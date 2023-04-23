@@ -117,6 +117,7 @@ uint8_t errorCounterNTP = 0;
 uint16_t matrix[10] = {};
 uint16_t matrixOld[10] = {};
 bool screenBufferNeedsUpdate = true;
+bool colorNeedsChange = false;
 uint8_t colorOld;
 
 // Mode
@@ -516,10 +517,7 @@ void loop()
         // Change color
         if (settings.mySettings.colorChange == COLORCHANGE_DAY)
         {
-            settings.mySettings.color = random(0, COLORCHANGE_COUNT + 1);
-#ifdef DEBUG
-            Serial.printf("Color changed to: %u\r\n", settings.mySettings.color);
-#endif
+          colorNeedsChange = true;
         }
     }
 
@@ -535,10 +533,7 @@ void loop()
         // Change color
         if (settings.mySettings.colorChange == COLORCHANGE_HOUR)
         {
-            settings.mySettings.color = random(0, COLOR_COUNT + 1);
-#ifdef DEBUG
-            Serial.printf("Color changed to: %u\r\n", settings.mySettings.color);
-#endif
+            colorNeedsChange = true;
         }
 
         // Hourly beep
@@ -726,10 +721,7 @@ void loop()
             // Change color
             if (settings.mySettings.colorChange == COLORCHANGE_FIVE)
             {
-                settings.mySettings.color = random(0, COLOR_COUNT + 1);
-#ifdef DEBUG
-                Serial.printf("Color changed to: %u\r\n", settings.mySettings.color);
-#endif
+                colorNeedsChange = true;
             }
         }
     }
@@ -965,6 +957,11 @@ void loop()
     if (screenBufferNeedsUpdate)
     {
         screenBufferNeedsUpdate = false;
+        colorOld = settings.mySettings.color;
+        if (colorNeedsChange) {
+          updateColor();
+          colorNeedsChange = false;
+        }
 
         // Save old screenbuffer (or not if it's the test pattern)
         if (testFlag)
@@ -1764,6 +1761,19 @@ void writeScreenBufferMatrix(uint16_t screenBufferOld[], uint16_t screenBufferNe
 
   writeScreenBuffer(screenBufferNew, color, brightness);
 } // writeScreenBufferMatrix
+
+//
+
+//*****************************************************************************
+// colorUpdate
+//*****************************************************************************
+void updateColor()
+{
+  settings.mySettings.color = random(0, COLORCHANGE_COUNT + 1);
+#ifdef DEBUG
+  Serial.printf("Color changed to: %u\r\n", settings.mySettings.color);
+#endif
+}
 
 //*****************************************************************************
 // "On/off" pressed
