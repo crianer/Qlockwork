@@ -387,7 +387,9 @@ void setup()
     feedText += String(myIP[0]) + "." + String(myIP[1]) + "." + String(myIP[2]) + "." + String(myIP[3]) + "   ";
     feedPosition = 0;
     feedColor = WHITE;
-    mode = MODE_FEED;
+    setMode(MODE_FEED);
+#else
+    setMode(MODE_TIME);
 #endif
 
     Serial.println("Starting webserver.");
