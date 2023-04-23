@@ -909,45 +909,88 @@ void loop()
         case IR_CODE_SETTINGS:
           break;
         case IR_CODE_PLUS:
+          if(settings.mySettings.brightness <= 90){
+            settings.mySettings.brightness += 10;
+          }
+          updateBrightness(true);
+          break;
         case IR_CODE_MINUS:
+          if(settings.mySettings.brightness >= 20){
+            settings.mySettings.brightness -= 10;
+          }
+          updateBrightness(true);
           break;
         case IR_CODE_SECONDS:
+          setMode(MODE_SECONDS);
           break;
         case IR_CODE_DATE:
+          setMode(MODE_DATE);
           break;
         case IR_CODE_RED:
+          settings.mySettings.color = RED;
+          settings.mySettings.colorChange = COLORCHANGE_NO;
           break;
         case IR_CODE_GREEN:
+          settings.mySettings.color = GREEN;
+          settings.mySettings.colorChange = COLORCHANGE_NO;
           break;
         case IR_CODE_DARKBLUE:
+          settings.mySettings.color = BLUE;
+          settings.mySettings.colorChange = COLORCHANGE_NO;
           break;
         case IR_CODE_PINK:
+          settings.mySettings.color = PINK;
+          settings.mySettings.colorChange = COLORCHANGE_NO;
           break;
         case IR_CODE_WHITE:
+          settings.mySettings.color = WHITE;
+          settings.mySettings.colorChange = COLORCHANGE_NO;
           break;
         case IR_CODE_BRIGHTBLUE:
+          settings.mySettings.color = CYAN;
+          settings.mySettings.colorChange = COLORCHANGE_NO;
           break;
         case IR_CODE_YELLOW:
+          settings.mySettings.color = YELLOW;
+          settings.mySettings.colorChange = COLORCHANGE_NO;
           break;
         case IR_CODE_ORANGE:
+          settings.mySettings.color = ORANGE;
+          settings.mySettings.colorChange = COLORCHANGE_NO;
           break;
         case IR_CODE_NORMAL:
+          settings.mySettings.transition = TRANSITION_NORMAL;
+          runTransitionDemo = true;
           break;
         case IR_CODE_FADE:
+          settings.mySettings.transition = TRANSITION_FADE;
+          runTransitionDemo = true;
           break;
         case IR_CODE_MATRIX:
+          settings.mySettings.transition = TRANSITION_MATRIX;
+          runTransitionDemo = true;
           break;
         case IR_CODE_SLIDE:
+          settings.mySettings.transition = TRANSITION_MOVEUP;
+          runTransitionDemo = true;
           break;
         case IR_CODE_MOOD:
           break;
         case IR_CODE_5MIN:
+          settings.mySettings.colorChange = COLORCHANGE_FIVE;
+          colorNeedsChange = true;
           break;
         case IR_CODE_1H:
+          settings.mySettings.colorChange = COLORCHANGE_HOUR;
+          colorNeedsChange = true;
           break;
         case IR_CODE_24H:
+          settings.mySettings.colorChange = COLORCHANGE_DAY;
+          colorNeedsChange = true;
           break;
         }
+        settings.saveToEEPROM();
+        screenBufferNeedsUpdate = true;
       }
       irrecv.resume();
     }
