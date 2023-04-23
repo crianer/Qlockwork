@@ -85,6 +85,7 @@ Adafruit_MCP9808 mcp;
 #ifdef IR_RECEIVER
 IRrecv irrecv(PIN_IR_RECEIVER);
 decode_results irDecodeResult;
+unsigned long last_ir_millis = 0;
 #endif
 
 // Syslog
@@ -902,6 +903,8 @@ void loop()
     // Look for IR commands
     if (irrecv.decode(&irDecodeResult))
     {
+      if ((last_ir_millis + IR_DEBOUNCE_T) < millis()){
+        last_ir_millis = millis();
 #ifdef DEBUG_IR
         Serial.print("IR signal: 0x");
         serialPrintUint64(irDecodeResult.value, HEX);
@@ -960,7 +963,8 @@ void loop()
         case IR_CODE_24H:
           break;
         }
-        irrecv.resume();
+      }
+      irrecv.resume();
     }
 #endif
 

@@ -281,6 +281,7 @@
 #define IR_LETTER_X 8
 #define IR_LETTER_Y 10
 
+#define IR_DEBOUNCE_T 500
 #endif
 
 //*****************************************************************************
