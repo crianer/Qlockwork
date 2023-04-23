@@ -18,7 +18,7 @@ event_t events[] = {
     { 1,  1, "Happy New Year!", 0, YELLOW_25 },
     { 3, 14, "Albert Einsteins birthday!", 1879, MAGENTA },
     { 12, 24, "It's Christmas!", 0, RED },
-    { 3, 12, "Qlockworks birthday!", 2017, MAGENTA }
+    { 3, 12, "QlockWiFives birthday!", 2017, MAGENTA }
 };
 
 #endif

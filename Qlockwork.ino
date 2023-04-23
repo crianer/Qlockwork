@@ -1,5 +1,5 @@
 //*****************************************************************************
-// QLOCKWORK
+// QLOCKWIFIVE
 // An advanced firmware for a DIY "word-clock"
 //
 // @mc ESP8266
@@ -91,7 +91,7 @@ unsigned long last_ir_millis = 0;
 // Syslog
 #ifdef SYSLOGSERVER_SERVER
 WiFiUDP wifiUdp;
-Syslog syslog(wifiUdp, SYSLOGSERVER_SERVER, SYSLOGSERVER_PORT, HOSTNAME, "QLOCKWORK", LOG_INFO);
+Syslog syslog(wifiUdp, SYSLOGSERVER_SERVER, SYSLOGSERVER_PORT, HOSTNAME, "QLOCKWIFIVE", LOG_INFO);
 #endif
 
 // RTC
@@ -212,7 +212,7 @@ void setup()
 
     // And the monkey flips the switch. (Akiva Goldsman)
     Serial.println();
-    Serial.println("*** QLOCKWORK ***");
+    Serial.println("*** QLOCKWIFIVE ***");
     Serial.println("Firmware: " + String(FIRMWARE_VERSION));
 
 #ifdef POWERON_SELFTEST
@@ -2300,7 +2300,7 @@ void handleRoot()
         "<br>" + outdoorWeather.description;
 #endif
     message += "<span style=\"font-size:12px;\">"
-        "<br><br><a href=\"http://thorsten-wahl.ch/qlockwork/\">Qlockwork</a> was <i class=\"fa fa-code\"></i> with <i class=\"fa fa-heart\"></i> by ch570512"
+        "<br><br><a href=\"http://shop.bracci.ch/\">QlockWiFive</a> was <i class=\"fa fa-code\"></i> with <i class=\"fa fa-heart\"></i> by <a href=\"https://github.com/ch570512/Qlockwork/\">ch570512</a> and <a href=\"https://github.com/bracci/Qlockwork/\">bracci</a>"
         "<br>Firmware: " + String(FIRMWARE_VERSION);
 #ifdef UPDATE_INFOSERVER
     if (updateInfo > int(FIRMWARE_VERSION))
