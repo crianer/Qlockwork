@@ -26,15 +26,10 @@
 #include <Arduino_JSON.h>
 #include <ArduinoHttpClient.h>
 #include <ArduinoOTA.h>
-#include <DHT.h>
-#include <DS3232RTC.h>
 #include <ESP8266HTTPUpdateServer.h>
 #include <ESP8266mDNS.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266WiFi.h>
-#include <IRremoteESP8266.h>
-#include <IRrecv.h>
-#include <IRutils.h>
 #include <TimeLib.h>
 #include "Colors.h"
 #include "Configuration.h"
@@ -50,6 +45,19 @@
 #include "Timezones.h"
 #include "WiFiManager.h"
 
+#ifdef IR_RECEIVER
+#include <IRremoteESP8266.h>
+#include <IRrecv.h>
+#include <IRutils.h>
+#endif
+
+#ifdef RTC_BACKUP
+#include <DS3232RTC.h>
+#endif
+
+#ifdef SENSOR_DHT22
+#include <DHT.h>
+#endif
 //*****************************************************************************
 // Init
 //*****************************************************************************
