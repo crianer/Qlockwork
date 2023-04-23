@@ -98,36 +98,141 @@
 // Hardware settings
 //*****************************************************************************
 
-#define SERIAL_SPEED 115200
+//#define BOARD_DEFAULT
+#define BOARD_QWF_V1_2
+//#define BOARD_QWF_V2_0
 
-#define NUMPIXELS 115
+#ifdef BOARD_DEFAULT
+#define ESP_LED
+//#define SENSOR_DHT22
+//#define RTC_BACKUP
+//#define LDR
+//#define BUZZER
+//#define IR_RECEIVER
 
 //#define ONOFF_BUTTON
 //#define MODE_BUTTON
 //#define TIME_BUTTON
 
+// Pin Definition ESP8266 (Wemos D1 mini)
+#define PIN_IR_RECEIVER  16 // D0 (no interrupt)
+//#define PIN_WIRE_SCL     05 // D1 SCL
+//#define PIN_WIRE_SDA     04 // D2 SDA
+#define PIN_MODE_BUTTON  00 // D3 LOW_Flash
+#define PIN_LED          02 // D4 ESP8266_LED
+#define PIN_BUZZER       14 // D5
+#define PIN_DHT22        12 // D6
+#define PIN_LEDS_CLOCK   13 // D7
+#define PIN_LEDS_DATA    15 // D8
+#define PIN_LDR          A0 // ADC
+#define PIN_TIME_BUTTON  01 // TXD0
+#define PIN_ONOFF_BUTTON 03 // RXD0
+// GPIO 06 to GPIO 11 are
+// used for flash memory databus
+
+//#define LED_LAYOUT_HORIZONTAL_1
+#define LED_LAYOUT_VERTICAL_1
+//#define LED_LAYOUT_VERTICAL_2
+//#define LED_LAYOUT_VERTICAL_3
+//#define LED_LAYOUT_VERTICAL_4
+
+#define NEOPIXEL_RGB
+//#define NEOPIXEL_RGBW
+
+#define NEOPIXEL_TYPE NEO_GRB + NEO_KHZ800     // see Adafruit_NeoPixel.h for help
+//#define NEOPIXEL_TYPE NEO_WRGB + NEO_KHZ800
+//#define NEOPIXEL_TYPE NEO_GRBW + NEO_KHZ800
+#endif // BOARD_DEFAULT
+
+// QlockWiFive Board v1.2
+#ifdef BOARD_QWF_V1_2
 #define ESP_LED
+#define RTC_BACKUP
+#define LDR
+#define IR_RECEIVER
+
+//#define ONOFF_BUTTON
+//#define MODE_BUTTON
+//#define TIME_BUTTON
+
+// Pin Definition ESP8266 (Wemos D1 mini)
+#define PIN_IR_RECEIVER  12 // D6 (no interrupt)
+//#define PIN_MODE_BUTTON  00 // D3 LOW_Flash
+#define PIN_LED          02 // D4 ESP8266_LED
+#define PIN_LEDS_CLOCK   14 // D5
+#define PIN_LEDS_DATA    13 // D7
+#define PIN_LDR          A0 // ADC
+//#define PIN_TIME_BUTTON  01 // TXD0
+//#define PIN_ONOFF_BUTTON 03 // RXD0
+// GPIO 06 to GPIO 11 are
+// used for flash memory databus
+
+//#define LED_LAYOUT_HORIZONTAL_1
+#define LED_LAYOUT_VERTICAL_1
+//#define LED_LAYOUT_VERTICAL_2
+//#define LED_LAYOUT_VERTICAL_3
+//#define LED_LAYOUT_VERTICAL_4
+
+#define NEOPIXEL_RGB
+//#define NEOPIXEL_RGBW
+
+//#define NEOPIXEL_TYPE NEO_GRB + NEO_KHZ800     // see Adafruit_NeoPixel.h for help
+//#define NEOPIXEL_TYPE NEO_WRGB + NEO_KHZ800
+#define NEOPIXEL_TYPE NEO_GRBW + NEO_KHZ800
+#endif // BOARD_QWF_V1_2
+
+// QlockWiFive Board v2.0
+#ifdef BOARD_QWF_V2_0
+#define RTC_BACKUP
+#define LDR
+#define IR_RECEIVER
+
+#define ONOFF_BUTTON
+#define MODE_BUTTON
+#define TIME_BUTTON
+
+// Pin Definition ESP8266
+#define PIN_IR_RECEIVER  12
+#define PIN_MODE_BUTTON  02
+#define PIN_LEDS_DATA    13
+#define PIN_LDR          A0
+#define PIN_TIME_BUTTON  14
+#define PIN_ONOFF_BUTTON 00
+
+//#define LED_LAYOUT_HORIZONTAL_1
+//#define LED_LAYOUT_VERTICAL_1
+//#define LED_LAYOUT_VERTICAL_2
+//#define LED_LAYOUT_VERTICAL_3
+#define LED_LAYOUT_VERTICAL_4
+
+#define NEOPIXEL_RGB
+//#define NEOPIXEL_RGBW
+
+#define NEOPIXEL_TYPE NEO_GRB + NEO_KHZ800     // see Adafruit_NeoPixel.h for help
+//#define NEOPIXEL_TYPE NEO_WRGB + NEO_KHZ800
+//#define NEOPIXEL_TYPE NEO_GRBW + NEO_KHZ800
+
+#endif // BOARD_QWF_V2_0
+
+#define SERIAL_SPEED 115200
+
+#define NUMPIXELS 114
 
 #define MIN_BRIGHTNESS 20
 #define MAX_BRIGHTNESS 255
 #define TEST_BRIGHTNESS 80
 
-//#define SENSOR_DHT22
 #define DHT_TEMPERATURE_OFFSET 0.5
 #define DHT_HUMIDITY_OFFSET -2.0
 
-//#define RTC_BACKUP
 #define RTC_TEMPERATURE_OFFSET -1.15
 
-//#define LDR
 //#define LDR_IS_INVERSE
 
-//#define BUZZER
 #define BUZZTIME_ALARM_1 30
 #define BUZZTIME_ALARM_2 30
 #define BUZZTIME_TIMER 30
 
-//#define IR_RECEIVER
 //#define IR_CODE_ONOFF 16769565 // HX1838 Remote CH+
 //#define IR_CODE_TIME  16753245 // HX1838 Remote CH-
 //#define IR_CODE_MODE  16736925 // HX1838 Remote CH
@@ -139,17 +244,6 @@
 #define IR_LETTER_X 8
 #define IR_LETTER_Y 10
 
-#define LED_LAYOUT_HORIZONTAL_1
-//#define LED_LAYOUT_VERTICAL_1
-//#define LED_LAYOUT_VERTICAL_2
-//#define LED_LAYOUT_VERTICAL_3
-
-#define NEOPIXEL_RGB
-//#define NEOPIXEL_RGBW
-
-#define NEOPIXEL_TYPE NEO_GRB + NEO_KHZ800     // see Adafruit_NeoPixel.h for help
-//#define NEOPIXEL_TYPE NEO_WRGB + NEO_KHZ800
-//#define NEOPIXEL_TYPE NEO_GRBW + NEO_KHZ800
 
 //*****************************************************************************
 // Misc
@@ -167,20 +261,5 @@
 #define UPDATE_INFOSERVER "thorsten-wahl.ch"
 #define UPDATE_INFOFILE "/qlockwork/updateinfo.json"
 
-// ESP8266
-#define PIN_IR_RECEIVER  16 // D0 (no interrupt)
-//#define PIN_WIRE_SCL     05 // D1 SCL
-//#define PIN_WIRE_SDA     04 // D2 SDA
-#define PIN_MODE_BUTTON  00 // D3 LOW_Flash
-#define PIN_LED          02 // D4 ESP8266_LED
-#define PIN_BUZZER       14 // D5
-#define PIN_DHT22        12 // D6
-#define PIN_LEDS_CLOCK   13 // D7
-#define PIN_LEDS_DATA    15 // D8
-#define PIN_LDR          A0 // ADC
-#define PIN_TIME_BUTTON  01 // TXD0
-#define PIN_ONOFF_BUTTON 03 // RXD0
-// GPIO 06 to GPIO 11 are
-// used for flash memory databus
 
 #endif
