@@ -957,6 +957,8 @@ void loop()
     if (screenBufferNeedsUpdate)
     {
         screenBufferNeedsUpdate = false;
+        bool goBackToTime = false;
+
         colorOld = settings.mySettings.color;
         if (colorNeedsChange) {
           updateColor();
@@ -1126,7 +1128,7 @@ void loop()
             {
                 sunrise_started = false;
                 settings.mySettings.color = save_color_sunrise_sunset;
-                setMode(MODE_TIME);
+                goBackToTime = true;
             }
             break;
             
@@ -1200,7 +1202,7 @@ void loop()
             {
                 sunset_started = false;
                 settings.mySettings.color = save_color_sunrise_sunset;
-                setMode(MODE_TIME);
+                goBackToTime = true;
             }
             break;
 #endif
@@ -1434,7 +1436,7 @@ void loop()
             if (feedPosition == feedText.length() - 2)
             {
                 feedPosition = 0;
-                setMode(MODE_TIME);
+                goBackToTime = true;
             }
             break;
         }
@@ -1512,6 +1514,10 @@ void loop()
         }
         runTransitionDemo = false;
         runTransitionOnce = false;
+        if (goBackToTime) {
+          setMode(MODE_TIME);
+          goBackToTime = false;
+        }
     }
 
     // Wait for mode timeout then switch back to time
