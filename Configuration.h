@@ -247,17 +247,41 @@
 #define BUZZTIME_TIMER 30
 #endif
 
-//#define IR_CODE_ONOFF 16769565 // HX1838 Remote CH+
-//#define IR_CODE_TIME  16753245 // HX1838 Remote CH-
-//#define IR_CODE_MODE  16736925 // HX1838 Remote CH
-#define IR_CODE_ONOFF 0xFFE01F // CLT2 V1.1 Remote Power
-#define IR_CODE_TIME  0xFFA05F // CLT2 V1.1 Remote Time
-#define IR_CODE_MODE  0xFF20DF // CLT2 V1.1 Remote Region
+#ifdef IR_RECEIVER
+#define IR_CODE_ONOFF        (0xFFE01F) // QWF V1.0 Remote Power
+#define IR_CODE_TIME         (0xFFA05F) // QWF V1.0 Remote Time
+#define IR_CODE_SETTINGS     (0xFFC837) // QWF V1.0 Remote Mode
+#define IR_CODE_PLUS         (0xFF58A7) // QWF V1.0 Remote Bright. Plus
+#define IR_CODE_MINUS        (0xFF48B7) // QWF V1.0 Remote Bright. Minus
+
+#define IR_CODE_MODE         (0xFFD827) // QWF V1.0 Remote Mode
+#define IR_CODE_SECONDS      (0xFF20DF) // QWF V1.0 Remote Seconds
+#define IR_CODE_DATE         (0xFF609F) // QWF V1.0 Remote Date
+
+#define IR_CODE_RED          (0xFF906F) // QWF V1.0 Remote Red
+#define IR_CODE_GREEN        (0xFF10EF) // QWF V1.0 Remote Green
+#define IR_CODE_DARKBLUE     (0xFF50AF) // QWF V1.0 Remote Darkblue
+#define IR_CODE_PINK         (0xFFD02F) // QWF V1.0 Remote Pink
+#define IR_CODE_WHITE        (0xFFB04F) // QWF V1.0 Remote White
+#define IR_CODE_BRIGHTBLUE   (0xFF30CF) // QWF V1.0 Remote Brightblue
+#define IR_CODE_YELLOW       (0xFF708F) // QWF V1.0 Remote Yellow
+#define IR_CODE_ORANGE       (0xFFF00F) // QWF V1.0 Remote RGB
+
+#define IR_CODE_NORMAL       (0xFF9867) // QWF V1.0 Remote Normal
+#define IR_CODE_FADE         (0xFF18E7) // QWF V1.0 Remote Fade
+#define IR_CODE_MATRIX       (0xFF8877) // QWF V1.0 Remote Matrix
+#define IR_CODE_SLIDE        (0xFF08F7) // QWF V1.0 Remote Slide
+
+#define IR_CODE_MOOD         (0xFFA857) // QWF V1.0 Remote Mood
+#define IR_CODE_5MIN         (0xFF28D7) // QWF V1.0 Remote 5min
+#define IR_CODE_1H           (0xFF6897) // QWF V1.0 Remote 1h
+#define IR_CODE_24H          (0xFFE817) // QWF V1.0 Remote 24h
 
 //#define IR_LETTER_OFF
 #define IR_LETTER_X 8
 #define IR_LETTER_Y 10
 
+#endif
 
 //*****************************************************************************
 // Misc

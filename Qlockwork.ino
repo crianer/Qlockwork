@@ -918,6 +918,47 @@ void loop()
         case IR_CODE_MODE:
             buttonModePressed();
             break;
+        case IR_CODE_SETTINGS:
+          break;
+        case IR_CODE_PLUS:
+        case IR_CODE_MINUS:
+          break;
+        case IR_CODE_SECONDS:
+          break;
+        case IR_CODE_DATE:
+          break;
+        case IR_CODE_RED:
+          break;
+        case IR_CODE_GREEN:
+          break;
+        case IR_CODE_DARKBLUE:
+          break;
+        case IR_CODE_PINK:
+          break;
+        case IR_CODE_WHITE:
+          break;
+        case IR_CODE_BRIGHTBLUE:
+          break;
+        case IR_CODE_YELLOW:
+          break;
+        case IR_CODE_ORANGE:
+          break;
+        case IR_CODE_NORMAL:
+          break;
+        case IR_CODE_FADE:
+          break;
+        case IR_CODE_MATRIX:
+          break;
+        case IR_CODE_SLIDE:
+          break;
+        case IR_CODE_MOOD:
+          break;
+        case IR_CODE_5MIN:
+          break;
+        case IR_CODE_1H:
+          break;
+        case IR_CODE_24H:
+          break;
         }
         irrecv.resume();
     }
