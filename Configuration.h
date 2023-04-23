@@ -222,16 +222,24 @@
 #define MAX_BRIGHTNESS 255
 #define TEST_BRIGHTNESS 80
 
+#ifdef SENSOR_DHT22
 #define DHT_TEMPERATURE_OFFSET 0.5
 #define DHT_HUMIDITY_OFFSET -2.0
+#endif
 
+#ifdef RTC_BACKUP
 #define RTC_TEMPERATURE_OFFSET -1.15
+#endif
 
+#ifdef LDR
 //#define LDR_IS_INVERSE
+#endif
 
+#ifdef BUZZER
 #define BUZZTIME_ALARM_1 30
 #define BUZZTIME_ALARM_2 30
 #define BUZZTIME_TIMER 30
+#endif
 
 //#define IR_CODE_ONOFF 16769565 // HX1838 Remote CH+
 //#define IR_CODE_TIME  16753245 // HX1838 Remote CH-
