@@ -1319,7 +1319,7 @@ void loop()
                 matrix[2] = 0b1110000010100000;
                 matrix[3] = 0b0000000011100000;
             }
-            renderer.setSmallText(String(int(abs(roomTemperature) + 0.5)), TEXT_POS_BOTTOM, matrix);
+            renderer.setSmallText(String(int(abs(roomTemperature))), TEXT_POS_BOTTOM, matrix);
             break;
 #ifdef SENSOR_DHT22
         case MODE_HUMIDITY:
