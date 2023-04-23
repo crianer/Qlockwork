@@ -105,6 +105,7 @@
 #ifdef BOARD_DEFAULT
 #define ESP_LED
 //#define SENSOR_DHT22
+//#define SENSOR_MCP9808
 //#define RTC_BACKUP
 //#define LDR
 //#define BUZZER
@@ -183,6 +184,7 @@
 
 // QlockWiFive Board v2.0
 #ifdef BOARD_QWF_V2_0
+#define SENSOR_MCP9808
 #define RTC_BACKUP
 #define LDR
 #define IR_RECEIVER
@@ -225,6 +227,10 @@
 #ifdef SENSOR_DHT22
 #define DHT_TEMPERATURE_OFFSET 0.5
 #define DHT_HUMIDITY_OFFSET -2.0
+#endif
+
+#ifdef SENSOR_MCP9808
+#define MCP_TEMPERATURE_OFFSET -0.1
 #endif
 
 #ifdef RTC_BACKUP

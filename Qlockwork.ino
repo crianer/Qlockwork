@@ -58,6 +58,11 @@
 #ifdef SENSOR_DHT22
 #include <DHT.h>
 #endif
+
+#ifdef SENSOR_MCP9808
+#include <Adafruit_MCP9808.h>
+#endif
+
 //*****************************************************************************
 // Init
 //*****************************************************************************
@@ -69,6 +74,11 @@ ESP8266HTTPUpdateServer httpUpdater;
 // DHT22
 #ifdef SENSOR_DHT22
 DHT dht(PIN_DHT22, DHT22);
+#endif
+
+// MCP9808
+#ifdef SENSOR_MCP9808
+Adafruit_MCP9808 mcp;
 #endif
 
 // IR receiver
@@ -139,8 +149,11 @@ OpenWeather outdoorWeather;
 uint8_t errorCounterOutdoorWeather = 0;
 #endif
 
-// DHT22
+// Temperature Sensor
 float roomTemperature = 0;
+uint8_t errorCounterMCP = 0;
+
+// DHT22
 float roomHumidity = 0;
 uint8_t errorCounterDHT = 0;
 
@@ -252,6 +265,13 @@ void setup()
     dht.begin();
 #endif
 
+#ifdef SENSOR_MCP9808
+    Serial.println(F("Setting up MCP9808."));
+    bool mcp_status;
+    mcp_status = mcp.begin();
+    if (!mcp_status) Serial.println(F("Could not find a valid MCP9808 sensor, check wiring, address!"));
+#endif
+
 #ifdef LDR
     Serial.print("Setting up LDR. ABC: ");
     settings.mySettings.useAbc ? Serial.println("enabled") : Serial.println("disabled");
@@ -340,9 +360,9 @@ void setup()
 #ifdef SYSLOGSERVER_SERVER
         Serial.println("Starting syslog.");
 #ifdef APIKEY
-        syslog.log(LOG_INFO, ";#;dateTime;roomTemperature;roomHumidity;outdoorTemperature;outdoorHumidity;sunriseTime;sunsetTime;ldrValue;errorCounterNTP;errorCounterDHT;errorCounterOutdoorWeather;freeHeapSize;upTime");
+        syslog.log(LOG_INFO, ";#;dateTime;roomTemperature;roomHumidity;outdoorTemperature;outdoorHumidity;sunriseTime;sunsetTime;ldrValue;errorCounterNTP;errorCounterDHT;errorCounterMCP;errorCounterOutdoorWeather;freeHeapSize;upTime");
 #else
-        syslog.log(LOG_INFO, ";#;dateTime;roomTemperature;roomHumidity;ldrValue;errorCounterNTP;errorCounterDHT;freeHeapSize;upTime");
+        syslog.log(LOG_INFO, ";#;dateTime;roomTemperature;roomHumidity;ldrValue;errorCounterNTP;errorCounterDHT;errorCounterMCP;freeHeapSize;upTime");
 #endif
 #endif
 
@@ -432,7 +452,7 @@ void setup()
     randomSecond = random(5, 56);
 
     // Update room conditions
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
     getRoomConditions();
 #endif
 
@@ -557,7 +577,7 @@ void loop()
         lastMinute = minute();
         screenBufferNeedsUpdate = true;
 
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
         // Update room conditions
         getRoomConditions();
 #endif
@@ -692,10 +712,10 @@ void loop()
                 syslog.log(LOG_INFO, ";D;" + String(tempEspTime) + ";" + String(roomTemperature) + ";" + String(roomHumidity) + ";" + String(outdoorWeather.temperature) + ";" + String(outdoorWeather.humidity) + ";" \
                 +String(hour(timeZone.toLocal(outdoorWeather.sunrise))) + ":" + String(minute(timeZone.toLocal(outdoorWeather.sunrise))) + ";" \
                 + String(hour(timeZone.toLocal(outdoorWeather.sunset))) + ":" + String(minute(timeZone.toLocal(outdoorWeather.sunset))) + ";" + String(ldrValue)\
-                    + ";" + String(errorCounterNTP) + ";" + String(errorCounterDHT) + ";" + String(errorCounterOutdoorWeather) + ";" + String(ESP.getFreeHeap()) + ";" + String(upTime));
+                    + ";" + String(errorCounterNTP) + ";" + String(errorCounterDHT) + ";" + String(errorCounterMCP) + ";" + String(errorCounterOutdoorWeather) + ";" + String(ESP.getFreeHeap()) + ";" + String(upTime));
 #else
                 syslog.log(LOG_INFO, ";D;" + String(tempEspTime) + ";" + String(roomTemperature) + ";" + String(roomHumidity) + ";" + String(ldrValue)\
-                    + ";" + String(errorCounterNTP) + ";" + String(errorCounterDHT) + ";" + String(ESP.getFreeHeap()) + ";" + String(upTime));
+                    + ";" + String(errorCounterNTP) + ";" + String(errorCounterDHT) + ";" + String(errorCounterMCP) + ";" + String(ESP.getFreeHeap()) + ";" + String(upTime));
 #endif
 #ifdef DEBUG
                 Serial.println("Data written to syslog.");
@@ -802,7 +822,7 @@ void loop()
                     autoMode = 1;
                     break;
                 case 1:
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
                     setMode(MODE_TEMP);
 #else
 #ifdef APIKEY
@@ -1237,7 +1257,7 @@ void loop()
             }
             break;
 #endif
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
         case MODE_TEMP:
 #ifdef DEBUG
             Serial.println("Room Temperature: " + String(roomTemperature));
@@ -1656,11 +1676,10 @@ void setMode(Mode newMode)
 #ifdef SHOW_MODE_MOONPHASE
     case MODE_MOONPHASE:
 #endif
-#if defined(RTC_BACKUP) && !defined(SENSOR_DHT22)
+#if defined(RTC_BACKUP) && defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
     case MODE_TEMP:
 #endif
 #ifdef SENSOR_DHT22
-    case MODE_TEMP:
     case MODE_HUMIDITY:
 #endif
 #ifdef APIKEY
@@ -1734,14 +1753,32 @@ void getUpdateInfo()
 // Get room conditions
 //*****************************************************************************
 
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
 void getRoomConditions()
 {
-#if defined(RTC_BACKUP) && !defined(SENSOR_DHT22)
+#if defined(RTC_BACKUP) && !defined(SENSOR_DHT22) && !defined(SENSOR_MCP9808)
     roomTemperature = RTC.temperature() / 4.0 + RTC_TEMPERATURE_OFFSET;
 #ifdef DEBUG
     Serial.println("Temperature (RTC): " + String(roomTemperature) + "C");
 #endif
+#endif
+#if defined(SENSOR_MCP9808) && !defined(SENSOR_DHT22)
+    float mcpTemperature = mcp.readTempC();
+    if (!isnan(mcpTemperature)){
+      errorCounterMCP = 0;
+      roomTemperature = mcpTemperature + MCP_TEMPERATURE_OFFSET;
+#ifdef DEBUG
+      Serial.println("Temperature (MCP): " + String(roomTemperature) + "C");
+#endif
+    }
+    else
+    {
+        if (errorCounterMCP < 255)
+            errorCounterMCP++;
+#ifdef DEBUG
+        Serial.printf("Error (MCP): %u\r\n", errorCounterMCP);
+#endif
+    }
 #endif
 #ifdef SENSOR_DHT22
     float dhtTemperature = dht.readTemperature();
@@ -1956,7 +1993,7 @@ void handleRoot()
         "<br><br>"
         "<button title=\"Switch modes\" onclick=\"window.location.href='/handleButtonMode'\"><i class=\"fa fa-bars\"></i></button>"
         "<button title=\"Return to time\" onclick=\"window.location.href='/handleButtonTime'\"><i class=\"fa fa-clock-o\"></i></button>";
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
     message += "<br><br><i class = \"fa fa-home\" style=\"font-size:20px;\"></i>";
     message += "<br><i class=\"fa fa-thermometer\" style=\"font-size:20px;\"></i> " + String(roomTemperature) + "&deg;C / " + String(roomTemperature * 1.8 + 32.0) + "&deg;F";
 #endif
@@ -2027,6 +2064,9 @@ void handleRoot()
 #ifdef SENSOR_DHT22
     message += "<br>Error (DHT): " + String(errorCounterDHT);
 #endif
+#ifdef SENSOR_MCP9808
+    message += "<br>Error (MCP): " + String(errorCounterMCP);
+#endif
 #ifdef APIKEY
     message += "<br>Error (OpenWeather): " + String(errorCounterOutdoorWeather);
 #endif
@@ -2036,6 +2076,11 @@ void handleRoot()
     message += "RTC ";
 #else
     message += "<s>RTC</s> ";
+#endif
+#ifdef SENSOR_MCP9808
+    message += "MCP9808 ";
+#else
+    message += "<s>MCP9808</s> ";
 #endif
 #ifdef SENSOR_DHT22
     message += "DHT22 ";
@@ -2231,7 +2276,7 @@ void handleButtonSettings()
         "</td></tr>";
 #endif
     // ------------------------------------------------------------------------
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
     message += "<tr><td>"
         "Show temperature"
         "</td><td>"
@@ -2552,7 +2597,7 @@ void handleCommitSettings()
     }
 #endif
     // ------------------------------------------------------------------------
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
     webServer.arg("mc") == "0" ? settings.mySettings.modeChange = false : settings.mySettings.modeChange = true;
 #endif
     // ------------------------------------------------------------------------
