@@ -239,6 +239,7 @@
 
 #ifdef LDR
 //#define LDR_IS_INVERSE
+#define LDR_HYSTERESIS 10
 #endif
 
 #ifdef BUZZER

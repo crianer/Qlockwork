@@ -166,8 +166,6 @@ uint16_t ldrValue = 0;
 uint16_t lastLdrValue = 0;
 uint16_t minLdrValue = 511; // The ESP will crash if minLdrValue and maxLdrValue are equal due to an error in map()
 uint16_t maxLdrValue = 512;
-uint8_t iTargetBrightness = 0;
-unsigned long iBrightnessMillis = 0;
 #endif
 
 // Alarm
@@ -871,6 +869,14 @@ void loop()
             }
         }
 #endif
+
+    // Set brightness from LDR and update display.
+#ifdef LDR
+      if (settings.mySettings.useAbc)
+      {
+        updateBrightness(false);
+      }
+#endif
     }
 
     //*************************************************************************
@@ -883,21 +889,6 @@ void loop()
     // Call HTTP- and OTA-handle
     webServer.handleClient();
     ArduinoOTA.handle();
-
-    // Set brightness from LDR and update display (not screenbuffer) at 40Hz.
-#ifdef LDR
-    if (settings.mySettings.useAbc)
-    {
-        if ((millis() > iBrightnessMillis + 25) && !testFlag)
-        {
-            iBrightnessMillis = millis();
-            iTargetBrightness = getBrightnessFromLDR();
-            if (brightness < iTargetBrightness) brightness++;
-            if (brightness > iTargetBrightness) brightness--;
-            writeScreenBuffer(matrix, settings.mySettings.color, brightness);
-        }
-    }
-#endif
 
 #ifdef IR_RECEIVER
     // Look for IR commands
@@ -1739,12 +1730,28 @@ void setMode(Mode newMode)
     }
 }
 
+void updateBrightness(bool forcedUpdate) {
+  uint8_t oldBrightness = brightness;
+  maxBrightness = map(settings.mySettings.brightness, 10, 100, MIN_BRIGHTNESS, MAX_BRIGHTNESS);
+#ifdef LDR
+  if (settings.mySettings.useAbc) {
+    brightness = getBrightnessFromLDR(forcedUpdate);
+  } else {
+    brightness = maxBrightness;
+  }
+#else
+  brightness = maxBrightness;
+#endif
+  if (oldBrightness != brightness){
+    screenBufferNeedsUpdate = true;
+  }
+}
 //*****************************************************************************
 // Get brightness from LDR
 //*****************************************************************************
 
 #ifdef LDR
-uint8_t getBrightnessFromLDR()
+uint8_t getBrightnessFromLDR(bool forcedUpdate)
 {
 #ifdef LDR_IS_INVERSE
     ldrValue = 1024 - analogRead(PIN_LDR);
@@ -1755,12 +1762,12 @@ uint8_t getBrightnessFromLDR()
         minLdrValue = ldrValue;
     if (ldrValue > maxLdrValue)
         maxLdrValue = ldrValue;
-    if ((ldrValue >= (lastLdrValue + 10)) || (ldrValue <= (lastLdrValue - 10))) // Hysteresis is 10
+    if ((ldrValue >= (lastLdrValue + LDR_HYSTERESIS)) || (ldrValue <= (lastLdrValue - LDR_HYSTERESIS)) || forcedUpdate)
     {
         lastLdrValue = ldrValue;
         return (uint8_t)map(ldrValue, minLdrValue, maxLdrValue, MIN_BRIGHTNESS, maxBrightness);
     }
-    return iTargetBrightness;
+    return brightness;
 }
 #endif
 
@@ -2650,15 +2657,13 @@ void handleCommitSettings()
     if (webServer.arg("ab") == "0")
     {
         settings.mySettings.useAbc = false;
-        brightness = maxBrightness;
     }
     else
         settings.mySettings.useAbc = true;
 #endif
     // ------------------------------------------------------------------------
     settings.mySettings.brightness = webServer.arg("br").toInt();
-    maxBrightness = map(settings.mySettings.brightness, 0, 100, MIN_BRIGHTNESS, MAX_BRIGHTNESS);
-    brightness = maxBrightness;
+    updateBrightness(true);
     // ------------------------------------------------------------------------
     settings.mySettings.color = webServer.arg("co").toInt();
     // ------------------------------------------------------------------------
