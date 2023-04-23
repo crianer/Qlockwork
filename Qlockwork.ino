@@ -125,6 +125,7 @@ Mode lastMode = mode;
 uint32_t modeTimeout = 0;
 uint32_t autoModeChangeTimer = AUTO_MODECHANGE_TIME;
 bool runTransitionOnce = false;
+bool runTransitionDemo = false;
 uint8_t autoMode = 0;
 
 // Time
@@ -991,9 +992,28 @@ void loop()
             matrix[7] = month() << 5;
             matrix[8] = year() - 2000 << 5;
 #else
-            renderer.setTime(hour(), minute(), matrix);
-            renderer.setCorners(minute(), matrix);
-            if (!settings.mySettings.itIs && ((minute() / 5) % 6)) renderer.clearEntryWords(matrix);
+            if (runTransitionDemo) {
+              runTransitionOnce = true;
+              uint8_t simHour = hour();
+              uint8_t simMinute = 0;
+              if (minute() < 55) {
+                simMinute = (minute() / 5 + 1) * 5;
+              } else {
+                if (hour() < 23){
+                  simHour++;
+                } else {
+                  simHour = 0;
+                }
+              }
+              renderer.setTime(simHour, simMinute, matrix);
+              renderer.setCorners(simMinute, matrix);
+              if (!settings.mySettings.itIs && ((simMinute / 5) % 6)) renderer.clearEntryWords(matrix);
+            }
+            else {
+              renderer.setTime(hour(), minute(), matrix);
+              renderer.setCorners(minute(), matrix);
+              if (!settings.mySettings.itIs && ((minute() / 5) % 6)) renderer.clearEntryWords(matrix);
+            }
 #endif
 #ifdef BUZZER
             if (settings.mySettings.alarm1 || settings.mySettings.alarm2 || alarmTimerSet) renderer.setAlarmLed(matrix);
@@ -1435,19 +1455,21 @@ void loop()
         {
         case MODE_TIME:
         case MODE_BLANK:
-            if (settings.mySettings.transition == TRANSITION_NORMAL)
+            if (settings.mySettings.transition == TRANSITION_NORMAL) {
                 writeScreenBuffer(matrix, settings.mySettings.color, brightness);
-            if (settings.mySettings.transition == TRANSITION_FADE)
+                if (runTransitionOnce) delay(500);
+            }
+            else if (settings.mySettings.transition == TRANSITION_FADE)
                 writeScreenBufferFade(matrixOld, matrix, settings.mySettings.color, brightness);
-            if (settings.mySettings.transition == TRANSITION_MOVEUP)
+            else if (settings.mySettings.transition == TRANSITION_MOVEUP)
             {
-                if (minute() % 5 == 0)
+                if (((minute() % 5 == 0) && (second() == 0)) || runTransitionOnce)
                     moveScreenBufferUp(matrixOld, matrix, settings.mySettings.color, brightness);
                 else
                     writeScreenBuffer(matrix, settings.mySettings.color, brightness);
             }
             else if (settings.mySettings.transition == TRANSITION_MATRIX)
-                if (((minute() % 5 == 0) && (second() == 0)))
+                if (((minute() % 5 == 0) && (second() == 0)) || runTransitionOnce)
                     writeScreenBufferMatrix(matrixOld, matrix, settings.mySettings.color, brightness);
                 else
                     writeScreenBuffer(matrix, settings.mySettings.color, brightness);
@@ -1479,13 +1501,18 @@ void loop()
                 //if (settings.mySettings.transition == TRANSITION_MOVEUP)
                 //    moveScreenBufferUp(matrixOld, matrix, settings.mySettings.color, brightness);
                 moveScreenBufferUp(matrixOld, matrix, settings.mySettings.color, brightness);
-                runTransitionOnce = false;
                 testColumn = 0;
             }
             else
                 writeScreenBuffer(matrix, settings.mySettings.color, brightness);
             break;
         }
+        
+        if (runTransitionDemo) {
+          screenBufferNeedsUpdate = true;
+        }
+        runTransitionDemo = false;
+        runTransitionOnce = false;
     }
 
     // Wait for mode timeout then switch back to time
