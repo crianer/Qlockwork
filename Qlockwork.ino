@@ -117,6 +117,7 @@ uint8_t errorCounterNTP = 0;
 uint16_t matrix[10] = {};
 uint16_t matrixOld[10] = {};
 bool screenBufferNeedsUpdate = true;
+uint8_t colorOld;
 
 // Mode
 Mode mode = MODE_TIME;
@@ -1445,6 +1446,11 @@ void loop()
                 else
                     writeScreenBuffer(matrix, settings.mySettings.color, brightness);
             }
+            else if (settings.mySettings.transition == TRANSITION_MATRIX)
+                if (((minute() % 5 == 0) && (second() == 0)))
+                    writeScreenBufferMatrix(matrixOld, matrix, settings.mySettings.color, brightness);
+                else
+                    writeScreenBuffer(matrix, settings.mySettings.color, brightness);
             break;
 #ifdef SHOW_MODE_TEST
         case MODE_RED:
@@ -1610,6 +1616,125 @@ void writeScreenBufferFade(uint16_t screenBufferOld[], uint16_t screenBufferNew[
         ledDriver.show();
     }
 } // writeScreenBufferFade
+
+void writeScreenBufferMatrix(uint16_t screenBufferOld[], uint16_t screenBufferNew[], uint8_t color, uint8_t brightness)
+{
+  uint16_t mline[11] = {0};
+  uint16_t wline[11] = {0};
+  uint16_t sline[11] = {0};
+  uint8_t aktline;
+  uint16_t mleer = 0;  // zu prüfen ob wir fertig sind
+
+  uint8_t mstep = 0;
+  uint16_t mline_max[11] = {0};
+  uint16_t brightnessBuffer[11][12] = {0};
+  uint16_t brightness_16 = brightness;
+
+  uint16_t zufallszeile[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  uint16_t zufallsbuffer;
+  uint16_t zufallsindex;
+
+  Serial.println("writeScreenBufferMatrix - color: " + String(color));
+  Serial.println("writeScreenBufferMatrix - brightness: " + String(brightness));
+  Serial.println("writeScreenBufferMatrix - matrix [0][10] : " + String(bitRead(screenBufferNew[0], 10)));
+  
+  // Zufälliges Vertauschen von jeweils 2 Zeilenwerten:
+  for (uint8_t i = 0; i <= 10; i++)
+  {
+    zufallsindex = random(0, 11);
+    zufallsbuffer = zufallszeile[zufallsindex];
+    zufallszeile[zufallsindex] = zufallszeile[i];
+    zufallszeile[i] = zufallsbuffer;
+
+  }
+  // Variablen init
+  for (uint8_t line = 0; line <= 10; line++)
+  {
+    sline[line] = (11 - (zufallszeile[line] % 11 )) * 5 / 2;
+    mline_max[line] = 0;
+    mline[line] = 0;
+    wline[line] = 0;
+  }
+
+  for (uint16_t i = 0; i <= 1200; i++)
+  {
+    aktline = zufallszeile[i % 11];
+
+    if ( sline[aktline] > 0 ) sline[aktline]--;
+    if ( sline[aktline] == 0 )
+    {
+      sline[aktline] = 3 - (aktline % 2);
+
+      if ( mline[aktline] == 0 && mline_max[aktline] < 10)
+      {
+        mline[aktline] = 1;
+        mline_max[aktline]++;
+      }
+      else
+      {
+        if ( mline_max[aktline] < 11 )  // solange grün hinzu bis unten erreicht ist
+        {
+          if ( random(0, 6) == 0 && (mline[aktline] & 1) == 0 )
+          {
+            mline[aktline] = mline[aktline] << 1;
+            mline[aktline] = mline[aktline] | 1;
+            wline[aktline] = wline[aktline] << 1;
+          }
+          else
+          {
+            wline[aktline] = wline[aktline] << 1;
+            wline[aktline] = wline[aktline] | 1;
+            mline[aktline] = mline[aktline] << 1;
+          }
+          mline_max[aktline]++;
+        }
+        else
+        {
+          mline[aktline] = mline[aktline] << 1;
+          wline[aktline] = wline[aktline] << 1;
+          if ( (mline[aktline] & 0x3FF)  == 0 && (wline[aktline] & 0x3FF) == 0 ) mleer = mleer | 1 << aktline;
+        }
+      }
+      ledDriver.clear();
+      for ( uint16_t y = 0; y <= 9; y++ )
+      {
+        for ( uint16_t x = 0; x <= 10; x++ )
+        {
+          if ( y > mline_max[x] - 1 )
+          {
+            if (bitRead(screenBufferOld[y], 15 - x)) ledDriver.setPixel(x, y, colorOld, brightness);
+          }
+          else
+          {
+            if (bitRead(screenBufferNew[y], 15 - x)) ledDriver.setPixel(x, y, color, brightness);
+          }
+          brightnessBuffer[y][x] = 0;
+          if ( wline[x] & (1 << y) )
+          {
+            brightnessBuffer[y][x] = brightness_16 / 9;
+            if ( brightnessBuffer[y][x] < MIN_BRIGHTNESS) brightnessBuffer[y][x] = MIN_BRIGHTNESS;
+          }
+          if ( mline[x] & (1 << y) )
+          {
+            brightnessBuffer[y][x] =  brightness_16 * 10 / 9;
+            if ( brightnessBuffer[y][x] > MAX_BRIGHTNESS ) brightnessBuffer[y][x] = MAX_BRIGHTNESS;
+          }
+
+          if ( brightnessBuffer[y][x] > 0 )
+          {
+            ledDriver.setPixel(x, y, GREEN, brightnessBuffer[y][x]);
+          }
+        } // x
+      }  // y
+      ledDriver.show();
+      delay (15);
+    }
+    webServer.handleClient();
+    if ( i > 100 && mleer == 0x7FF) break;
+  }
+
+  writeScreenBuffer(screenBufferNew, color, brightness);
+} // writeScreenBufferMatrix
 
 //*****************************************************************************
 // "On/off" pressed
@@ -2507,6 +2632,10 @@ void handleButtonSettings()
     if (settings.mySettings.transition == 2)
         message += " checked";
     message += "> fade "
+    "<input type=\"radio\" name=\"tr\" value=\"3\"";
+    if (settings.mySettings.transition == 3)
+        message += " checked";
+    message += "> matrix "
         "<input type=\"radio\" name=\"tr\" value=\"1\"";
     if (settings.mySettings.transition == 1)
         message += " checked";
@@ -2691,6 +2820,9 @@ void handleCommitSettings()
         break;
     case 2:
         settings.mySettings.transition = TRANSITION_FADE;
+        break;
+    case 3:
+        settings.mySettings.transition = TRANSITION_MATRIX;
         break;
     }
     // ------------------------------------------------------------------------

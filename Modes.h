@@ -64,7 +64,8 @@ enum eTransition
 {
     TRANSITION_NORMAL, // 0
     TRANSITION_MOVEUP, // 1
-    TRANSITION_FADE    // 2
+    TRANSITION_FADE,   // 2
+    TRANSITION_MATRIX  // 3
 };
 
 #endif
