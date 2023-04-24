@@ -32,7 +32,7 @@ void Settings::resetToDefault() {
     mySettings.nightOffTime = 3600;
     mySettings.dayOnTime = 18000;
     mySettings.hourBeep = false;
-
+    mySettings.moodRate = 0;
     saveToEEPROM();
 }
 

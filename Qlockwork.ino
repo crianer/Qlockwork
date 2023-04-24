@@ -198,6 +198,7 @@ int updateInfo = 0;
 IPAddress myIP = { 0,0,0,0 };
 uint32_t lastButtonPress = 0;
 bool testFlag = false;
+unsigned long mood_millis = 0;
 
 //*****************************************************************************
 // Setup()
@@ -975,6 +976,8 @@ void loop()
           runTransitionDemo = true;
           break;
         case IR_CODE_MOOD:
+          settings.mySettings.colorChange = COLORCHANGE_MOOD;
+          settings.mySettings.color = MOOD;
           break;
         case IR_CODE_5MIN:
           settings.mySettings.colorChange = COLORCHANGE_FIVE;
@@ -995,6 +998,15 @@ void loop()
       irrecv.resume();
     }
 #endif
+
+
+    if (settings.mySettings.colorChange == COLORCHANGE_MOOD){
+      if((mood_millis + MOOD_INTERVAL_MIN + ((MOOD_INTERVAL_MAX - MOOD_INTERVAL_MIN) * (MOOD_LEVEL_MAX - settings.mySettings.moodRate) / MOOD_LEVEL_MAX)) < millis()){
+        mood_millis = millis();
+        ledDriver.updateColorWheel();
+        screenBufferNeedsUpdate = true;
+      }
+    }
 
     // Render a new screenbuffer if needed
     if (screenBufferNeedsUpdate)
@@ -2699,6 +2711,10 @@ void handleButtonSettings()
     message += "<tr><td>"
         "Colorchange"
         "</td><td>"
+        "<input type=\"radio\" name=\"cc\" value=\"4\"";
+    if (settings.mySettings.colorChange == 4)
+        message += " checked";
+    message += "> mood "
         "<input type=\"radio\" name=\"cc\" value=\"3\"";
     if (settings.mySettings.colorChange == 3)
         message += " checked";
@@ -2900,6 +2916,10 @@ void handleCommitSettings()
         break;
     case 3:
         settings.mySettings.colorChange = COLORCHANGE_DAY;
+        break;
+    case 4:
+        settings.mySettings.colorChange = COLORCHANGE_MOOD;
+        settings.mySettings.color = MOOD;
         break;
     }
     // ------------------------------------------------------------------------

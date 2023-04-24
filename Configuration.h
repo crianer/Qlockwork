@@ -40,6 +40,9 @@
 //#define LOCATION "Zurich, CH"
 //#define LOCATION "Hong Kong, HK"
 
+#define MOOD_INTERVAL_MIN 300
+#define MOOD_INTERVAL_MAX 4000
+
 //#define FRONTCOVER_EN
 #define FRONTCOVER_DE_DE
 //#define FRONTCOVER_DE_SW

@@ -15,6 +15,8 @@
 #define SETTINGS_MAGIC_NUMBER 0x2A
 #define SETTINGS_VERSION 25
 
+#define MOOD_LEVEL_MAX 9
+
 class Settings {
 public:
     Settings();
@@ -40,6 +42,7 @@ public:
         time_t  nightOffTime;
         time_t  dayOnTime;
         boolean hourBeep;
+        uint8_t moodRate;
     } mySettings;
 
     void saveToEEPROM();
