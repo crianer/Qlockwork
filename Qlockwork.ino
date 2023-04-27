@@ -31,9 +31,11 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266WiFi.h>
 #include <TimeLib.h>
+#include <LittleFS.h>
+
 #include "Colors.h"
 #include "Configuration.h"
-#include "Events.h"
+#include "Event.h"
 #include "LedDriver.h"
 #include "Modes.h"
 #include "Ntp.h"
@@ -44,6 +46,8 @@
 #include "Timezone.h"
 #include "Timezones.h"
 #include "WiFiManager.h"
+#include "Animation.h"
+#include "html_content.h"
 
 #ifdef IR_RECEIVER
 #include <IRremoteESP8266.h>
@@ -178,10 +182,6 @@ uint8_t alarmOn = false;
 #endif
 
 // Events
-#ifdef EVENT_TIME
-    uint32_t showEventTimer = EVENT_TIME;
-#endif
-
 #if defined(SHOW_MODE_SUNRISE_SUNSET) && defined(APIKEY)
 bool sunrise_started = false;
 unsigned long sunrise_millis = 0;
@@ -199,6 +199,21 @@ IPAddress myIP = { 0,0,0,0 };
 uint32_t lastButtonPress = 0;
 bool testFlag = false;
 unsigned long mood_millis = 0;
+
+//Animationen
+s_myanimation myanimation;
+s_frame copyframe;
+uint32_t anipalette[] = { 0xFF0000, 0xFFAA00, 0xFFFF00, 0x00FF00, 0x00FFFF, 0x0000FF, 0xAA00FF, 0xFF00FF, 0x000000, 0xFFFFFF };
+String myanimationslist[MAXANIMATION];
+uint8_t akt_aniframe = 0;
+uint8_t akt_aniloop = 0;
+uint8_t frame_fak = 1;        // Animationsrichtung
+String animation;
+bool playanimation = false;
+
+uint16_t minFreeBlockSize = 10000;
+uint16_t codeline = 0;
+String codetab;
 
 //*****************************************************************************
 // Setup()
@@ -461,7 +476,6 @@ void setup()
 
     // print some infos
 #ifdef DEBUG
-    Serial.printf("Defined events: %u\r\n", sizeof(events) / sizeof(event_t));
     Serial.printf("Day on: %02u:%02u:00\r\n", hour(settings.mySettings.dayOnTime), minute(settings.mySettings.dayOnTime));
     Serial.printf("Night off: %02u:%02u:00\r\n", hour(settings.mySettings.nightOffTime), minute(settings.mySettings.nightOffTime));
     Serial.printf("Alarm1: %02u:%02u:00 ", hour(settings.mySettings.alarm1Time), minute(settings.mySettings.alarm1Time));
@@ -484,6 +498,9 @@ void setup()
 #ifdef FRONTCOVER_BINARY
     settings.setTransition(TRANSITION_NORMAL);
 #endif
+    setupFS();
+    // Load Animationsliste
+    getAnimationList();
 } // setup()
 
 //*****************************************************************************
@@ -504,10 +521,6 @@ void loop()
 #ifdef SHOW_MODE_MOONPHASE
         moonphase = getMoonphase(year(), month(), day());
 #endif
-
-        // Reset URL event 0
-        events[0].day = 0;
-        events[0].month = 0;
 
 #ifdef DEBUG
         Serial.printf("Uptime: %u days, %02u:%02u\r\n", int(upTime / 86400), hour(upTime), minute(upTime));
@@ -837,34 +850,6 @@ void loop()
             }
         }
 
-        // Show event in feed
-#ifdef EVENT_TIME
-        if (mode == MODE_TIME)
-        {
-            showEventTimer--;
-            if (!showEventTimer)
-            {
-                showEventTimer = EVENT_TIME;
-                for (uint8_t i = 0; i < (sizeof(events) / sizeof(event_t)); i++)
-                {
-                    if ((day() == events[i].day) && (month() == events[i].month))
-                    {
-                        if (events[i].year)
-                            feedText = "  " + events[i].text + " (" + String(year() - events[i].year) + ")   ";
-                        else
-                            feedText = "  " + events[i].text + "   ";
-                        feedPosition = 0;
-                        feedColor = events[i].color;
-#ifdef DEBUG
-                        Serial.println("Event: \"" + feedText + "\"");
-#endif
-                        setMode(MODE_FEED);
-                    }
-                }
-            }
-        }
-#endif
-
     // Set brightness from LDR and update display.
 #ifdef LDR
       if (settings.mySettings.useAbc)
@@ -872,6 +857,35 @@ void loop()
         updateBrightness(false);
       }
 #endif
+
+      if (mode == MODE_TIME)
+      {
+          for (uint8_t i = 0; i < NUM_EVTS; i++)
+          {
+              uint8_t rep_rate = evtRepRate[settings.mySettings.events[i].repRate];
+              if (settings.mySettings.events[i].enabled && (day() == day(settings.mySettings.events[i].time)) && (month() == month(settings.mySettings.events[i].time)) && !(minute() % rep_rate))
+              {
+                  feedText = "  " + String(settings.mySettings.events[i].txt) + "   ";
+                  feedPosition = 0;
+                  feedColor = settings.mySettings.events[i].color;
+#ifdef DEBUG
+                  Serial.println("Event Text: \"" + feedText + "\"");
+                  Serial.println("Event Animation: " + String(settings.mySettings.events[i].animation));
+#endif
+                  if (loadAnimation(String(settings.mySettings.events[i].animation)))
+                  {
+                    akt_aniframe = 0;
+                    akt_aniloop = 0;
+                    frame_fak = 0;
+#ifdef DEBUG
+                    Serial.println("Starte Event Animation: " + String(myanimation.name) );
+#endif
+                    while ( showAnimation(brightness) ) {}
+                    setMode(MODE_FEED);
+                  }
+              }
+          }
+      }
     }
 
     //*************************************************************************
@@ -2223,11 +2237,13 @@ void setupWebServer()
     webServer.on("/", handleRoot);
     webServer.on("/handleButtonOnOff", []() { buttonOnOffPressed(); callRoot(); });
     webServer.on("/handleButtonSettings", handleButtonSettings);
+    webServer.on("/handleButtonEvents", handleButtonEvents);
     webServer.on("/handleButtonMode", []() { buttonModePressed(); callRoot(); });
     webServer.on("/handleButtonTime", []() {    buttonTimePressed(); callRoot(); });
-    webServer.on("/commitSettings", handleCommitSettings);
+    webServer.on("/commitSettings", []() {    handleCommitSettings(); callRoot(); });
+    webServer.on("/commitEvents", []() {    handleCommitEvents(); handleButtonSettings(); });
     webServer.on("/reset", handleReset);
-    webServer.on("/setEvent", handleSetEvent);
+    webServer.on(F("/wifireset"), handleWiFiReset);
     webServer.on("/showText", handleShowText);
     webServer.on("/control", handleControl);
     webServer.begin();
@@ -2819,8 +2835,121 @@ void handleButtonSettings()
     // ------------------------------------------------------------------------
     message += "</table>"
         "<br><button title=\"Save Settings.\"><i class=\"fa fa-check\"></i></button>"
-        "</form></body></html>";
+        "</form>"
+        "<button title=\"Events\" onclick=\"window.location.href='/handleButtonEvents'\"><i class=\"fa fa-birthday-cake\"></i></button>"
+        "<br>"
+        "<button title=\"Back\" onclick=\"window.location.href='/'\"><i class=\"fa fa-reply\"></i></button>";
+        "</body></html>";
     webServer.send(200, "text/html", message);
+}
+
+// Page settings.
+void handleButtonEvents()
+{
+#ifdef DEBUG
+  Serial.println("Events pressed.");
+#endif
+  String message = "<!doctype html>";
+  message += "<html>";
+  message += "<head>";
+  message += "<title>" + String(WEBSITE_TITLE) + " Events</title>";
+  message += "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">";
+  message += "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">";
+  message += "<style>";
+  message += "body{background-color:#FFFFFF;text-align:center;color:#333333;font-family:Sans-serif;font-size:16px;}";
+  message += "input[type=submit]{background-color:#1FA3EC;text-align:center;color:#FFFFFF;width:200px;padding:12px;border:5px solid #FFFFFF;font-size:20px;border-radius:10px;}";
+  message += "button{background-color:#1FA3EC;text-align:center;color:#FFFFFF;width:200px;padding:10px;border:5px solid #FFFFFF;font-size:24px;border-radius:10px;}";
+  message += "table{border-collapse:collapse;margin:0px auto;} td{padding:12px;border-bottom:1px solid #ddd; text-align:right;} tr:first-child{border-top:1px solid #ddd; text-align:right;} td:first-child{text-align:right;} td:last-child{text-align:left;}";
+  message += "select{font-size:16px;}";
+  message += "</style>";
+  message += "</head>";
+  message += "<body>";
+  message += "<h1>" + String(WEBSITE_TITLE) + " Events</h1>";
+  message += "<form action=\"/commitEvents\">";
+  message += "<table>";
+
+  // ------------------------------------------------------------------------
+  for (uint8_t i = 0; i < NUM_EVTS; i++){
+    message += "<tr><td rowspan=\"6\">";
+    message += "Event " + String(i + 1);
+    message += "</td><td>";
+    message += "Enable";
+    message += "</td>";
+    message += "<td>";
+    message += "<input type=\"radio\" name=\"ev" + String(i) + "\" value=\"1\"";
+    if (settings.mySettings.events[i].enabled) message += " checked";
+    message += "> on ";
+    message += "<input type=\"radio\" name=\"ev" + String(i) + "\" value=\"0\"";
+    if (!settings.mySettings.events[i].enabled) message += " checked";
+    message += "> off";
+    message += "</td></tr>";
+    message += "<tr><td>";
+    message += "Date";
+    message += "</td><td>";
+    message += "<input type=\"date\" name=\"ev" + String(i) + "d\" value=\"";
+    message += String(year(settings.mySettings.events[i].time)) + "-";
+    if (month(settings.mySettings.events[i].time) < 10) message += "0";
+    message += String(month(settings.mySettings.events[i].time)) + "-";
+    if (day(settings.mySettings.events[i].time) < 10) message += "0";
+    message += String(day(settings.mySettings.events[i].time))+ "\" min=\"1970-01-01\">";
+    message += "</td></tr>";
+    message += "<tr><td>";
+    message += "Text";
+    message += "</td><td>";
+    message += "<input type=\"text\" name=\"ev" + String(i) + "t\" value=\"";
+    message += String(settings.mySettings.events[i].txt)+ "\" pattern=\"[\\x20-\\x7e]{0," + String(LEN_EVT_STR-1) + "}\" placeholder=\"Event text ...\">";
+    message += "</td></tr>";
+    message += "<tr><td>";
+    message += "Animation";
+    message += "</td><td>";
+    message += "<select name=\"ev" + String(i) + "ani\">";
+    for(uint8_t j = 0; j < MAXANIMATION; j++){
+      Serial.println("Animation " + String(j) + " length: " + String(myanimationslist[j].length()));
+      Serial.println("Animation " + String(j) + " text: " + myanimationslist[j]);
+      if ( myanimationslist[j].length() != 0){
+        message += "<option value=\"" +String(j) + "\"";
+        if (myanimationslist[j] == String(settings.mySettings.events[i].animation)) message += " selected";
+        message += ">";
+        message += myanimationslist[j] + "</option>";
+      }
+    }
+    webServer.handleClient();
+    delay(0);
+    message += "</td></tr>";
+    message += "<tr><td>";
+    message += "Color";
+    message += "</td><td>";
+    message += "<select name=\"ev" + String(i) + "c\">";
+    uint8_t colorNum = settings.mySettings.events[i].color;
+    for(uint8_t j = 0; j <= COLOR_COUNT; j++){
+      message += "<option value=\"" +String(j) + "\"";
+      if (colorNum == j) message += " selected";
+      message += ">";
+      message += String(FPSTR(sColorStr[j])) + "</option>";
+    }
+    message += "</select>";
+    message += "</td></tr>";
+    message += "<tr><td>";
+    message += "Repetition Rate";
+    message += "</td><td>";
+    message += "<select name=\"ev" + String(i) + "rep\">";
+    for(uint8_t j = 0; j < EVT_REP_COUNT; j++){
+      message += "<option value=\"" + String(j) + "\"";
+      if (settings.mySettings.events[i].repRate == j) message += " selected";
+      message += ">" + String(FPSTR(sEvtRep[j])) + "</option>";
+    }
+    message += "</select> minutes.";
+    message += "</td></tr>";
+  }
+  // ------------------------------------------------------------------------
+
+  message += "</table>";
+  message += "<br><button title=\"Save Settings.\"><i class=\"fa fa-check\"></i></button>";
+  message += "</form>";
+  message += "<button title=\"Back\" onclick=\"window.location.href='/handleButtonSettings'\"><i class=\"fa fa-reply\"></i></button>";
+  message += "</body>";
+  message += "</html>";
+  webServer.send(200, "text/html", message);
 }
 
 void handleCommitSettings()
@@ -2957,8 +3086,49 @@ void handleCommitSettings()
     }
     // ------------------------------------------------------------------------
     settings.saveToEEPROM();
-    callRoot();
     screenBufferNeedsUpdate = true;
+}
+
+void handleCommitEvents()
+{
+#ifdef DEBUG
+  Serial.println("Commit events pressed.");
+#endif
+  // ------------------------------------------------------------------------
+  for (uint8_t i = 0; i < NUM_EVTS; i++){
+    char text[LEN_EVT_STR];
+    memset(text, 0, sizeof(text));
+    webServer.arg("ev" + String(i) + "t").toCharArray(text, sizeof(text), 0);
+    memcpy(settings.mySettings.events[i].txt, text, sizeof(text));
+    settings.mySettings.events[i].enabled = webServer.arg("ev" + String(i)).toInt();
+    char ani[LEN_ANI_STR];
+    myanimationslist[webServer.arg("ev" + String(i) + "ani").toInt()].toCharArray(ani, sizeof(ani), 0);
+    memcpy(settings.mySettings.events[i].animation, ani, sizeof(ani));
+    settings.mySettings.events[i].color = (eColor)(webServer.arg("ev" + String(i) + "c").toInt());
+    settings.mySettings.events[i].repRate = (eEvtRep)(webServer.arg("ev" + String(i) + "rep").toInt());
+    tmElements_t eventTm;
+    eventTm.Year = webServer.arg("ev" + String(i) + "d").substring(0, 4).toInt() - 1970;
+    eventTm.Month = webServer.arg("ev" + String(i) + "d").substring(5, 7).toInt();
+    eventTm.Day = webServer.arg("ev" + String(i) + "d").substring(8, 10).toInt();
+    eventTm.Hour = 0;
+    eventTm.Minute = 0;
+    eventTm.Second = 0;
+    time_t eventTime = makeTime(eventTm);
+    settings.mySettings.events[i].time = eventTime;
+  }
+  // ------------------------------------------------------------------------
+#ifdef DEBUG
+  for (uint8_t i = 0; i < NUM_EVTS; i++){
+      Serial.println("Enable" + String(i) + ": " + webServer.arg("ev" + String(i)).toInt());
+      Serial.println("Date" + String(i) + ": " + webServer.arg("ev" + String(i) + "d"));
+      Serial.println("Text" + String(i) + ": " + webServer.arg("ev" + String(i) + "t"));
+      Serial.println("Animation" + String(i) + ": " + myanimationslist[webServer.arg("ev" + String(i) + "ani").toInt()]);
+      Serial.println("Color" + String(i) + ": " + webServer.arg("ev" + String(i) + "c").toInt());
+      Serial.println("Rep" + String(i) + ": " + webServer.arg("ev" + String(i) + "rep").toInt());
+  }
+#endif
+  settings.saveToEEPROM();
+  screenBufferNeedsUpdate = true;
 }
 
 // Page reset
@@ -2968,18 +3138,21 @@ void handleReset()
     ESP.restart();
 }
 
-// Page setEvent
-void handleSetEvent()
+// WiFi Reset
+void handleWiFiReset()
 {
-    events[0].day = webServer.arg("day").toInt();
-    events[0].month = webServer.arg("month").toInt();
-    events[0].text = webServer.arg("text").substring(0, 40);
-    events[0].color = (eColor)webServer.arg("color").toInt();;
-    webServer.send(200, "text/plain", "OK.");
-
-#ifdef DEBUG
-    Serial.println("Event set: " + String(events[0].day) + "." + String(events[0].month) + ". " + events[0].text);
-#endif
+  webServer.send(200, TEXT_PLAIN, F("OK. I'll be back as AP!"));
+  delay(0);
+  webServer.handleClient();
+  delay(1000);
+  webServer.handleClient();
+  delay(5000);
+  WiFi.disconnect(true);
+  delay(1000);
+  ESP.eraseConfig();
+  Serial.println(F("ESP Config gelöscht"));
+  delay(1000);
+  ESP.restart();
 }
 
 // Page showText
@@ -3012,4 +3185,99 @@ void handleControl()
 {
     setMode((Mode)webServer.arg("mode").toInt());
     webServer.send(200, "text/plain", "OK.");
+}
+
+//################################################################################################################
+// ANIMATIONEN
+bool showAnimation(uint8_t brightness)
+{
+  uint8_t red;
+  uint8_t green;
+  uint8_t blue;
+  //  unsigned long aktmillis = millis();
+  // beim ersten Frame in der ersten loop die Corner LEDs löschen
+  if (  ! akt_aniframe && ! akt_aniloop )
+  {
+    for (uint8_t cp = 0; cp <= 3; cp++)
+    {
+      ledDriver.setPixelRGB(110 + cp, 0, 0, 0);
+    }
+    if ( myanimation.laufmode < 2 ) frame_fak = 1;
+  }
+
+  if ( akt_aniloop >= myanimation.loops )
+  {
+    akt_aniloop = 0;
+    akt_aniframe = 0;
+    frame_fak = 1;
+    return false;
+  }
+  else
+  {
+#ifdef  DEBUG_ANIMATION
+    Serial.println("Start Animation: " + String(myanimation.name) + " Loop: " +  String(akt_aniloop) + " Frame: " + String(akt_aniframe) );
+#endif
+
+    for ( uint8_t z = 0; z <= 9; z++)
+    {
+      for ( uint8_t x = 0; x <= 10; x++)
+      {
+        red = myanimation.frame[akt_aniframe].color[x][z].red * brightness * 0.0039;
+        green = myanimation.frame[akt_aniframe].color[x][z].green * brightness * 0.0039;
+        blue = myanimation.frame[akt_aniframe].color[x][z].blue * brightness * 0.0039;
+        ledDriver.setPixelRGB(x, z, red, green, blue);
+      }
+    }
+    ledDriver.show();
+    webServer.handleClient();
+    if ( myanimation.frame[akt_aniframe].delay > 200 )
+    {
+      delay (myanimation.frame[akt_aniframe].delay / 2);
+      webServer.handleClient();
+      delay (myanimation.frame[akt_aniframe].delay / 2);
+    }
+    else
+    {
+      delay (myanimation.frame[akt_aniframe].delay);
+    }
+    if ( myanimation.laufmode == 0 )
+    {
+      akt_aniframe++;
+      if (  (myanimation.frame[akt_aniframe].delay == 0 || akt_aniframe > MAXFRAMES ))
+      {
+        akt_aniframe = 0;
+        akt_aniloop++;
+      }
+    }
+    if ( myanimation.laufmode == 1 )
+    {
+      akt_aniframe = akt_aniframe + frame_fak;
+      if (myanimation.frame[akt_aniframe].delay == 0 || akt_aniframe > MAXFRAMES )
+      {
+        frame_fak = -1;
+        akt_aniframe = akt_aniframe - 2;
+        akt_aniloop++;
+      }
+      if (akt_aniframe == 0 ) {
+        frame_fak = 1;
+        akt_aniloop++;
+      }
+    }
+    if ( myanimation.laufmode == 2 )
+    {
+      frame_fak++;
+      for ( uint8_t i = 0; i <= 20; i++)
+      {
+        akt_aniframe = random(0, MAXFRAMES);
+        if (myanimation.frame[akt_aniframe].delay != 0 ) break;
+      }
+      if ( frame_fak == 20 )
+      {
+        frame_fak = 0;
+        akt_aniloop++;
+      }
+    }
+    screenBufferNeedsUpdate = true;
+    return true;
+  }
 }

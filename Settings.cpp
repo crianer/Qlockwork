@@ -33,6 +33,16 @@ void Settings::resetToDefault() {
     mySettings.dayOnTime = 18000;
     mySettings.hourBeep = false;
     mySettings.moodRate = 0;
+
+    for (uint8_t i = 0; i < NUM_EVTS ; i++) {
+      mySettings.events[i].enabled = false;
+      memset(mySettings.events[i].txt, 0, sizeof(mySettings.events[i].txt));
+      memset(mySettings.events[i].animation, 0, sizeof(mySettings.events[i].animation));
+      mySettings.events[i].color = WHITE;
+      mySettings.events[i].repRate = EVT_REP_60;
+      mySettings.events[i].time = 0;
+    }
+    
     saveToEEPROM();
 }
 

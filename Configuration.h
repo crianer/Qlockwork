@@ -304,4 +304,5 @@
 //#define UPDATE_INFOSERVER "thorsten-wahl.ch"
 //#define UPDATE_INFOFILE "/qlockwork/updateinfo.json"
 
+#define __NAME__ (strrchr(__FILE__,'\\')?strrchr(__FILE__,'\\')+1:__FILE__)
 #endif

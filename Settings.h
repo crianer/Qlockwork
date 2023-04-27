@@ -11,11 +11,14 @@
 #include "Configuration.h"
 #include "Languages.h"
 #include "Modes.h"
+#include "Event.h"
 
 #define SETTINGS_MAGIC_NUMBER 0x2A
 #define SETTINGS_VERSION 25
 
 #define MOOD_LEVEL_MAX 9
+
+#define NUM_EVTS 7
 
 class Settings {
 public:
@@ -43,6 +46,7 @@ public:
         time_t  dayOnTime;
         boolean hourBeep;
         uint8_t moodRate;
+        event_t events[NUM_EVTS];
     } mySettings;
 
     void saveToEEPROM();
