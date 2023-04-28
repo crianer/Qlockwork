@@ -20,12 +20,13 @@
 //
 //*****************************************************************************
 
-#define FIRMWARE_VERSION 20220830
+#define FIRMWARE_VERSION 20230428
 
 #include <Arduino.h>
 #include <Arduino_JSON.h>
 #include <ArduinoHttpClient.h>
 #include <ArduinoOTA.h>
+
 #include <ESP8266HTTPUpdateServer.h>
 #include <ESP8266mDNS.h>
 #include <ESP8266WebServer.h>
