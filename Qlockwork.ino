@@ -863,7 +863,7 @@ void loop()
           for (uint8_t i = 0; i < NUM_EVTS; i++)
           {
               uint8_t rep_rate = evtRepRate[settings.mySettings.events[i].repRate];
-              if (settings.mySettings.events[i].enabled && (day() == day(settings.mySettings.events[i].time)) && (month() == month(settings.mySettings.events[i].time)) && !(minute() % rep_rate))
+              if (settings.mySettings.events[i].enabled && (day() == day(settings.mySettings.events[i].time)) && (month() == month(settings.mySettings.events[i].time)) && !(minute() % rep_rate) && (second() < 30))
               {
                   feedText = "  " + String(settings.mySettings.events[i].txt) + "   ";
                   feedPosition = 0;
