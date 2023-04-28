@@ -2263,153 +2263,153 @@ void handleNotFound()
 // Page /
 void handleRoot()
 {
-    String message = "<!doctype html>"
-        "<html>"
-        "<head>"
-        "<title>" + String(WEBSITE_TITLE) + "</title>"
-        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
-        "<meta http-equiv=\"refresh\" content=\"60\" charset=\"UTF-8\">"
-        "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">"
-        "<style>"
-        "body{background-color:#FFFFFF;text-align:center;color:#333333;font-family:Sans-serif;font-size:16px;}"
-        "button{background-color:#1FA3EC;text-align:center;color:#FFFFFF;width:200px;padding:10px;border:5px solid #FFFFFF;font-size:24px;border-radius:10px;}"
-        "</style>"
-        "</head>"
-        "<body>"
-        "<h1>" + String(WEBSITE_TITLE) + "</h1>";
+    String message = F("<!doctype html>");
+        message += F("<html>");
+        message += F("<head>");
+        message += F("<title>") + String(WEBSITE_TITLE) + F("</title>");
+        message += F("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+        message += F("<meta http-equiv=\"refresh\" content=\"60\" charset=\"UTF-8\">");
+        message += F("<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">");
+        message += F("<style>");
+        message += F("body{background-color:#FFFFFF;text-align:center;color:#333333;font-family:Sans-serif;font-size:16px;}");
+        message += F("button{background-color:#1FA3EC;text-align:center;color:#FFFFFF;width:200px;padding:10px;border:5px solid #FFFFFF;font-size:24px;border-radius:10px;}");
+        message += F("</style>");
+        message += F("</head>");
+        message += F("<body>");
+        message += F("<h1>") + String(WEBSITE_TITLE) + F("</h1>");
 #ifdef DEDICATION
     message += DEDICATION;
-    message += "<br><br>";
+    message += F("<br><br>");
 #endif
     if (mode == MODE_BLANK)
-        message += "<button title=\"Switch LEDs on\" onclick=\"window.location.href='/handleButtonOnOff'\"><i class=\"fa fa-toggle-off\"></i></button>";
+        message += F("<button title=\"Switch LEDs on\" onclick=\"window.location.href='/handleButtonOnOff'\"><i class=\"fa fa-toggle-off\"></i></button>");
     else
-        message += "<button title=\"Switch LEDs off\" onclick=\"window.location.href='/handleButtonOnOff'\"><i class=\"fa fa-toggle-on\"></i></button>";
-    message += "<button title=\"Settings\" onclick=\"window.location.href='/handleButtonSettings'\"><i class=\"fa fa-gear\"></i></button>"
-        "<br><br>"
-        "<button title=\"Switch modes\" onclick=\"window.location.href='/handleButtonMode'\"><i class=\"fa fa-bars\"></i></button>"
-        "<button title=\"Return to time\" onclick=\"window.location.href='/handleButtonTime'\"><i class=\"fa fa-clock-o\"></i></button>";
+        message += F("<button title=\"Switch LEDs off\" onclick=\"window.location.href='/handleButtonOnOff'\"><i class=\"fa fa-toggle-on\"></i></button>");
+    message += F("<button title=\"Settings\" onclick=\"window.location.href='/handleButtonSettings'\"><i class=\"fa fa-gear\"></i></button>");
+        message += F("<br><br>");
+        message += F("<button title=\"Switch modes\" onclick=\"window.location.href='/handleButtonMode'\"><i class=\"fa fa-bars\"></i></button>");
+        message += F("<button title=\"Return to time\" onclick=\"window.location.href='/handleButtonTime'\"><i class=\"fa fa-clock-o\"></i></button>");
 #if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
-    message += "<br><br><i class = \"fa fa-home\" style=\"font-size:20px;\"></i>";
-    message += "<br><i class=\"fa fa-thermometer\" style=\"font-size:20px;\"></i> " + String(roomTemperature) + "&deg;C / " + String(roomTemperature * 1.8 + 32.0) + "&deg;F";
+    message += F("<br><br><i class = \"fa fa-home\" style=\"font-size:20px;\"></i>");
+    message += F("<br><i class=\"fa fa-thermometer\" style=\"font-size:20px;\"></i> ") + String(roomTemperature) + F("&deg;C / ") + String(roomTemperature * 1.8 + 32.0) + F("&deg;F");
 #endif
 #ifdef SENSOR_DHT22
-    message += "<br><i class=\"fa fa-tint\" style=\"font-size:20px;\"></i> " + String(roomHumidity) + "% RH"
-        "<br><span style=\"font-size:20px;\">";
+    message += F("<br><i class=\"fa fa-tint\" style=\"font-size:20px;\"></i> ") + String(roomHumidity) + F("% RH");
+        message += F("<br><span style=\"font-size:20px;\">");
     if (roomHumidity < 30)
-        message += "<i style=\"color:Red;\" class=\"fa fa-square\"\"></i>";
+        message += F("<i style=\"color:Red;\" class=\"fa fa-square\"\"></i>");
     else
-        message += "<i style=\"color:Red;\" class=\"fa fa-square-o\"></i>";
+        message += F("<i style=\"color:Red;\" class=\"fa fa-square-o\"></i>");
     if ((roomHumidity >= 30) && (roomHumidity < 40))
-        message += "&nbsp;<i style=\"color:Orange;\" class=\"fa fa-square\"></i>";
+        message += F("&nbsp;<i style=\"color:Orange;\" class=\"fa fa-square\"></i>");
     else
-        message += "&nbsp;<i style=\"color:Orange;\" class=\"fa fa-square-o\"></i>";
+        message += F("&nbsp;<i style=\"color:Orange;\" class=\"fa fa-square-o\"></i>");
     if ((roomHumidity >= 40) && (roomHumidity <= 50))
-        message += "&nbsp;<i style=\"color:MediumSeaGreen;\" class=\"fa fa-square\"></i>";
+        message += F("&nbsp;<i style=\"color:MediumSeaGreen;\" class=\"fa fa-square\"></i>");
     else
-        message += "&nbsp;<i style=\"color:MediumSeaGreen;\" class=\"fa fa-square-o\"></i>";
+        message += F("&nbsp;<i style=\"color:MediumSeaGreen;\" class=\"fa fa-square-o\"></i>");
     if ((roomHumidity > 50) && (roomHumidity < 60))
-        message += "&nbsp;<i style=\"color:Lightblue;\" class=\"fa fa-square\"></i>";
+        message += F("&nbsp;<i style=\"color:Lightblue;\" class=\"fa fa-square\"></i>");
     else
-        message += "&nbsp;<i style=\"color:Lightblue;\" class=\"fa fa-square-o\"></i>";
+        message += F("&nbsp;<i style=\"color:Lightblue;\" class=\"fa fa-square-o\"></i>");
     if (roomHumidity >= 60)
-        message += "&nbsp;<i style=\"color:Blue;\" class=\"fa fa-square\"></i>";
+        message += F("&nbsp;<i style=\"color:Blue;\" class=\"fa fa-square\"></i>");
     else
-        message += "&nbsp;<i style=\"color:Blue;\" class=\"fa fa-square-o\"></i>";
-    message += "</span>";
+        message += F("&nbsp;<i style=\"color:Blue;\" class=\"fa fa-square-o\"></i>");
+    message += F("</span>");
 #endif
 #ifdef APIKEY
-    message += "<br><br><i class = \"fa fa-tree\" style=\"font-size:20px;\"></i>"
-        "<br><i class = \"fa fa-thermometer\" style=\"font-size:20px;\"></i> " + String(outdoorWeather.temperature) + "&deg;C / " + String(outdoorWeather.temperature * 1.8 + 32.0) + "&deg;F" +\
-        "<br><i class = \"fa fa-tint\" style=\"font-size:20px;\"></i> " + String(outdoorWeather.humidity) + "% RH" +\
-        "<br>" + String(outdoorWeather.pressure) + " hPa / " + String(outdoorWeather.pressure / 33.865) + " inHg" +\
-        "<br><i class = \"fa fa-sun-o\" style=\"font-size:20px;\"></i> " + String(hour(timeZone.toLocal(outdoorWeather.sunrise))) + ":" + String(minute(timeZone.toLocal(outdoorWeather.sunrise))) +\
-        " <i class = \"fa fa-moon-o\" style=\"font-size:20px;\"></i> " + String(hour(timeZone.toLocal(outdoorWeather.sunset))) + ":" + String(minute(timeZone.toLocal(outdoorWeather.sunset))) +\
-        "<br>" + outdoorWeather.description;
+    message += F("<br><br><i class = \"fa fa-tree\" style=\"font-size:20px;\"></i>");
+        message += F("<br><i class = \"fa fa-thermometer\" style=\"font-size:20px;\"></i> ") + String(outdoorWeather.temperature) + F("&deg;C / ") + String(outdoorWeather.temperature * 1.8 + 32.0) + F("&deg;F");
+        message += F("<br><i class = \"fa fa-tint\" style=\"font-size:20px;\"></i> ") + String(outdoorWeather.humidity) + F("% RH");
+        message += F("<br>") + String(outdoorWeather.pressure) + F(" hPa / ") + String(outdoorWeather.pressure / 33.865) + F(" inHg");
+        message += F("<br><i class = \"fa fa-sun-o\" style=\"font-size:20px;\"></i> ") + String(hour(timeZone.toLocal(outdoorWeather.sunrise))) + F(":") + String(minute(timeZone.toLocal(outdoorWeather.sunrise)));
+        message += F(" <i class = \"fa fa-moon-o\" style=\"font-size:20px;\"></i> ") + String(hour(timeZone.toLocal(outdoorWeather.sunset))) + F(":") + String(minute(timeZone.toLocal(outdoorWeather.sunset)));
+        message += F("<br>") + outdoorWeather.description;
 #endif
-    message += "<span style=\"font-size:12px;\">"
-        "<br><br><a href=\"http://shop.bracci.ch/\">QlockWiFive</a> was <i class=\"fa fa-code\"></i> with <i class=\"fa fa-heart\"></i> by <a href=\"https://github.com/ch570512/Qlockwork/\">ch570512</a> and <a href=\"https://github.com/bracci/Qlockwork/\">bracci</a>"
-        "<br>Firmware: " + String(FIRMWARE_VERSION);
+    message += F("<span style=\"font-size:12px;\">");
+        message += F("<br><br><a href=\"http://shop.bracci.ch/\">QlockWiFive</a> was <i class=\"fa fa-code\"></i> with <i class=\"fa fa-heart\"></i> by <a href=\"https://github.com/ch570512/Qlockwork/\">ch570512</a> and <a href=\"https://github.com/bracci/Qlockwork/\">bracci</a>");
+        message += F("<br>Firmware: ") + String(FIRMWARE_VERSION);
 #ifdef UPDATE_INFOSERVER
     if (updateInfo > int(FIRMWARE_VERSION))
-        message += "<br><span style=\"color:red;\">Firmwareupdate available! (" + String(updateInfo) + ")</span>";
+        message += F("<br><span style=\"color:red;\">Firmwareupdate available! (") + String(updateInfo) + F(")</span>");
 #endif
 #ifdef DEBUG_WEB
     time_t tempEspTime = now();
-    message += "<br><br>Time: " + String(hour(tempEspTime)) + ":";
+    message += F("<br><br>Time: ") + String(hour(tempEspTime)) + F(":");
     if (minute(tempEspTime) < 10)
-        message += "0";
+        message += F("0");
     message += String(minute(tempEspTime));
     if (timeZone.locIsDST(now()))
-        message += " (DST)";
-    message += " up " + String(int(upTime / 86400)) + " days, " + String(hour(upTime)) + ":";
+        message += F(" (DST)");
+    message += F(" up ") + String(int(upTime / 86400)) + F(" days, ") + String(hour(upTime)) + F(":");
     if (minute(upTime) < 10)
-        message += "0";
+        message += F("0");
     message += String(minute(upTime));
-    message += "<br>" + String(dayStr(weekday(tempEspTime))) + ", " + String(monthStr(month(tempEspTime))) + " " + String(day(tempEspTime)) + ". " + String(year(tempEspTime));
-    message += "<br>Moonphase: " + String(moonphase);
-    message += "<br>Free RAM: " + String(ESP.getFreeHeap()) + " bytes";
-    message += "<br>RSSI: " + String(WiFi.RSSI());
+    message += F("<br>") + String(dayStr(weekday(tempEspTime))) + F(", ") + String(monthStr(month(tempEspTime))) + F(" ") + String(day(tempEspTime)) + F(". ") + String(year(tempEspTime));
+    message += F("<br>Moonphase: ") + String(moonphase);
+    message += F("<br>Free RAM: ") + String(ESP.getFreeHeap()) + F(" bytes");
+    message += F("<br>RSSI: ") + String(WiFi.RSSI());
 #ifdef LDR
-    message += "<br>Brightness: " + String(brightness) + " (ABC: ";
-    settings.mySettings.useAbc ? message += "enabled" : message += "disabled";
-    message += ", min: " + String(MIN_BRIGHTNESS) + ", max : " + String(maxBrightness) + ")";
-    message += "<br>LDR: " + String(ldrValue) + " (min: " + String(minLdrValue) + ", max: " + String(maxLdrValue) + ")";
+    message += F("<br>Brightness: ") + String(brightness) + F(" (ABC: ");
+    settings.mySettings.useAbc ? message += F("enabled") : message += F("disabled");
+    message += F(", min: ") + String(MIN_BRIGHTNESS) + F(", max : ") + String(maxBrightness) + F(")");
+    message += F("<br>LDR: ") + String(ldrValue) + F(" (min: ") + String(minLdrValue) + F(", max: ") + String(maxLdrValue) + F(")");
 #endif
-    message += "<br>Error (NTP): " + String(errorCounterNTP);
+    message += F("<br>Error (NTP): ") + String(errorCounterNTP);
 #ifdef SENSOR_DHT22
-    message += "<br>Error (DHT): " + String(errorCounterDHT);
+    message += F("<br>Error (DHT): ") + String(errorCounterDHT);
 #endif
 #ifdef SENSOR_MCP9808
-    message += "<br>Error (MCP): " + String(errorCounterMCP);
+    message += F("<br>Error (MCP): ") + String(errorCounterMCP);
 #endif
 #ifdef APIKEY
-    message += "<br>Error (OpenWeather): " + String(errorCounterOutdoorWeather);
+    message += F("<br>Error (OpenWeather): ") + String(errorCounterOutdoorWeather);
 #endif
-    message += "<br>Reset reason: " + ESP.getResetReason();
-    message += "<br>Flags: ";
+    message += F("<br>Reset reason: ") + ESP.getResetReason();
+    message += F("<br>Flags: ");
 #ifdef RTC_BACKUP
-    message += "RTC ";
+    message += F("RTC ");
 #else
-    message += "<s>RTC</s> ";
+    message += F("<s>RTC</s> ");
 #endif
 #ifdef SENSOR_MCP9808
-    message += "MCP9808 ";
+    message += F("MCP9808 ");
 #else
-    message += "<s>MCP9808</s> ";
+    message += F("<s>MCP9808</s> ");
 #endif
 #ifdef SENSOR_DHT22
-    message += "DHT22 ";
+    message += F("DHT22 ");
 #else
-    message += "<s>DHT22</s> ";
+    message += F("<s>DHT22</s> ");
 #endif
 #ifdef LDR
-    message += "LDR ";
+    message += F("LDR ");
 #else
-    message += "<s>LDR</s> ";
+    message += F("<s>LDR</s> ");
 #endif
 #ifdef BUZZER
-    message += "BUZZER ";
+    message += F("BUZZER ");
 #else
-    message += "<s>BUZZER</s> ";
+    message += F("<s>BUZZER</s> ");
 #endif
 #ifdef IR_RECEIVER
-    message += "IR_RECEIVER ";
+    message += F("IR_RECEIVER ");
 #else
-    message += "<s>IR_RECEIVER</s> ";
+    message += F("<s>IR_RECEIVER</s> ");
 #endif
 #ifdef ESP_LED
-    message += "ESP_LED ";
+    message += F("ESP_LED ");
 #else
-    message += "<s>ESP_LED</s> ";
+    message += F("<s>ESP_LED</s> ");
 #endif
 #if defined(ONOFF_BUTTON) || defined(MODE_BUTTON) || defined(TIME_BUTTON)
-    message += "BUTTONS ";
+    message += F("BUTTONS ");
 #else
-    message += "<s>BUTTONS</s> ";
+    message += F("<s>BUTTONS</s> ");
 #endif
 #endif
-    message += "</span></body></html>";
+    message += F("</span></body></html>");
     webServer.send(200, "text/html", message);
 }
 
@@ -2419,427 +2419,352 @@ void handleButtonSettings()
 #ifdef DEBUG
     Serial.println("Settings pressed.");
 #endif
-    String message = "<!doctype html>"
-        "<html>"
-        "<head>"
-        "<title>" + String(WEBSITE_TITLE) + " " TXT_SETTINGS "</title>"
-        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
-        "<meta charset=\"UTF-8\">"
-        "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">"
-        "<style>"
-        "body{background-color:#FFFFFF;text-align:center;color:#333333;font-family:Sans-serif;font-size:16px;}"
-        "input[type=submit]{background-color:#1FA3EC;text-align:center;color:#FFFFFF;width:200px;padding:12px;border:5px solid #FFFFFF;font-size:20px;border-radius:10px;}"
-        "table{border-collapse:collapse;margin:0px auto;} td{padding:12px;border-bottom:1px solid #ddd;} tr:first-child{border-top:1px solid #ddd;} td:first-child{text-align:right;} td:last-child{text-align:left;}"
-        "select{font-size:16px;}"
-        "button{background-color:#1FA3EC;text-align:center;color:#FFFFFF;width:200px;padding:10px;border:5px solid #FFFFFF;font-size:24px;border-radius:10px;}"
-        "</style>"
-        "</head>"
-        "<body>"
-        "<h1>" + String(WEBSITE_TITLE) + " " TXT_SETTINGS "</h1>"
-        "<form action=\"/commitSettings\">"
-        "<table>";
+    String message = F("<!doctype html>");
+        message += F("<html>");
+        message += F("<head>");
+        message += F("<title>") + String(WEBSITE_TITLE) + F(" ");
+        message += F(TXT_SETTINGS);
+        message += F("</title>");
+        message += F("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+        message += F("<meta charset=\"UTF-8\">");
+        message += F("<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">");
+        message += F("<style>");
+        message += F("body{background-color:#FFFFFF;text-align:center;color:#333333;font-family:Sans-serif;font-size:16px;}");
+        message += F("input[type=submit]{background-color:#1FA3EC;text-align:center;color:#FFFFFF;width:200px;padding:12px;border:5px solid #FFFFFF;font-size:20px;border-radius:10px;}");
+        message += F("table{border-collapse:collapse;margin:0px auto;} td{padding:12px;border-bottom:1px solid #ddd;} tr:first-child{border-top:1px solid #ddd;} td:first-child{text-align:right;} td:last-child{text-align:left;}");
+        message += F("select{font-size:16px;}");
+        message += F("button{background-color:#1FA3EC;text-align:center;color:#FFFFFF;width:200px;padding:10px;border:5px solid #FFFFFF;font-size:24px;border-radius:10px;}");
+        message += F("</style>");
+        message += F("</head>");
+        message += F("<body>");
+        message += F("<h1>") + String(WEBSITE_TITLE) + F(" ");
+        message += F(TXT_SETTINGS);
+        message += F("</h1>");
+        message += F("<form action=\"/commitSettings\">");
+        message += F("<table>");
     // ------------------------------------------------------------------------
 #ifdef BUZZER
-    message += "<tr><td>"
-        TXT_ALARM
-        " 1</td><td>"
-        "<input type=\"radio\" name=\"a1\" value=\"1\"";
+        message += F("<tr><td>");
+        message += F(TXT_ALARM);
+        message += F(" 1</td><td>");
+        message += F("<input type=\"radio\" name=\"a1\" value=\"1\"");
     if (settings.mySettings.alarm1)
-        message += " checked";
-    message += "> " TXT_ON
-        "<input type=\"radio\" name=\"a1\" value=\"0\"";
+        message += F(" checked");
+        message += F("> ");
+        message += F(TXT_ON);
+        message += F("<input type=\"radio\" name=\"a1\" value=\"0\"");
     if (!settings.mySettings.alarm1)
-        message += " checked";
-    message += "> " TXT_OFF "&nbsp;&nbsp;&nbsp;"
-        "<input type=\"time\" name=\"a1t\" value=\"";
+        message += F(" checked");
+        message += F("> ");
+        message += F(TXT_OFF);
+        message += F("<input type=\"time\" name=\"a1t\" value=\"");
     if (hour(settings.mySettings.alarm1Time) < 10)
-        message += "0";
-    message += String(hour(settings.mySettings.alarm1Time)) + ":";
+        message += F("0");
+        message += String(hour(settings.mySettings.alarm1Time)) + F(":");
     if (minute(settings.mySettings.alarm1Time) < 10)
-        message += "0";
-    message += String(minute(settings.mySettings.alarm1Time)) + "\">"
-        " h<br><br>"
-        "<input type=\"checkbox\" name=\"a1w2\" value=\"4\"";
+        message += F("0");
+        message += String(minute(settings.mySettings.alarm1Time)) + F("\">")
+        message += F(" h<br><br>");
+        message += F("<input type=\"checkbox\" name=\"a1w2\" value=\"4\"");
     if (bitRead(settings.mySettings.alarm1Weekdays, 2))
-        message += " checked";
-    message += "> Mo. "
-        "<input type=\"checkbox\" name=\"a1w3\" value=\"8\"";
+        message += F(" checked");
+        message += F("> Mo. ");
+        message += F("<input type=\"checkbox\" name=\"a1w3\" value=\"8\"");
     if (bitRead(settings.mySettings.alarm1Weekdays, 3))
-        message += " checked";
-    message += "> Tu. "
-        "<input type=\"checkbox\" name=\"a1w4\" value=\"16\"";
+        message += F(" checked");
+        message += F("> Tu. ");
+        message += F("<input type=\"checkbox\" name=\"a1w4\" value=\"16\"");
     if (bitRead(settings.mySettings.alarm1Weekdays, 4))
-        message += " checked";
-    message += "> We. "
-        "<input type=\"checkbox\" name=\"a1w5\" value=\"32\"";
+        message += F(" checked");
+        message += F("> We. ");
+        message += F("<input type=\"checkbox\" name=\"a1w5\" value=\"32\"");
     if (bitRead(settings.mySettings.alarm1Weekdays, 5))
-        message += " checked";
-    message += "> Th. "
-        "<input type=\"checkbox\" name=\"a1w6\" value=\"64\"";
+        message += F(" checked");
+        message += F("> Th. ");
+        message += F("<input type=\"checkbox\" name=\"a1w6\" value=\"64\"");
     if (bitRead(settings.mySettings.alarm1Weekdays, 6))
-        message += " checked";
-    message += "> Fr. "
-        "<input type=\"checkbox\" name=\"a1w7\" value=\"128\"";
+        message += F(" checked");
+        message += F("> Fr. ");
+        message += F("<input type=\"checkbox\" name=\"a1w7\" value=\"128\"");
     if (bitRead(settings.mySettings.alarm1Weekdays, 7))
-        message += " checked";
-    message += "> Sa. "
-        "<input type=\"checkbox\" name=\"a1w1\" value=\"2\"";
+        message += F(" checked");
+        message += F("> Sa. ");
+        message += F("<input type=\"checkbox\" name=\"a1w1\" value=\"2\"");
     if (bitRead(settings.mySettings.alarm1Weekdays, 1))
-        message += " checked";
-    message += "> Su. "
-        "</td></tr>";
+        message += F(" checked");
+        message += F("> Su. ");
+        message += F("</td></tr>");
     // ------------------------------------------------------------------------
-    message += "<tr><td>"
-        TXT_ALARM
-        " 2</td><td>"
-        "<input type=\"radio\" name=\"a2\" value=\"1\"";
+        message += F("<tr><td>")
+        message += F(TXT_ALARM);
+        message += F(" 2</td><td>");
+        message += F("<input type=\"radio\" name=\"a2\" value=\"1\"");
     if (settings.mySettings.alarm2)
-        message += " checked";
-    message += "> " TXT_ON
-        "<input type=\"radio\" name=\"a2\" value=\"0\"";
+        message += F(" checked");
+        message += F(">) ");
+        message += F(TXT_ON);
+        message += F("<input type=\"radio\" name=\"a2\" value=\"0\"");
     if (!settings.mySettings.alarm2)
-        message += " checked";
-    message += "> " TXT_OFF "&nbsp;&nbsp;&nbsp;"
-        "<input type=\"time\" name=\"a2t\" value=\"";
+        message += F(" checked");
+        message += F("> ");
+        message += F(TXT_OFF);
+        message += F("<input type=\"time\" name=\"a2t\" value=\"");
     if (hour(settings.mySettings.alarm2Time) < 10)
-        message += "0";
-    message += String(hour(settings.mySettings.alarm2Time)) + ":";
+        message += F("0");
+        message += String(hour(settings.mySettings.alarm2Time)) + F(":");
     if (minute(settings.mySettings.alarm2Time) < 10)
-        message += "0";
-    message += String(minute(settings.mySettings.alarm2Time)) + "\">"
-        " h<br><br>"
-        "<input type=\"checkbox\" name=\"a2w2\" value=\"4\"";
+        message += F("0");
+        message += String(minute(settings.mySettings.alarm2Time)) + F("\">");
+        message += F(" h<br><br>");
+        message += F("<input type=\"checkbox\" name=\"a2w2\" value=\"4\"");
     if (bitRead(settings.mySettings.alarm2Weekdays, 2))
-        message += " checked";
-    message += "> Mo. "
-        "<input type=\"checkbox\" name=\"a2w3\" value=\"8\"";
+        message += F(" checked");
+        message += F("> Mo. ");
+        message += F("<input type=\"checkbox\" name=\"a2w3\" value=\"8\"");
     if (bitRead(settings.mySettings.alarm2Weekdays, 3))
-        message += " checked";
-    message += "> Tu. "
-        "<input type=\"checkbox\" name=\"a2w4\" value=\"16\"";
+        message += F(" checked");
+        message += F("> Tu. ");
+        message += F("<input type=\"checkbox\" name=\"a2w4\" value=\"16\"");
     if (bitRead(settings.mySettings.alarm2Weekdays, 4))
-        message += " checked";
-    message += "> We. "
-        "<input type=\"checkbox\" name=\"a2w5\" value=\"32\"";
+        message += F(" checked");
+        message += F("> We. ");
+        message += F("<input type=\"checkbox\" name=\"a2w5\" value=\"32\"");
     if (bitRead(settings.mySettings.alarm2Weekdays, 5))
-        message += " checked";
-    message += "> Th. "
-        "<input type=\"checkbox\" name=\"a2w6\" value=\"64\"";
+        message += F(" checked");
+        message += F("> Th. ");
+        message += F("<input type=\"checkbox\" name=\"a2w6\" value=\"64\"");
     if (bitRead(settings.mySettings.alarm2Weekdays, 6))
-        message += " checked";
-    message += "> Fr. "
-        "<input type=\"checkbox\" name=\"a2w7\" value=\"128\"";
+        message += F(" checked");
+        message += F("> Fr. ");
+        message += F("<input type=\"checkbox\" name=\"a2w7\" value=\"128\"");
     if (bitRead(settings.mySettings.alarm2Weekdays, 7))
-        message += " checked";
-    message += "> Sa. "
-        "<input type=\"checkbox\" name=\"a2w1\" value=\"2\"";
+        message += F(" checked");
+        message += F("> Sa. ");
+        message += F("<input type=\"checkbox\" name=\"a2w1\" value=\"2\"");
     if (bitRead(settings.mySettings.alarm2Weekdays, 1))
-        message += " checked";
-    message += "> Su. "
-        "</td></tr>";
+        message += F(" checked");
+        message += F("> Su. ");
+        message += F("</td></tr>");
     // ------------------------------------------------------------------------
-    message += "<tr><td>"
-        TXT_TIMER
-        "</td><td>"
-        "<select name=\"ti\">";
+        message += F("<tr><td>");
+        message += F(TXT_TIMER);
+        message += F("</td><td>");
+        message += F("<select name=\"ti\">");
     for (int i = 0; i <= 10; i++)
     {
-        message += "<option value=\"" + String(i) + "\">";
+        message += F("<option value=\"") + String(i) + F("\">");
         if (i < 10)
-            message += "0";
-        message += String(i) + "</option>";
+            message += F("0");
+            message += String(i) + F("</option>");
     }
-    message += "<option value=\"15\">15</option>"
-        "<option value=\"20\">20</option>"
-        "<option value=\"25\">25</option>"
-        "<option value=\"30\">30</option>"
-        "<option value=\"45\">45</option>"
-        "<option value=\"60\">60</option>"
-        "</select> " TXT_MINUTES
-        "</td></tr>";
+        message += F("<option value=\"15\">15</option>");
+        message += F("<option value=\"20\">20</option>");
+        message += F("<option value=\"25\">25</option>");
+        message += F("<option value=\"30\">30</option>");
+        message += F("<option value=\"45\">45</option>");
+        message += F("<option value=\"60\">60</option>");
+        message += F("</select> "); 
+        message += F(TXT_MINUTES);
+        message += F("</td></tr>");
     // ------------------------------------------------------------------------
-    message += "<tr><td>"
-        TXT_HOURBEEP
-        "</td><td>"
-        "<input type=\"radio\" name=\"hb\" value=\"1\"";
+        message += F("<tr><td>");
+        message += F(TXT_HOURBEEP);
+        message += F("</td><td>");
+        message += F("<input type=\"radio\" name=\"hb\" value=\"1\"");
     if (settings.mySettings.hourBeep)
-        message += " checked";
-    message += "> " TXT_ON
-        "<input type=\"radio\" name=\"hb\" value=\"0\"";
+        message += F(" checked");
+        message += F("> ");
+        message += F(TXT_ON);
+        message += F("<input type=\"radio\" name=\"hb\" value=\"0\"");
     if (!settings.mySettings.hourBeep)
-        message += " checked";
-    message += "> " TXT_OFF
-        "</td></tr>";
+        message += F(" checked");
+        message += F("> ");
+        message += F(TXT_OFF);
+        message += F("</td></tr>");
 #endif
     // ------------------------------------------------------------------------
 #if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
-    message += "<tr><td>"
-        "Show temperature"
-        "</td><td>"
-        "<input type=\"radio\" name=\"mc\" value=\"1\"";
+        message += F("<tr><td>");
+        message += F(TXT_SHOW_TEMP);
+        message += F("</td><td>");
+        message += F("<input type=\"radio\" name=\"mc\" value=\"1\"");
     if (settings.mySettings.modeChange)
-        message += " checked";
-    message += "> " TXT_ON
-        "<input type=\"radio\" name=\"mc\" value=\"0\"";
+        message += F(" checked");
+        message += F("> ");
+        message += F(TXT_ON);
+        message += F("<input type=\"radio\" name=\"mc\" value=\"0\"");
     if (!settings.mySettings.modeChange)
-        message += " checked";
-    message += "> " TXT_OFF
-        "</td></tr>";
+        message += F(" checked");
+        message += F("> ");
+        message += F(TXT_OFF);
+        message += F("</td></tr>");
 #endif
     // ------------------------------------------------------------------------
 #ifdef LDR
-    message += "<tr><td>"
-        "ABC"
-        "</td><td>"
-        "<input type=\"radio\" name=\"ab\" value=\"1\"";
+        message += F("<tr><td>");
+        message += F(TXT_AUTO_BRIGHTNESS);
+        message += F("</td><td>");
+        message += F("<input type=\"radio\" name=\"ab\" value=\"1\"");
     if (settings.mySettings.useAbc)
-        message += " checked";
-    message += "> " TXT_ON
-        "<input type=\"radio\" name=\"ab\" value=\"0\"";
+        message += F(" checked");
+        message += F("> ");
+        message += F(TXT_ON);
+        message += F("<input type=\"radio\" name=\"ab\" value=\"0\"");
     if (!settings.mySettings.useAbc)
-        message += " checked";
-    message += "> " TXT_OFF
-        "</td></tr>";
+        message += F(" checked");
+        message += F("> ");
+        message += F(TXT_OFF);
+        message += F("</td></tr>");
 #endif
     // ------------------------------------------------------------------------
-    message += "<tr><td>"
-        "Brightness"
-        "</td><td>"
-        "<select name=\"br\">";
+    message += F("<tr><td>");
+        message += F(TXT_BRIGHTNESS);
+        message += F("</td><td>");
+        message += F("<select name=\"br\">");
     for (int i = 10; i <= 100; i += 10)
     {
-        message += "<option value=\"" + String(i) + "\"";
+        message += F("<option value=\"") + String(i) + F("\"");
         if (i == settings.mySettings.brightness)
-            message += " selected";
-        message += ">";
-        message += String(i) + "</option>";
+            message += F(" selected");
+        message += F(">");
+        message += String(i) + F("</option>");
     }
-    message += "</select> %"
-        "</td></tr>";
+        message += F("</select> %");
+        message += F("</td></tr>");
     // ------------------------------------------------------------------------
-    message += "<tr><td>"
-        "Color"
-        "</td><td>"
-        "<select name=\"co\">"
-        "<option value=\"0\"";
-    if (settings.mySettings.color == 0) message += " selected";
-    message += ">"
-        "White</option>"
-        "<option value=\"1\"";
-    if (settings.mySettings.color == 1) message += " selected";
-    message += ">"
-        "Red</option>"
-        "<option value=\"2\"";
-    if (settings.mySettings.color == 2) message += " selected";
-    message += ">"
-        "Red 75%</option>"
-        "<option value=\"3\"";
-    if (settings.mySettings.color == 3) message += " selected";
-    message += ">"
-        "Red 50%</option>"
-        "<option value=\"4\"";
-    if (settings.mySettings.color == 4) message += " selected";
-    message += ">"
-        "Orange</option>"
-        "<option value=\"5\"";
-    if (settings.mySettings.color == 5) message += " selected";
-    message += ">"
-        "Yellow</option>"
-        "<option value=\"6\"";
-    if (settings.mySettings.color == 6) message += " selected";
-    message += ">"
-        "Yellow 75%</option>"
-        "<option value=\"7\"";
-    if (settings.mySettings.color == 7) message += " selected";
-    message += ">"
-        "Yellow 50%</option>"
-        "<option value=\"8\"";
-    if (settings.mySettings.color == 8) message += " selected";
-    message += ">"
-        "Green-Yellow</option>"
-        "<option value=\"9\"";
-    if (settings.mySettings.color == 9) message += " selected";
-    message += ">"
-        "Green</option>"
-        "<option value=\"10\"";
-    if (settings.mySettings.color == 10) message += " selected";
-    message += ">"
-        "Green 75%</option>"
-        "<option value=\"11\"";
-    if (settings.mySettings.color == 11) message += " selected";
-    message += ">"
-        "Green 50%</option>"
-        "<option value=\"12\"";
-    if (settings.mySettings.color == 12) message += " selected";
-    message += ">"
-        "Mintgreen</option>"
-        "<option value=\"13\"";
-    if (settings.mySettings.color == 13) message += " selected";
-    message += ">"
-        "Cyan</option>"
-        "<option value=\"14\"";
-    if (settings.mySettings.color == 14) message += " selected";
-    message += ">"
-        "Cyan 75%</option>"
-        "<option value=\"15\"";
-    if (settings.mySettings.color == 15) message += " selected";
-    message += ">"
-        "Cyan 50%</option>"
-        "<option value=\"16\"";
-    if (settings.mySettings.color == 16) message += " selected";
-    message += ">"
-        "Light Blue</option>"
-        "<option value=\"17\"";
-    if (settings.mySettings.color == 17) message += " selected";
-    message += ">"
-        "Blue</option>"
-        "<option value=\"18\"";
-    if (settings.mySettings.color == 18) message += " selected";
-    message += ">"
-        "Blue 75%</option>"
-        "<option value=\"19\"";
-    if (settings.mySettings.color == 19) message += " selected";
-    message += ">"
-        "Blue 50%</option>"
-        "<option value=\"20\"";
-    if (settings.mySettings.color == 20) message += " selected";
-    message += ">"
-        "Violet</option>"
-        "<option value=\"21\"";
-    if (settings.mySettings.color == 21) message += " selected";
-    message += ">"
-        "Magenta</option>"
-        "<option value=\"22\"";
-    if (settings.mySettings.color == 22) message += " selected";
-    message += ">"
-        "Magenta 75%</option>"
-        "<option value=\"23\"";
-    if (settings.mySettings.color == 23) message += " selected";
-    message += ">"
-        "Magenta 50%</option>"
-        "<option value=\"24\"";
-    if (settings.mySettings.color == 24) message += " selected";
-    message += ">"
-        "Pink</option>"
-        "</select>"
-        "</td></tr>";
+        message += F("<tr><td>");
+        message += F(TXT_COLOR);
+        message += F("</td><td>");
+        
+        message += F("<select name=\"co\">");
+        uint8_t colorNum = settings.mySettings.color;
+        for(uint8_t j = 0; j <= COLOR_COUNT; j++){
+          message += F("<option value=\"") +String(j) + F("\"");
+          if (colorNum == j) message += F(" selected");
+          message += F(">");
+          message += String(FPSTR(sColorStr[j])) + F("</option>");
+        }
+        message += F("</select>");
+        message += F("</td></tr>");
     // ------------------------------------------------------------------------
-    message += "<tr><td>"
-        "Colorchange"
-        "</td><td>"
-        "<input type=\"radio\" name=\"cc\" value=\"4\"";
+        message += F("<tr><td>");
+        message += F(TXT_COLORCHANGE);
+        message += F("</td><td>");
+        message += F("<input type=\"radio\" name=\"cc\" value=\"4\"");
     if (settings.mySettings.colorChange == 4)
-        message += " checked";
-    message += "> mood "
-        "<input type=\"radio\" name=\"cc\" value=\"3\"";
+        message += F(" checked");
+        message += F("> mood ");
+        message += F("<input type=\"radio\" name=\"cc\" value=\"3\"");
     if (settings.mySettings.colorChange == 3)
-        message += " checked";
-    message += "> day "
-        "<input type=\"radio\" name=\"cc\" value=\"2\"";
+        message += F(" checked");
+        message += F("> day ");
+        message += F("<input type=\"radio\" name=\"cc\" value=\"2\"");
     if (settings.mySettings.colorChange == 2)
-        message += " checked";
-    message += "> hour "
-        "<input type=\"radio\" name=\"cc\" value=\"1\"";
+        message += F(" checked");
+        message += F("> hour ");
+        message += F("<input type=\"radio\" name=\"cc\" value=\"1\"");
     if (settings.mySettings.colorChange == 1)
-        message += " checked";
-    message += "> five "
-        "<input type=\"radio\" name=\"cc\" value=\"0\"";
+        message += F(" checked");
+        message += F("> five ");
+        message += F("<input type=\"radio\" name=\"cc\" value=\"0\"");
     if (settings.mySettings.colorChange == 0)
-        message += " checked";
-    message += "> off"
-        "</td></tr>";
+        message += F(" checked");
+        message += F("> off");
+        message += F("</td></tr>");
     // ------------------------------------------------------------------------
 #ifndef FRONTCOVER_BINARY
-    message += "<tr><td>"
-        "Transition"
-        "</td><td>"
-        "<input type=\"radio\" name=\"tr\" value=\"2\"";
+        message += F("<tr><td>");
+        message += F(TXT_TRANSITION);
+        message += F("</td><td>");
+        message += F("<input type=\"radio\" name=\"tr\" value=\"2\"");
     if (settings.mySettings.transition == 2)
-        message += " checked";
-    message += "> fade "
-    "<input type=\"radio\" name=\"tr\" value=\"3\"";
+        message += F(" checked");
+        message += F("> fade ");
+        message += F("<input type=\"radio\" name=\"tr\" value=\"3\"");
     if (settings.mySettings.transition == 3)
-        message += " checked";
-    message += "> matrix "
-        "<input type=\"radio\" name=\"tr\" value=\"1\"";
+        message += F(" checked");
+        message += F("> matrix ");
+        message += F("<input type=\"radio\" name=\"tr\" value=\"1\"");
     if (settings.mySettings.transition == 1)
-        message += " checked";
-    message += "> move "
-        "<input type=\"radio\" name=\"tr\" value=\"0\"";
+        message += F(" checked");
+        message += F("> move ");
+        message += F("<input type=\"radio\" name=\"tr\" value=\"0\"");
     if (settings.mySettings.transition == 0)
-        message += " checked";
-    message += "> none"
-        "</td></tr>";
+        message += F(" checked");
+        message += F("> none");
+        message += F("</td></tr>");
 #endif
     // ------------------------------------------------------------------------
-    message += "<tr><td>"
-        "Timeout"
-        "</td><td>"
-        "<select name=\"to\">";
+        message += F("<tr><td>");
+        message += F(TXT_TIMEOUT);
+        message += F("</td><td>");
+        message += F("<select name=\"to\">");
     for (int i = 0; i <= 60; i += 5) {
-        message += "<option value=\"" + String(i) + "\"";
+        message += F("<option value=\"") + String(i) + F("\"");
         if (i == settings.mySettings.timeout)
-            message += " selected";
-        message += ">";
+            message += F(" selected");
+        message += F(">");
         if (i < 10)
-            message += "0";
-        message += String(i) + "</option>";
+            message += F("0");
+        message += String(i) + F("</option>");
     }
-    message += "</select> sec."
-        "</td></tr>";
+        message += F("</select> sec.");
+        message += F("</td></tr>");
     // ------------------------------------------------------------------------
-    message += "<tr><td>"
-        "Night off"
-        "</td><td>"
-        "<input type=\"time\" name=\"no\" value=\"";
+        message += F("<tr><td>");
+        message += F(TXT_NIGHT_OFF);
+        message += F("</td><td>");
+        message += F("<input type=\"time\" name=\"no\" value=\"");
     if (hour(settings.mySettings.nightOffTime) < 10)
-        message += "0";
-    message += String(hour(settings.mySettings.nightOffTime)) + ":";
+        message += F("0");
+        message += String(hour(settings.mySettings.nightOffTime)) + F(":");
     if (minute(settings.mySettings.nightOffTime) < 10)
-        message += "0";
-    message += String(minute(settings.mySettings.nightOffTime)) + "\">"
-        " h"
-        "</td></tr>";
+        message += F("0");
+        message += String(minute(settings.mySettings.nightOffTime)) + F("\">");
+        message += F(" h");
+        message += F("</td></tr>");
     // ------------------------------------------------------------------------
-    message += "<tr><td>"
-        "Day on"
-        "</td><td>"
-        "<input type=\"time\" name=\"do\" value=\"";
+        message += F("<tr><td>");
+        message += F(TXT_DAY_ON);
+        message += F("</td><td>");
+        message += F("<input type=\"time\" name=\"do\" value=\"");
     if (hour(settings.mySettings.dayOnTime) < 10)
-        message += "0";
-    message += String(hour(settings.mySettings.dayOnTime)) + ":";
+        message += F("0");
+        message += String(hour(settings.mySettings.dayOnTime)) + F(":");
     if (minute(settings.mySettings.dayOnTime) < 10)
-        message += "0";
-    message += String(minute(settings.mySettings.dayOnTime)) + "\">"
-        " h"
-        "</td></tr>";
+        message += F("0");
+        message += String(minute(settings.mySettings.dayOnTime)) + F("\">");
+        message += F(" h");
+        message += F("</td></tr>");
     // ------------------------------------------------------------------------
-    message += "<tr><td>"
-        "Show \"It is\""
-        "</td><td>"
-        "<input type=\"radio\" name=\"ii\" value=\"1\"";
+        message += F("<tr><td>");
+        message += F(TXT_SHOW_IT_IS);
+        message += F("</td><td>");
+        message += F("<input type=\"radio\" name=\"ii\" value=\"1\"");
     if (settings.mySettings.itIs)
-        message += " checked";
-    message += "> " TXT_ON
-        "<input type=\"radio\" name=\"ii\" value=\"0\"";
+        message += F(" checked");
+        message += F("> ");
+        message += TXT_ON;
+        message += F("<input type=\"radio\" name=\"ii\" value=\"0\"");
     if (!settings.mySettings.itIs)
-        message += " checked";
-    message += "> " TXT_OFF
-        "</td></tr>";
+        message += F(" checked");
+        message += F("> ");
+        message += TXT_OFF;
+        message += F("</td></tr>");
     // ------------------------------------------------------------------------
-    message += "<tr><td>"
-        "Set date/time"
-        "</td><td>"
-        "<input type=\"datetime-local\" name=\"st\">"
-        "</td></tr>";
+        message += F("<tr><td>");
+        message += F(TXT_SET_DATE_TIME);
+        message += F("</td><td>");
+        message += F("<input type=\"datetime-local\" name=\"st\">");
+        message += F("</td></tr>");
     // ------------------------------------------------------------------------
-    message += "</table>"
-        "<br><button title=\"Save Settings.\"><i class=\"fa fa-check\"></i></button>"
-        "</form>"
-        "<button title=\"Events\" onclick=\"window.location.href='/handleButtonEvents'\"><i class=\"fa fa-birthday-cake\"></i></button>"
-        "<br>"
-        "<button title=\"Back\" onclick=\"window.location.href='/'\"><i class=\"fa fa-reply\"></i></button>";
-        "</body></html>";
+        message += F("</table>");
+        message += F("<br><button title=\"Save Settings.\"><i class=\"fa fa-check\"></i></button>");
+        message += F("</form>");
+        message += F("<button title=\"Events\" onclick=\"window.location.href='/handleButtonEvents'\"><i class=\"fa fa-birthday-cake\"></i></button>");
+        message += F("<br>");
+        message += F("<button title=\"Back\" onclick=\"window.location.href='/'\"><i class=\"fa fa-reply\"></i></button>");
+        message += F("</body></html>");
     webServer.send(200, "text/html", message);
 }
 
@@ -2849,106 +2774,106 @@ void handleButtonEvents()
 #ifdef DEBUG
   Serial.println("Events pressed.");
 #endif
-  String message = "<!doctype html>";
-  message += "<html>";
-  message += "<head>";
-  message += "<title>" + String(WEBSITE_TITLE) + " Events</title>";
-  message += "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">";
-  message += "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">";
-  message += "<style>";
-  message += "body{background-color:#FFFFFF;text-align:center;color:#333333;font-family:Sans-serif;font-size:16px;}";
-  message += "input[type=submit]{background-color:#1FA3EC;text-align:center;color:#FFFFFF;width:200px;padding:12px;border:5px solid #FFFFFF;font-size:20px;border-radius:10px;}";
-  message += "button{background-color:#1FA3EC;text-align:center;color:#FFFFFF;width:200px;padding:10px;border:5px solid #FFFFFF;font-size:24px;border-radius:10px;}";
-  message += "table{border-collapse:collapse;margin:0px auto;} td{padding:12px;border-bottom:1px solid #ddd; text-align:right;} tr:first-child{border-top:1px solid #ddd; text-align:right;} td:first-child{text-align:right;} td:last-child{text-align:left;}";
-  message += "select{font-size:16px;}";
-  message += "</style>";
-  message += "</head>";
-  message += "<body>";
-  message += "<h1>" + String(WEBSITE_TITLE) + " Events</h1>";
-  message += "<form action=\"/commitEvents\">";
-  message += "<table>";
+  String message = F("<!doctype html>");
+  message += F("<html>");
+  message += F("<head>");
+  message += F("<title>") + String(WEBSITE_TITLE) + F(" Events</title>");
+  message += F("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+  message += F("<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">");
+  message += F("<style>");
+  message += F("body{background-color:#FFFFFF;text-align:center;color:#333333;font-family:Sans-serif;font-size:16px;}");
+  message += F("input[type=submit]{background-color:#1FA3EC;text-align:center;color:#FFFFFF;width:200px;padding:12px;border:5px solid #FFFFFF;font-size:20px;border-radius:10px;}");
+  message += F("button{background-color:#1FA3EC;text-align:center;color:#FFFFFF;width:200px;padding:10px;border:5px solid #FFFFFF;font-size:24px;border-radius:10px;}");
+  message += F("table{border-collapse:collapse;margin:0px auto;} td{padding:12px;border-bottom:1px solid #ddd; text-align:right;} tr:first-child{border-top:1px solid #ddd; text-align:right;} td:first-child{text-align:right;} td:last-child{text-align:left;}");
+  message += F("select{font-size:16px;}");
+  message += F("</style>");
+  message += F("</head>");
+  message += F("<body>");
+  message += F("<h1>") + String(WEBSITE_TITLE) + F(" Events</h1>");
+  message += F("<form action=\"/commitEvents\">");
+  message += F("<table>");
 
   // ------------------------------------------------------------------------
   for (uint8_t i = 0; i < NUM_EVTS; i++){
-    message += "<tr><td rowspan=\"6\">";
-    message += "Event " + String(i + 1);
-    message += "</td><td>";
-    message += "Enable";
-    message += "</td>";
-    message += "<td>";
-    message += "<input type=\"radio\" name=\"ev" + String(i) + "\" value=\"1\"";
-    if (settings.mySettings.events[i].enabled) message += " checked";
-    message += "> on ";
-    message += "<input type=\"radio\" name=\"ev" + String(i) + "\" value=\"0\"";
-    if (!settings.mySettings.events[i].enabled) message += " checked";
-    message += "> off";
-    message += "</td></tr>";
-    message += "<tr><td>";
-    message += "Date";
-    message += "</td><td>";
-    message += "<input type=\"date\" name=\"ev" + String(i) + "d\" value=\"";
-    message += String(year(settings.mySettings.events[i].time)) + "-";
-    if (month(settings.mySettings.events[i].time) < 10) message += "0";
-    message += String(month(settings.mySettings.events[i].time)) + "-";
-    if (day(settings.mySettings.events[i].time) < 10) message += "0";
-    message += String(day(settings.mySettings.events[i].time))+ "\" min=\"1970-01-01\">";
-    message += "</td></tr>";
-    message += "<tr><td>";
-    message += "Text";
-    message += "</td><td>";
-    message += "<input type=\"text\" name=\"ev" + String(i) + "t\" value=\"";
-    message += String(settings.mySettings.events[i].txt)+ "\" pattern=\"[\\x20-\\x7e]{0," + String(LEN_EVT_STR-1) + "}\" placeholder=\"Event text ...\">";
-    message += "</td></tr>";
-    message += "<tr><td>";
-    message += "Animation";
-    message += "</td><td>";
-    message += "<select name=\"ev" + String(i) + "ani\">";
+    message += F("<tr><td rowspan=\"6\">");
+    message += F("Event ") + String(i + 1);
+    message += F("</td><td>");
+    message += F(TXT_ACTIVE);
+    message += F("</td>");
+    message += F("<td>");
+    message += F("<input type=\"radio\" name=\"ev") + String(i) + F("\" value=\"1\"");
+    if (settings.mySettings.events[i].enabled) message += F(" checked");
+    message += F(">");
+    message += F(TXT_ON);
+    message += F("<input type=\"radio\" name=\"ev") + String(i) + F("\" value=\"0\"");
+    if (!settings.mySettings.events[i].enabled) message += F(" checked");
+    message += F(">");
+    message += F(TXT_OFF);
+    message += F("</td></tr>");
+    message += F("<tr><td>");
+    message += F(TXT_DATE);
+    message += F("</td><td>");
+    message += F("<input type=\"date\" name=\"ev") + String(i) + F("d\" value=\"");
+    message += String(year(settings.mySettings.events[i].time)) + F("-");
+    if (month(settings.mySettings.events[i].time) < 10) message += F("0");
+    message += String(month(settings.mySettings.events[i].time)) + F("-");
+    if (day(settings.mySettings.events[i].time) < 10) message += F("0");
+    message += String(day(settings.mySettings.events[i].time))+ F("\" min=\"1970-01-01\">");
+    message += F("</td></tr>");
+    message += F("<tr><td>");
+    message += F(TXT_TEXT);
+    message += F("</td><td>");
+    message += F("<input type=\"text\" name=\"ev") + String(i) + F("t\" value=\"");
+    message += String(settings.mySettings.events[i].txt)+ F("\" pattern=\"[\\x20-\\x7e]{0,") + String(LEN_EVT_STR-1) + F("}\" placeholder=\"Event text ...\">");
+    message += F("</td></tr>");
+    message += F("<tr><td>");
+    message += F(TXT_ANIMATION);
+    message += F("</td><td>");
+    message += F("<select name=\"ev") + String(i) + F("ani\">");
     for(uint8_t j = 0; j < MAXANIMATION; j++){
-      Serial.println("Animation " + String(j) + " length: " + String(myanimationslist[j].length()));
-      Serial.println("Animation " + String(j) + " text: " + myanimationslist[j]);
-      if ( myanimationslist[j].length() != 0){
-        message += "<option value=\"" +String(j) + "\"";
-        if (myanimationslist[j] == String(settings.mySettings.events[i].animation)) message += " selected";
-        message += ">";
-        message += myanimationslist[j] + "</option>";
+      if (myanimationslist[j].length() != 0){
+        message += F("<option value=\"") +String(j) + F("\"");
+        if (myanimationslist[j] == String(settings.mySettings.events[i].animation)) message += F(" selected");
+        message += F(">");
+        message += myanimationslist[j] + F("</option>");
       }
     }
-    webServer.handleClient();
-    delay(0);
-    message += "</td></tr>";
-    message += "<tr><td>";
-    message += "Color";
-    message += "</td><td>";
-    message += "<select name=\"ev" + String(i) + "c\">";
+    message += F("</td></tr>");
+    message += F("<tr><td>");
+    message += F(TXT_COLOR);
+    message += F("</td><td>");
+    message += F("<select name=\"ev") + String(i) + F("c\">");
     uint8_t colorNum = settings.mySettings.events[i].color;
     for(uint8_t j = 0; j <= COLOR_COUNT; j++){
-      message += "<option value=\"" +String(j) + "\"";
-      if (colorNum == j) message += " selected";
-      message += ">";
-      message += String(FPSTR(sColorStr[j])) + "</option>";
+      message += F("<option value=\"") +String(j) + F("\"");
+      if (colorNum == j) message += F(" selected");
+      message += F(">");
+      message += String(FPSTR(sColorStr[j])) + F("</option>");
     }
-    message += "</select>";
-    message += "</td></tr>";
-    message += "<tr><td>";
-    message += "Repetition Rate";
-    message += "</td><td>";
-    message += "<select name=\"ev" + String(i) + "rep\">";
+    message += F("</select>");
+    message += F("</td></tr>");
+    message += F("<tr><td>");
+    message += F(TXT_REP_RATE);
+    message += F("</td><td>");
+    message += F("<select name=\"ev") + String(i) + F("rep\">");
     for(uint8_t j = 0; j < EVT_REP_COUNT; j++){
-      message += "<option value=\"" + String(j) + "\"";
-      if (settings.mySettings.events[i].repRate == j) message += " selected";
-      message += ">" + String(FPSTR(sEvtRep[j])) + "</option>";
+      message += F("<option value=\"") + String(j) + F("\"");
+      if (settings.mySettings.events[i].repRate == j) message += F(" selected");
+      message += F(">") + String(FPSTR(sEvtRep[j])) + F("</option>");
     }
-    message += "</select> minutes.";
-    message += "</td></tr>";
+    message += F("</select> minutes.");
+    message += F("</td></tr>");
   }
   // ------------------------------------------------------------------------
 
-  message += "</table>";
-  message += "<br><button title=\"Save Settings.\"><i class=\"fa fa-check\"></i></button>";
-  message += "</form>";
-  message += "<button title=\"Back\" onclick=\"window.location.href='/handleButtonSettings'\"><i class=\"fa fa-reply\"></i></button>";
-  message += "</body>";
-  message += "</html>";
+  message += F("</table>");
+  message += F("<br><button title=\"Save Settings.\"><i class=\"fa fa-check\"></i></button>");
+  message += F("</form>");
+  message += F("<button title=\"Back\" onclick=\"window.location.href='/handleButtonSettings'\"><i class=\"fa fa-reply\"></i></button>");
+  message += F("</body>");
+  message += F("</html>");
+  Serial.println("Free Heap: " + String(ESP.getFreeHeap()));
+  Serial.println("Max Free Block: " + String(ESP.getMaxFreeBlockSize()));
   webServer.send(200, "text/html", message);
 }
 
