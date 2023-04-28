@@ -11,7 +11,7 @@
 //*****************************************************************************
 
 #define HOSTNAME "QLOCKWIFIVE"
-#define WEBSITE_TITLE "QLOCKWIFIVEs page"
+#define WEBSITE_TITLE "QLOCKWIFIVE"
 //#define DEDICATION "The only reason for time is so that everything doesn't happen at once.<br>(Albert Einstein)"
 #define WIFI_SETUP_TIMEOUT 120
 #define WIFI_AP_PASS "12345678"
