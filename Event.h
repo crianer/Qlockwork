@@ -20,7 +20,7 @@
 #define LEN_EVT_STR 30
 #define LEN_ANI_STR 15
 
-const char sEvtRep[][4] = { 
+const char sEvtRep[][4] PROGMEM = { 
     { "5" },   // 00
 		{ "15" }, // 01
 		{ "30" }, // 02

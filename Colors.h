@@ -46,7 +46,7 @@ enum eColor : uint8_t
   MOOD
 };
 
-const char sColorStr[][15] =
+const char sColorStr[][15] PROGMEM =
 {
   "White",
   "Red",
