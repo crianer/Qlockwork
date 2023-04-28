@@ -12,7 +12,7 @@
 #include "Colors.h"
 
 #define MAXFRAMES 25
-#define MAXANIMATION 15
+#define MAXANIMATION 30
 #define ANIMATIONSLISTE "/animationsliste.json"
 
 typedef struct
