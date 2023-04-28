@@ -18,7 +18,7 @@
 
 #define MOOD_LEVEL_MAX 9
 
-#define NUM_EVTS 7
+#define NUM_EVTS 8
 
 class Settings {
 public:
