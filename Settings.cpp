@@ -57,7 +57,7 @@ void Settings::loadFromEEPROM() {
 
 // Write settings to EEPROM
 void Settings::saveToEEPROM() {
-    Serial.println("Settings saved to EEPROM.");
+    Serial.println("Settings (" + String(sizeof(mySettings)) + "bytes) saved to EEPROM.");
     EEPROM.begin(1024);
     EEPROM.put(0, mySettings);
     //EEPROM.commit();

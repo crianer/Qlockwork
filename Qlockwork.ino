@@ -304,6 +304,7 @@ void setup()
     renderer.setSmallText("WI", TEXT_POS_TOP, matrix);
     renderer.setSmallText("FI", TEXT_POS_BOTTOM, matrix);
     writeScreenBuffer(matrix, WHITE, brightness);
+    Serial.println("Setting up WiFiManager.");
     WiFiManager wifiManager;
     //wifiManager.resetSettings();
     wifiManager.setTimeout(WIFI_SETUP_TIMEOUT);
