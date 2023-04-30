@@ -2336,9 +2336,11 @@ uint8_t getBrightnessFromLDR(bool forcedUpdate)
     ldrValue = analogRead(PIN_LDR);
 #endif
 
+#ifdef DEBUG
     Serial.println("LDR value: " + String(ldrValue));
     Serial.println("LDR min: " + String(minLdrValue));
     Serial.println("LDR max: " + String(maxLdrValue));
+#endif
 
     if (ldrValue < minLdrValue)
         minLdrValue = ldrValue;
