@@ -3062,7 +3062,7 @@ void handleButtonSettings()
         message += F(TXT_TIMEOUT);
         message += F("</td><td>");
         message += F("<select name=\"to\">");
-    for (int i = 0; i <= 60; i += 5) {
+    for (int i = 5; i <= 60; i += 5) {
         message += F("<option value=\"") + String(i) + F("\"");
         if (i == settings.mySettings.timeout)
             message += F(" selected");
