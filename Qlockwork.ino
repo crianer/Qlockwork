@@ -979,18 +979,28 @@ void loop()
             buttonModePressed();
             break;
         case IR_CODE_SETTINGS:
+            if (mode < MODE_SET_1ST) setMode(MODE_SET_1ST);
+            else setMode(mode++);
           break;
         case IR_CODE_PLUS:
-          if(settings.mySettings.brightness <= 90){
-            settings.mySettings.brightness += 10;
+          if (mode < MODE_SET_1ST) {
+            if(settings.mySettings.brightness <= 90){
+              settings.mySettings.brightness += 10;
+            }
+            updateBrightness(true);
+          } else {
+            buttonPlusPressed();
           }
-          updateBrightness(true);
           break;
         case IR_CODE_MINUS:
-          if(settings.mySettings.brightness >= 20){
-            settings.mySettings.brightness -= 10;
+          if (mode < MODE_SET_1ST) {
+            if(settings.mySettings.brightness >= 20){
+              settings.mySettings.brightness -= 10;
+            }
+            updateBrightness(true);
+          } else {
+            buttonMinusPressed();
           }
-          updateBrightness(true);
           break;
         case IR_CODE_SECONDS:
           setMode(MODE_SECONDS);
@@ -2120,6 +2130,64 @@ void buttonModePressed()
 
 void buttonPlusPressed()
 {
+#ifdef DEBUG
+    Serial.println("Minus pressed.");
+#endif
+  switch (mode) {
+#ifdef SHOW_MODE_SETTINGS
+#ifdef LDR
+  case MODE_SET_LDR:
+    settings.mySettings.useAbc = !settings.mySettings.useAbc;
+  break;
+#endif
+  case MODE_SET_COLOR:
+    if (settings.mySettings.color < COLOR_COUNT) settings.mySettings.color++;
+    else settings.mySettings.color = 0;
+    if (settings.mySettings.colorChange == COLORCHANGE_MOOD) settings.mySettings.colorChange = COLORCHANGE_NO;
+  break;
+  case MODE_SET_COLORCHANGE:
+    if (settings.mySettings.colorChange < COLORCHANGE_COUNT) settings.mySettings.colorChange++;
+    else settings.mySettings.colorChange = 0;
+    if (settings.mySettings.colorChange == COLORCHANGE_MOOD) settings.mySettings.color = MOOD;
+  break;
+  case MODE_SET_TRANSITION:
+    if (settings.mySettings.transition < TRANSITION_COUNT) settings.mySettings.transition++;
+    else settings.mySettings.transition = 0;
+  break;
+  case MODE_SET_IT_IS:
+    settings.mySettings.itIs = !settings.mySettings.itIs;
+  break;
+  case MODE_SET_TIME:
+    setTime(hour() + 1, minute(), second(), day(), month(), year());
+  break;
+  case MODE_SET_DAY:
+    setTime(hour(), minute(), second(), day() + 1, month(), year());
+  break;
+  case MODE_SET_MONTH:
+    setTime(hour(), minute(), second(), day(), month() + 1, year());
+  break;
+  case MODE_SET_YEAR:
+    setTime(hour(), minute(), second(), day(), month(), year() + 1);
+  break;
+  case MODE_SET_NIGHTOFF:
+    settings.mySettings.nightOffTime += 3600;
+  break;
+  case MODE_SET_DAYON:
+    settings.mySettings.dayOnTime += 3600;
+  break;
+  case MODE_SET_TIMEOUT:
+    if (settings.mySettings.timeout < 60) {
+      settings.mySettings.timeout += 5;
+    }
+  break;
+  default:
+    if(settings.mySettings.brightness <= 90){
+      settings.mySettings.brightness += 10;
+    }
+    updateBrightness(true);
+#endif
+  }
+  settings.saveToEEPROM();
 }
 
 //*****************************************************************************
@@ -2128,6 +2196,64 @@ void buttonPlusPressed()
 
 void buttonMinusPressed()
 {
+#ifdef DEBUG
+    Serial.println("Minus pressed.");
+#endif
+  switch (mode) {
+#ifdef SHOW_MODE_SETTINGS
+#ifdef LDR
+  case MODE_SET_LDR:
+    settings.mySettings.useAbc = !settings.mySettings.useAbc;
+  break;
+#endif
+  case MODE_SET_COLOR:
+    if (settings.mySettings.color > 0) settings.mySettings.color--;
+    else settings.mySettings.color = COLOR_COUNT;
+    if (settings.mySettings.colorChange == COLORCHANGE_MOOD) settings.mySettings.colorChange = COLORCHANGE_NO;
+  break;
+  case MODE_SET_COLORCHANGE:
+    if (settings.mySettings.colorChange > 0) settings.mySettings.colorChange--;
+    else settings.mySettings.colorChange = COLORCHANGE_COUNT;
+    if (settings.mySettings.colorChange == COLORCHANGE_MOOD) settings.mySettings.color = MOOD;
+  break;
+  case MODE_SET_TRANSITION:
+    if (settings.mySettings.transition > 0) settings.mySettings.transition--;
+    else settings.mySettings.transition = TRANSITION_COUNT;
+  break;
+  case MODE_SET_IT_IS:
+    settings.mySettings.itIs = !settings.mySettings.itIs;
+  break;
+  case MODE_SET_TIME:
+    setTime(hour(), minute() + 1, second(), day(), month(), year());
+  break;
+  case MODE_SET_DAY:
+    setTime(hour(), minute(), second(), day() - 1, month(), year());
+  break;
+  case MODE_SET_MONTH:
+    setTime(hour(), minute(), second(), day(), month() - 1, year());
+  break;
+  case MODE_SET_YEAR:
+    setTime(hour(), minute(), second(), day(), month(), year() - 1);
+  break;
+  case MODE_SET_NIGHTOFF:
+    settings.mySettings.nightOffTime += 300;
+  break;
+  case MODE_SET_DAYON:
+    settings.mySettings.dayOnTime += 300;
+  break;
+  case MODE_SET_TIMEOUT:
+    if (settings.mySettings.timeout > 5) {
+      settings.mySettings.timeout -= 5;
+    }
+  break;
+  default:
+    if(settings.mySettings.brightness >= 20){
+      settings.mySettings.brightness -= 10;
+    }
+    updateBrightness(true);
+#endif
+  }
+  settings.saveToEEPROM();
 }
 
 //*****************************************************************************
