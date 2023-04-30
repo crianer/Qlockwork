@@ -2289,7 +2289,7 @@ void setMode(Mode newMode)
 #ifdef SHOW_MODE_MOONPHASE
     case MODE_MOONPHASE:
 #endif
-#if defined(RTC_BACKUP) && defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
     case MODE_TEMP:
 #endif
 #ifdef SENSOR_DHT22
