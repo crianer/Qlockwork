@@ -1045,6 +1045,8 @@ void loop()
         else
             for (uint8_t i = 0; i <= 9; i++) matrixOld[i] = matrix[i];
 
+        renderer.clearScreenBuffer(matrix);
+
         switch (mode)
         {
         case MODE_TIME:
@@ -1052,7 +1054,6 @@ void loop()
             sunrise_started = false;
             sunset_started = false;
 #endif
-            renderer.clearScreenBuffer(matrix);
 
 #ifdef FRONTCOVER_BINARY
             matrix[0] = 0b1111000000000000;
@@ -1093,13 +1094,11 @@ void loop()
             break;
 #ifdef SHOW_MODE_AMPM
         case MODE_AMPM:
-            renderer.clearScreenBuffer(matrix);
             isAM() ? renderer.setSmallText("AM", TEXT_POS_MIDDLE, matrix) : renderer.setSmallText("PM", TEXT_POS_MIDDLE, matrix);
             break;
 #endif
 #ifdef SHOW_MODE_SECONDS
         case MODE_SECONDS:
-            renderer.clearScreenBuffer(matrix);
             renderer.setCorners(minute(), matrix);
             for (uint8_t i = 0; i <= 6; i++)
             {
@@ -1110,13 +1109,11 @@ void loop()
 #endif
 #ifdef SHOW_MODE_WEEKDAY
         case MODE_WEEKDAY:
-            renderer.clearScreenBuffer(matrix);
             renderer.setSmallText(String(sWeekday[weekday()][0]) + String(sWeekday[weekday()][1]), TEXT_POS_MIDDLE, matrix);
             break;
 #endif
 #ifdef SHOW_MODE_DATE
         case MODE_DATE:
-            renderer.clearScreenBuffer(matrix);
             if (day() < 10)
                 renderer.setSmallText(("0" + String(day())), TEXT_POS_TOP, matrix);
             else
@@ -1142,7 +1139,6 @@ void loop()
             if (millis() < sunrise_millis + 1000)
             {
                 settings.mySettings.color = YELLOW;
-                renderer.clearScreenBuffer(matrix);
                 // Sunrise screen
                 matrix[0] = 0b0000000000000000;
                 matrix[1] = 0b0000000000000000;
@@ -1158,7 +1154,6 @@ void loop()
             // else if (millis() < sunrise_millis + SUNSET_SUNRISE_SPEED * 0.5 * 0.666)
             else if (millis() < sunrise_millis + 2000)
             {
-                renderer.clearScreenBuffer(matrix);
                 // Sunrise screen
                 matrix[0] = 0b0000000000000000;
                 matrix[1] = 0b0000000000000000;
@@ -1174,7 +1169,6 @@ void loop()
             // else if (millis() < sunrise_millis + SUNSET_SUNRISE_SPEED * 0.5)
             else if (millis() < sunrise_millis + 3000)
             {
-                renderer.clearScreenBuffer(matrix);
                 // Sunrise screen
                 matrix[0] = 0b0000111000000000;
                 matrix[1] = 0b0011111110000000;
@@ -1190,7 +1184,6 @@ void loop()
             //else if (millis() < sunrise_millis + SUNSET_SUNRISE_SPEED * 1.5)
             else if (millis() < sunrise_millis + 4000 + settings.mySettings.timeout * 1000)
             {
-                renderer.clearScreenBuffer(matrix);
                 renderer.setTime(hour(sunrise_unix), minute(sunrise_unix), matrix);
                 renderer.setCorners(minute(sunrise_unix), matrix);
                 renderer.clearEntryWords(matrix);
@@ -1216,7 +1209,6 @@ void loop()
             if (millis() < sunset_millis + 1000)
             {
                 settings.mySettings.color = ORANGE;
-                renderer.clearScreenBuffer(matrix);
                 // Sunset screen
                 matrix[0] = 0b0000111000000000;
                 matrix[1] = 0b0011111110000000;
@@ -1232,7 +1224,6 @@ void loop()
             // else if (millis() < sunset_millis + SUNSET_SUNRISE_SPEED * 0.5 * 0.666)
             else if (millis() < sunset_millis + 2000)
             {
-                renderer.clearScreenBuffer(matrix);
                 // Sunset screen
                 matrix[0] = 0b0000000000000000;
                 matrix[1] = 0b0000000000000000;
@@ -1248,7 +1239,6 @@ void loop()
             // else if (millis() < sunset_millis + SUNSET_SUNRISE_SPEED * 0.5)
             else if (millis() < sunset_millis + 3000)
             {
-                renderer.clearScreenBuffer(matrix);
                 // Sunset screen
                 matrix[0] = 0b0000000000000000;
                 matrix[1] = 0b0000000000000000;
@@ -1264,7 +1254,6 @@ void loop()
             // else if (millis() < sunset_millis + SUNSET_SUNRISE_SPEED * 1.5)
             else if (millis() < sunset_millis + 4000 + settings.mySettings.timeout * 1000)
             {
-                renderer.clearScreenBuffer(matrix);
                 renderer.setTime(hour(sunset_unix), minute(sunset_unix), matrix);
                 renderer.setCorners(minute(sunset_unix), matrix);
                 renderer.clearEntryWords(matrix);
@@ -1282,7 +1271,6 @@ void loop()
 #if defined(SHOW_MODE_SUNRISE_SUNSET) && defined(APIKEY)
             settings.mySettings.color = save_color_sunrise_sunset;
 #endif
-            renderer.clearScreenBuffer(matrix);
             switch (moonphase)
             {
             case 0:
@@ -1389,7 +1377,6 @@ void loop()
 #ifdef DEBUG
             Serial.println("Room Temperature: " + String(roomTemperature));
 #endif
-            renderer.clearScreenBuffer(matrix);
             if (roomTemperature == 0)
             {
                 matrix[0] = 0b0000000001000000;
@@ -1418,7 +1405,6 @@ void loop()
 #ifdef DEBUG
             Serial.println("Room Humidity: " + String(roomHumidity));
 #endif
-            renderer.clearScreenBuffer(matrix);
             renderer.setSmallText(String(int(roomHumidity + 0.5)), TEXT_POS_TOP, matrix);
             matrix[6] = 0b0100100001000000;
             matrix[7] = 0b0001000010100000;
@@ -1432,7 +1418,6 @@ void loop()
 #ifdef DEBUG
             Serial.println("Outdoor temperature: " + String(outdoorWeather.temperature));
 #endif
-            renderer.clearScreenBuffer(matrix);
             if (outdoorWeather.temperature > 0)
             {
                 matrix[1] = 0b0100000000000000;
@@ -1447,7 +1432,6 @@ void loop()
 #ifdef DEBUG
             Serial.println("Outdoor humidity: " + String(outdoorWeather.humidity));
 #endif
-            renderer.clearScreenBuffer(matrix);
             if (outdoorWeather.humidity < 100)
                 renderer.setSmallText(String(outdoorWeather.humidity), TEXT_POS_TOP, matrix);
             else
@@ -1466,14 +1450,12 @@ void loop()
 #endif
 #ifdef BUZZER
         case MODE_TIMER:
-            renderer.clearScreenBuffer(matrix);
             renderer.setSmallText("TI", TEXT_POS_TOP, matrix);
             renderer.setSmallText(String(alarmTimer), TEXT_POS_BOTTOM, matrix);
             break;
 #endif
 #ifdef SHOW_MODE_TEST
         case MODE_TEST:
-            renderer.clearScreenBuffer(matrix);
             if (testColumn == 10)
                 testColumn = 0;
             matrix[testColumn] = 0b1111111111110000;
@@ -1487,9 +1469,6 @@ void loop()
             testFlag = true;
             break;
 #endif
-        case MODE_BLANK:
-            renderer.clearScreenBuffer(matrix);
-            break;
         case MODE_FEED:
             for (uint8_t y = 0; y <= 5; y++)
             {
