@@ -118,6 +118,8 @@
 //#define ONOFF_BUTTON
 //#define MODE_BUTTON
 //#define TIME_BUTTON
+//#define PLUS_BUTTON
+//#define MINUS_BUTTON
 
 // Pin Definition ESP8266 (Wemos D1 mini)
 #define PIN_IR_RECEIVER  16 // D0 (no interrupt)
@@ -159,6 +161,8 @@
 //#define ONOFF_BUTTON
 //#define MODE_BUTTON
 //#define TIME_BUTTON
+//#define PLUS_BUTTON
+//#define MINUS_BUTTON
 
 // Pin Definition ESP8266 (Wemos D1 mini)
 #define PIN_IR_RECEIVER  12 // D6 (no interrupt)
@@ -193,17 +197,21 @@
 #define LDR
 #define IR_RECEIVER
 
-#define ONOFF_BUTTON
+//#define ONOFF_BUTTON
 #define MODE_BUTTON
-#define TIME_BUTTON
+//#define TIME_BUTTON
+#define PLUS_BUTTON
+#define MINUS_BUTTON
 
 // Pin Definition ESP8266
 #define PIN_IR_RECEIVER  12
 #define PIN_MODE_BUTTON  02
 #define PIN_LEDS_DATA    13
 #define PIN_LDR          A0
-#define PIN_TIME_BUTTON  14
-#define PIN_ONOFF_BUTTON 00
+//#define PIN_TIME_BUTTON  14
+//#define PIN_ONOFF_BUTTON 00
+#define PIN_MINUS_BUTTON  14
+#define PIN_PLUS_BUTTON 00
 
 //#define LED_LAYOUT_HORIZONTAL_1
 //#define LED_LAYOUT_VERTICAL_1

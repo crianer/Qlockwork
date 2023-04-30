@@ -276,6 +276,18 @@ void setup()
     attachInterrupt(digitalPinToInterrupt(PIN_TIME_BUTTON), buttonTimeInterrupt, FALLING);
 #endif
 
+#ifdef PLUS_BUTTON
+    Serial.println("Setting up Plus-Button.");
+    pinMode(PIN_PLUS_BUTTON, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(PIN_PLUS_BUTTON), buttonPlusInterrupt, FALLING);
+#endif
+
+#ifdef MINUS_BUTTON
+    Serial.println("Setting up Minus-Button.");
+    pinMode(PIN_MINUS_BUTTON, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(PIN_MINUS_BUTTON), buttonMinusInterrupt, FALLING);
+#endif
+
 #ifdef BUZZER
     Serial.println("Setting up Buzzer.");
     pinMode(PIN_BUZZER, OUTPUT);
@@ -2101,6 +2113,21 @@ void buttonModePressed()
       setMode(mode++);
     }
 }
+
+//*****************************************************************************
+// "Plus" pressed
+//*****************************************************************************
+
+void buttonPlusPressed()
+{
+}
+
+//*****************************************************************************
+// "Minus" pressed
+//*****************************************************************************
+
+void buttonMinusPressed()
+{
 }
 
 //*****************************************************************************
@@ -2320,6 +2347,28 @@ ICACHE_RAM_ATTR void buttonTimeInterrupt()
     {
         lastButtonPress = millis();
         buttonTimePressed();
+    }
+}
+#endif
+
+#ifdef PLUS_BUTTON
+ICACHE_RAM_ATTR void buttonPlusInterrupt()
+{
+    if (millis() > lastButtonPress + 250)
+    {
+        lastButtonPress = millis();
+        buttonPlusPressed();
+    }
+}
+#endif
+
+#ifdef MINUS_BUTTON
+ICACHE_RAM_ATTR void buttonMinusInterrupt()
+{
+    if (millis() > lastButtonPress + 250)
+    {
+        lastButtonPress = millis();
+        buttonMinusPressed();
     }
 }
 #endif
