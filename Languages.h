@@ -70,7 +70,7 @@ const char sWeekday[][2] = {
 #define TXT_TIMEOUT "Zurück zur Zeitanzeige nach"
 #define TXT_NIGHT_OFF "Ausschalten um"
 #define TXT_DAY_ON "Einschalten um"
-#define TXT_SHOW_IT_IS "Show \"ES IST\""
+#define TXT_SHOW_IT_IS "\"ES IST\" anzeigen"
 #define TXT_SET_DATE_TIME "Datum/Zeit setzen"
 #define TXT_ACTIVE "Aktiv"
 #define TXT_DATE "Datum"

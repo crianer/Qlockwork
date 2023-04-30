@@ -3016,23 +3016,23 @@ void handleButtonSettings()
         message += F("<input type=\"radio\" name=\"cc\" value=\"4\"");
     if (settings.mySettings.colorChange == 4)
         message += F(" checked");
-        message += F("> mood ");
+        message += F("> Mood ");
         message += F("<input type=\"radio\" name=\"cc\" value=\"3\"");
     if (settings.mySettings.colorChange == 3)
         message += F(" checked");
-        message += F("> day ");
+        message += F("> 24h ");
         message += F("<input type=\"radio\" name=\"cc\" value=\"2\"");
     if (settings.mySettings.colorChange == 2)
         message += F(" checked");
-        message += F("> hour ");
+        message += F("> 1h ");
         message += F("<input type=\"radio\" name=\"cc\" value=\"1\"");
     if (settings.mySettings.colorChange == 1)
         message += F(" checked");
-        message += F("> five ");
+        message += F("> 5 min ");
         message += F("<input type=\"radio\" name=\"cc\" value=\"0\"");
     if (settings.mySettings.colorChange == 0)
         message += F(" checked");
-        message += F("> off");
+        message += F("> Off");
         message += F("</td></tr>");
     // ------------------------------------------------------------------------
 #ifndef FRONTCOVER_BINARY
@@ -3042,19 +3042,19 @@ void handleButtonSettings()
         message += F("<input type=\"radio\" name=\"tr\" value=\"2\"");
     if (settings.mySettings.transition == 2)
         message += F(" checked");
-        message += F("> fade ");
+        message += F("> Fading ");
         message += F("<input type=\"radio\" name=\"tr\" value=\"3\"");
     if (settings.mySettings.transition == 3)
         message += F(" checked");
-        message += F("> matrix ");
+        message += F("> Matrix ");
         message += F("<input type=\"radio\" name=\"tr\" value=\"1\"");
     if (settings.mySettings.transition == 1)
         message += F(" checked");
-        message += F("> move ");
+        message += F("> Move ");
         message += F("<input type=\"radio\" name=\"tr\" value=\"0\"");
     if (settings.mySettings.transition == 0)
         message += F(" checked");
-        message += F("> none");
+        message += F("> None");
         message += F("</td></tr>");
 #endif
     // ------------------------------------------------------------------------
