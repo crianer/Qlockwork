@@ -68,6 +68,8 @@
 #include <Adafruit_MCP9808.h>
 #endif
 
+#define MILLIS_2_HZ 500
+
 //*****************************************************************************
 // Init
 //*****************************************************************************
@@ -198,8 +200,10 @@ uint8_t testColumn = 0;
 int updateInfo = 0;
 IPAddress myIP = { 0,0,0,0 };
 uint32_t lastButtonPress = 0;
+uint32_t lastModePress = 0;
 bool testFlag = false;
 unsigned long mood_millis = 0;
+uint32_t lastMillis2Hz = 0;
 
 //Animationen
 s_myanimation myanimation;
@@ -743,6 +747,45 @@ void loop()
     }
 
     //*************************************************************************
+    // Run once every half second
+    //*************************************************************************
+    
+    // millis overflow
+    if (lastMillis2Hz > millis()){
+      lastMillis2Hz = millis();
+    }
+  
+    // execute every 0.5 second
+    if ((lastMillis2Hz + MILLIS_2_HZ) < millis()){
+      lastMillis2Hz = millis();
+      switch (mode) {
+#ifdef LDR
+        case MODE_SET_LDR:
+#endif      
+#ifdef BUZZER
+        case MODE_SET_TIMER:
+        case MODE_SET_ALARM_1:
+        case MODE_SET_ALARM_2:
+#endif
+        case MODE_SET_COLOR:
+        case MODE_SET_COLORCHANGE:
+        case MODE_SET_TIMEOUT:
+        case MODE_SET_TRANSITION:
+        case MODE_SET_TIME:
+        case MODE_SET_IT_IS:
+        case MODE_SET_DAY:
+        case MODE_SET_MONTH:
+        case MODE_SET_YEAR:
+        case MODE_SET_NIGHTOFF:
+        case MODE_SET_DAYON:
+          screenBufferNeedsUpdate = true;
+        break;
+          default:
+        break;
+      }
+    }
+
+    //*************************************************************************
     // Run once every second
     //*************************************************************************
 
@@ -1015,6 +1058,16 @@ void loop()
     }
 #endif
 
+#if defined(SHOW_MODE_SETTINGS) && defined(MODE_BUTTON)
+      if (!digitalRead(PIN_MODE_BUTTON) && (millis() > (lastModePress + 2000))) {
+        lastModePress = millis();
+        if (mode < MODE_SET_1ST) {
+          setMode(MODE_SET_1ST);
+        } else {
+          setMode(MODE_TIME);
+        }
+      }
+#endif
 
     if (settings.mySettings.colorChange == COLORCHANGE_MOOD){
       if((mood_millis + MOOD_INTERVAL_MIN + ((MOOD_INTERVAL_MAX - MOOD_INTERVAL_MIN) * (MOOD_LEVEL_MAX - settings.mySettings.moodRate) / MOOD_LEVEL_MAX)) < millis()){
@@ -1469,6 +1522,154 @@ void loop()
             testFlag = true;
             break;
 #endif
+#ifdef SHOW_MODE_SETTINGS
+#ifdef LDR
+        case MODE_SET_LDR:
+          renderer.setSmallText("AB", TEXT_POS_TOP, matrix);
+          if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0) for (uint8_t i = 5; i <= 9; i++) matrix[i] = 0;
+          else
+          {
+            if (settings.mySettings.useAbc)
+            {
+              renderer.setSmallText("EN", TEXT_POS_BOTTOM, matrix);
+            }
+            else
+            {
+              renderer.setSmallText("DA", TEXT_POS_BOTTOM, matrix);
+            }
+          }
+        break;
+#endif
+        case MODE_SET_COLOR:
+          renderer.setSmallText("CO", TEXT_POS_TOP, matrix);
+          if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0) for (uint8_t i = 5; i <= 9; i++) matrix[i] = 0;
+          else
+          {
+            renderer.setSmallText(String(settings.mySettings.color), TEXT_POS_BOTTOM, matrix);
+          }
+        break;  
+        case MODE_SET_COLORCHANGE:
+          renderer.setSmallText("CC", TEXT_POS_TOP, matrix);
+          if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0) for (uint8_t i = 5; i <= 9; i++) matrix[i] = 0;
+          else {
+            switch (settings.mySettings.colorChange) {
+              case COLORCHANGE_NO:
+                renderer.setSmallText("NO", TEXT_POS_BOTTOM, matrix);
+              break;
+              case COLORCHANGE_MOOD:
+                renderer.setSmallText("MD", TEXT_POS_BOTTOM, matrix);
+              break;
+              case COLORCHANGE_FIVE:
+                renderer.setSmallText("5", TEXT_POS_BOTTOM, matrix);
+              break;
+              case COLORCHANGE_HOUR:
+                renderer.setSmallText("60", TEXT_POS_BOTTOM, matrix);
+              break;
+              case COLORCHANGE_DAY:
+                renderer.setSmallText("24", TEXT_POS_BOTTOM, matrix);
+              break;
+            }
+          }
+          break;
+        case MODE_SET_TRANSITION:
+          renderer.setSmallText("TR", TEXT_POS_TOP, matrix);
+          if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0) for (uint8_t i = 5; i <= 9; i++) matrix[i] = 0;
+          else
+          {
+            switch (settings.mySettings.transition) {
+              case TRANSITION_NORMAL:
+                renderer.setSmallText("NO", TEXT_POS_BOTTOM, matrix);
+              break;
+              case TRANSITION_FADE:
+                renderer.setSmallText("FD", TEXT_POS_BOTTOM, matrix);
+              break;
+              case TRANSITION_MATRIX:
+                renderer.setSmallText("MX", TEXT_POS_BOTTOM, matrix);
+              break;
+              case TRANSITION_MOVEUP:
+                renderer.setSmallText("UP", TEXT_POS_BOTTOM, matrix);
+              break;
+            }
+          }
+          break;
+        case MODE_SET_IT_IS:
+          renderer.setSmallText("IT", TEXT_POS_TOP, matrix);
+          if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0) for (uint8_t i = 5; i <= 9; i++) matrix[i] = 0;
+          else
+          {
+            if (settings.mySettings.itIs)
+            {
+              renderer.setSmallText("EN", TEXT_POS_BOTTOM, matrix);
+            }
+            else
+            {
+              renderer.setSmallText("DA", TEXT_POS_BOTTOM, matrix);
+            }
+          }
+          break;
+        case MODE_SET_TIME:
+          if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0)
+          {
+            renderer.setTime(hour(), minute(), matrix);
+            renderer.setCorners(minute(), matrix);
+            renderer.clearEntryWords(matrix);
+            renderer.setAMPM(hour(), matrix);
+          }
+          break;
+        case MODE_SET_DAY:
+          renderer.setSmallText("DD", TEXT_POS_TOP, matrix);
+          if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0) for (uint8_t i = 5; i <= 9; i++) matrix[i] = 0;
+          else
+          {
+            renderer.setSmallText(String(day()), TEXT_POS_BOTTOM, matrix);
+          }
+          break;
+        case MODE_SET_MONTH:
+          renderer.setSmallText("MM", TEXT_POS_TOP, matrix);
+          if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0) for (uint8_t i = 5; i <= 9; i++) matrix[i] = 0;
+          else
+          {
+            renderer.setSmallText(String(month()), TEXT_POS_BOTTOM, matrix);
+          }
+          break;
+        case MODE_SET_YEAR:
+          renderer.setSmallText("YY", TEXT_POS_TOP, matrix);
+          if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0) for (uint8_t i = 5; i <= 9; i++) matrix[i] = 0;
+          else
+          {
+            renderer.setSmallText(String(year() % 100), TEXT_POS_BOTTOM, matrix);
+          }
+          break;
+        case MODE_SET_NIGHTOFF:
+          if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0)
+          {
+            renderer.setTime(hour(settings.mySettings.nightOffTime), minute(settings.mySettings.nightOffTime), matrix);
+            renderer.clearEntryWords(matrix);
+            renderer.setAMPM(hour(settings.mySettings.nightOffTime), matrix);
+          }
+          break;
+        case MODE_SET_DAYON:
+          if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0)
+          {
+            renderer.setTime(hour(settings.mySettings.dayOnTime), minute(settings.mySettings.dayOnTime), matrix);
+            renderer.clearEntryWords(matrix);
+            renderer.setAMPM(hour(settings.mySettings.dayOnTime), matrix);
+          }
+          break;
+        case MODE_SET_TIMEOUT:
+          renderer.setSmallText("FB", TEXT_POS_TOP, matrix);
+          if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0) for (uint8_t i = 5; i <= 9; i++) matrix[i] = 0;
+          else
+          {
+            renderer.setSmallText(String(settings.mySettings.timeout), TEXT_POS_BOTTOM, matrix);
+          }
+          break;
+#ifdef BUZZER
+//        case MODE_SET_TIMER:
+//        case MODE_SET_ALARM_1:
+//        case MODE_SET_ALARM_2:
+#endif
+#endif
         case MODE_FEED:
             for (uint8_t y = 0; y <= 5; y++)
             {
@@ -1894,7 +2095,12 @@ void buttonModePressed()
         return;
     }
 #endif
-    setMode(mode++);
+    if(mode == MODE_SET_1ST - 1) {
+      setMode(MODE_TIME);
+    } else {
+      setMode(mode++);
+    }
+}
 }
 
 //*****************************************************************************
@@ -2090,6 +2296,7 @@ ICACHE_RAM_ATTR void buttonModeInterrupt()
     if (millis() > lastButtonPress + 250)
     {
         lastButtonPress = millis();
+        lastModePress = lastButtonPress;
         buttonModePressed();
     }
 }

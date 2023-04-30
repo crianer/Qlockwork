@@ -47,9 +47,33 @@ typedef enum eMode : uint8_t
     MODE_BLUE,				// 16
     MODE_WHITE,				// 17
 #endif
+#ifdef SHOW_MODE_SETTINGS
+    MODE_SET_1ST,
+#ifdef LDR
+    MODE_SET_LDR = MODE_SET_1ST,
+    MODE_SET_COLOR,
+#else
+    MODE_SET_COLOR = MODE_SET_1ST,
+#endif      
+    MODE_SET_COLORCHANGE,
+    MODE_SET_TRANSITION,
+    MODE_SET_IT_IS,
+    MODE_SET_TIME,
+    MODE_SET_DAY,
+    MODE_SET_MONTH,
+    MODE_SET_YEAR,
+    MODE_SET_NIGHTOFF,
+    MODE_SET_DAYON,
+    MODE_SET_TIMEOUT,
+#ifdef BUZZER
+    MODE_SET_TIMER,
+    MODE_SET_ALARM_1,
+    MODE_SET_ALARM_2,
+#endif
+#endif
     MODE_COUNT,				// 18
     MODE_BLANK,				// 19
-    MODE_FEED				// 20
+    MODE_FEED,				// 20
 } Mode;
 
 // Overload the ControlType++ operator.
@@ -65,7 +89,8 @@ enum eTransition
     TRANSITION_NORMAL, // 0
     TRANSITION_MOVEUP, // 1
     TRANSITION_FADE,   // 2
-    TRANSITION_MATRIX  // 3
+    TRANSITION_MATRIX,  // 3
+    TRANSITION_COUNT = TRANSITION_MATRIX
 };
 
 #endif

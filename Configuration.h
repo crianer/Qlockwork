@@ -34,6 +34,7 @@
 #define SHOW_MODE_MOONPHASE
 //#define SHOW_MODE_SUNRISE_SUNSET // works only if APIKEY is defined
 #define SHOW_MODE_TEST
+#define SHOW_MODE_SETTINGS
 
 //#define APIKEY "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 #define LOCATION "Berlin, DE"
