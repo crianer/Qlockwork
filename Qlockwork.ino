@@ -2151,6 +2151,7 @@ void buttonPlusPressed()
     if (settings.mySettings.colorChange < COLORCHANGE_COUNT) settings.mySettings.colorChange++;
     else settings.mySettings.colorChange = 0;
     if (settings.mySettings.colorChange == COLORCHANGE_MOOD) settings.mySettings.color = MOOD;
+    if (settings.mySettings.colorChange == COLORCHANGE_NO) settings.mySettings.color = WHITE;
   break;
   case MODE_SET_TRANSITION:
     if (settings.mySettings.transition < TRANSITION_COUNT) settings.mySettings.transition++;
@@ -2217,6 +2218,7 @@ void buttonMinusPressed()
     if (settings.mySettings.colorChange > 0) settings.mySettings.colorChange--;
     else settings.mySettings.colorChange = COLORCHANGE_COUNT;
     if (settings.mySettings.colorChange == COLORCHANGE_MOOD) settings.mySettings.color = MOOD;
+    if (settings.mySettings.colorChange == COLORCHANGE_NO) settings.mySettings.color = WHITE;
   break;
   case MODE_SET_TRANSITION:
     if (settings.mySettings.transition > 0) settings.mySettings.transition--;
