@@ -22,7 +22,6 @@
 
 //#define NONE_TECHNICAL_ZERO
 #define AUTO_MODECHANGE_TIME 60 // seconds
-#define EVENT_TIME 300 // seconds
 #define ALARM_LED_COLOR RED
 //#define ABUSE_CORNER_LED_FOR_ALARM
 
