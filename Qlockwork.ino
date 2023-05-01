@@ -1257,7 +1257,7 @@ void loop()
                 matrix[9] = 0b0000111000000000;
             }
             //else if (millis() < sunrise_millis + SUNSET_SUNRISE_SPEED * 1.5)
-            else if (millis() < sunrise_millis + 4000 + settings.mySettings.timeout * 1000)
+            else if (millis() < sunrise_millis + 4500 + settings.mySettings.timeout * 1000)
             {
                 renderer.setTime(hour(sunrise_unix), minute(sunrise_unix), matrix);
                 renderer.setCorners(minute(sunrise_unix), matrix);
@@ -1267,7 +1267,7 @@ void loop()
             {
                 sunrise_started = false;
                 settings.mySettings.color = save_color_sunrise_sunset;
-                goBackToTime = true;
+                if (settings.mySettings.timeout != 0) goBackToTime = true;
             }
             break;
             
@@ -1327,7 +1327,7 @@ void loop()
                 matrix[9] = 0b1111111111100000;
             }
             // else if (millis() < sunset_millis + SUNSET_SUNRISE_SPEED * 1.5)
-            else if (millis() < sunset_millis + 4000 + settings.mySettings.timeout * 1000)
+            else if (millis() < sunset_millis + 4500 + settings.mySettings.timeout * 1000)
             {
                 renderer.setTime(hour(sunset_unix), minute(sunset_unix), matrix);
                 renderer.setCorners(minute(sunset_unix), matrix);
@@ -1337,7 +1337,7 @@ void loop()
             {
                 sunset_started = false;
                 settings.mySettings.color = save_color_sunrise_sunset;
-                goBackToTime = true;
+                if (settings.mySettings.timeout != 0) goBackToTime = true;
             }
             break;
 #endif
@@ -1794,7 +1794,7 @@ void loop()
     }
 
     // Wait for mode timeout then switch back to time
-    if ((millis() > (modeTimeout + settings.mySettings.timeout * 1000)) && modeTimeout)
+    if ((settings.mySettings.timeout != 0) && (millis() > (modeTimeout + settings.mySettings.timeout * 1000)) && modeTimeout)
     {
 // #if defined(SHOW_MODE_SUNRISE_SUNSET) && defined(APIKEY)
 //        sunrise_started = false;
@@ -2242,7 +2242,7 @@ void buttonMinusPressed()
     settings.mySettings.dayOnTime += 300;
   break;
   case MODE_SET_TIMEOUT:
-    if (settings.mySettings.timeout > 5) {
+    if (settings.mySettings.timeout > 0) {
       settings.mySettings.timeout -= 5;
     }
   break;
@@ -3064,7 +3064,7 @@ void handleButtonSettings()
         message += F(TXT_TIMEOUT);
         message += F("</td><td>");
         message += F("<select name=\"to\">");
-    for (int i = 5; i <= 60; i += 5) {
+    for (int i = 0; i <= 60; i += 5) {
         message += F("<option value=\"") + String(i) + F("\"");
         if (i == settings.mySettings.timeout)
             message += F(" selected");
