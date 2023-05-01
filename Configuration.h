@@ -102,8 +102,8 @@
 //*****************************************************************************
 
 //#define BOARD_DEFAULT
-#define BOARD_QWF_V1_2
-//#define BOARD_QWF_V2_0
+//#define BOARD_QWF_V1_2
+#define BOARD_QWF_V2_0
 
 #ifdef BOARD_DEFAULT
 #define ESP_LED
