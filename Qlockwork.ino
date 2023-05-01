@@ -1105,6 +1105,16 @@ void loop()
         screenBufferNeedsUpdate = false;
         bool goBackToTime = false;
 
+#if defined(SHOW_MODE_SUNRISE_SUNSET) && defined(APIKEY)
+        if (sunrise_started && (mode != MODE_SUNRISE)) {
+          sunrise_started = false; 
+          settings.mySettings.color = save_color_sunrise_sunset;
+        }
+        if (sunset_started && (mode != MODE_SUNSET)) {
+          sunset_started = false;
+          settings.mySettings.color = save_color_sunrise_sunset;
+        }
+#endif
         colorOld = settings.mySettings.color;
         if (colorNeedsChange) {
           updateColor();
@@ -1125,11 +1135,6 @@ void loop()
         switch (mode)
         {
         case MODE_TIME:
-#if defined(SHOW_MODE_SUNRISE_SUNSET) && defined(APIKEY)
-            sunrise_started = false;
-            sunset_started = false;
-#endif
-
 #ifdef FRONTCOVER_BINARY
             matrix[0] = 0b1111000000000000;
             matrix[1] = hour() << 5;
@@ -1343,9 +1348,6 @@ void loop()
 #endif
 #ifdef SHOW_MODE_MOONPHASE
         case MODE_MOONPHASE:
-#if defined(SHOW_MODE_SUNRISE_SUNSET) && defined(APIKEY)
-            settings.mySettings.color = save_color_sunrise_sunset;
-#endif
             switch (moonphase)
             {
             case 0:
