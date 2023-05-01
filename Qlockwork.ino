@@ -192,7 +192,7 @@ bool sunset_started = false;
 unsigned long sunset_millis = 0;
 time_t sunset_unix = 0;
 time_t sunrise_unix = 0;
-int save_color_sunrise_sunset = settings.mySettings.color;
+int save_color_sunrise_sunset = 0;
 #endif
 
 // Misc
