@@ -2736,6 +2736,7 @@ void handleRoot()
     message += F("<br>") + String(dayStr(weekday(tempEspTime))) + F(", ") + String(monthStr(month(tempEspTime))) + F(" ") + String(day(tempEspTime)) + F(". ") + String(year(tempEspTime));
     message += F("<br>Moonphase: ") + String(moonphase);
     message += F("<br>Free RAM: ") + String(ESP.getFreeHeap()) + F(" bytes");
+    message += F("<br>Max Free Block Size: ") + String(ESP.getMaxFreeBlockSize()) + F(" bytes");
     message += F("<br>RSSI: ") + String(WiFi.RSSI());
 #ifdef LDR
     message += F("<br>Brightness: ") + String(brightness) + F(" (ABC: ");
