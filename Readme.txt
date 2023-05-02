@@ -212,12 +212,12 @@ Color change (CC):					Change the color in intervals.
                                     Do not change (NO), every 5 minutes (5), every hour (60), every day (24), continuously (MD).
 Transition (TR):					Choose between none (NO), matrix (MX), move up (UP) or fade (FD) mode transition.
 Show "IT IS" (IT):					Enable (EN) or disable (DA) "It is". It will be shown every half and full hour anyway.
-Time:								Set the current time in case no internet connectivity is available. The seconds are set to zero.
+Time (TI ME):						Set the current time in case no internet connectivity is available. The seconds are set to zero.
 Year (YY):							Set the current year in case no internet connectivity is available.
 Month (MM):							Set the current month in case no internet connectivity is available.
 Day (DD):							Set the current day in case no internet connectivity is available.
-Daily switch off time:				Set the time at which the clock switches off automatically (e.g. at the evening).
-Daily switch on time:				Set the time at which the clock switches on automatically (e.g. at the morning).
+Daily switch off time (DO FF):		Set the time at which the clock switches off automatically (e.g. at the evening).
+Daily switch on time (D ON):		Set the time at which the clock switches on automatically (e.g. at the morning).
 Fallback timeout (FB):				Time in seconds to change mode back to time. (0: disabled, max. 60s)
 
 *** Settings (web): **********************************************************
