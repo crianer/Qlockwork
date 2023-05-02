@@ -1633,7 +1633,11 @@ void loop()
           }
           break;
         case MODE_SET_TIME:
-          if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0)
+          if (millis() < (modeTimeout + SETTINGS_TITLE_TIMEOUT)){
+            renderer.setSmallText("TI", TEXT_POS_TOP, matrix);
+            renderer.setSmallText("ME", TEXT_POS_BOTTOM, matrix);
+          }
+          else if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0)
           {
             renderer.setTime(hour(), minute(), matrix);
             renderer.setCorners(minute(), matrix);
@@ -1666,7 +1670,11 @@ void loop()
           }
           break;
         case MODE_SET_NIGHTOFF:
-          if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0)
+          if (millis() < (modeTimeout + SETTINGS_TITLE_TIMEOUT)){
+            renderer.setSmallText("DO", TEXT_POS_TOP, matrix);
+            renderer.setSmallText("FF", TEXT_POS_BOTTOM, matrix);
+          }
+          else if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0)
           {
             renderer.setTime(hour(settings.mySettings.nightOffTime), minute(settings.mySettings.nightOffTime), matrix);
             renderer.clearEntryWords(matrix);
@@ -1674,7 +1682,11 @@ void loop()
           }
           break;
         case MODE_SET_DAYON:
-          if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0)
+          if (millis() < (modeTimeout + SETTINGS_TITLE_TIMEOUT)){
+            renderer.setSmallText("D", TEXT_POS_TOP, matrix);
+            renderer.setSmallText("ON", TEXT_POS_BOTTOM, matrix);
+          }
+          else if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0)
           {
             renderer.setTime(hour(settings.mySettings.dayOnTime), minute(settings.mySettings.dayOnTime), matrix);
             renderer.clearEntryWords(matrix);
@@ -1797,7 +1809,7 @@ void loop()
     }
 
     // Wait for mode timeout then switch back to time
-    if ((settings.mySettings.timeout != 0) && (millis() > (modeTimeout + settings.mySettings.timeout * 1000)) && modeTimeout)
+    if ((settings.mySettings.timeout != 0) && (millis() > (modeTimeout + settings.mySettings.timeout * 1000)) && modeTimeout && (mode < MODE_SET_1ST))
     {
 // #if defined(SHOW_MODE_SUNRISE_SUNSET) && defined(APIKEY)
 //        sunrise_started = false;
@@ -2303,6 +2315,11 @@ void setMode(Mode newMode)
 #ifdef APIKEY
     case MODE_EXT_TEMP:
     case MODE_EXT_HUMIDITY:
+#endif
+#ifdef SHOW_MODE_SETTINGS
+    case MODE_SET_TIME:
+    case MODE_SET_NIGHTOFF:
+    case MODE_SET_DAYON:
 #endif
         modeTimeout = millis();
         break;
