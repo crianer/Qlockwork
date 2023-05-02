@@ -54,7 +54,8 @@ Shop Hardware here:
 https://shop.bracci.ch/
 
 Visit this forum for comments, suggestions and bug reports:
-http://diskussion.christians-bastel-laden.de/viewtopic.php?f=23&t=2843
+http://diskussion.christians-bastel-laden.de/viewtopic.php?t=4230 (QlockWiFive)
+http://diskussion.christians-bastel-laden.de/viewtopic.php?f=23&t=2843 (Qlockwork)
 
 ******************************************************************************
 Top features:
