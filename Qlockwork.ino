@@ -937,7 +937,8 @@ void loop()
 #ifdef DEBUG
                     Serial.println("Starte Event Animation: " + String(myanimation.name) );
 #endif
-                    while ( showAnimation(brightness) ) {}
+                    uint32_t animationMillis = millis();
+                    while( millis() < (animationMillis + MIN_ANI_DURATION)){ while ( showAnimation(brightness) ) {};};
                     setMode(MODE_FEED);
                   }
               }
