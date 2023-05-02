@@ -22,8 +22,8 @@ After the WLAN timeout the clock works without NTP but you can still control it 
 Without WLAN the clock uses the optional RTC to set the time or if no RTC is present has to be set manually.
 In either ways the clocks IP is shown as a textfeed.
 
-Events can be shown at a certain repetition rate (every 5/15/30/60 minutes) on a particular day of the year as a textfeed
-followed by an animation (e.g. a firework). Up to 8 events can be configured through the web interface. 
+Events can be shown at a certain repetition rate (every 5/15/30/60 minutes) on a particular day of the year as an 
+animation (e.g. a firework) followed by a textfeed. Up to 8 events can be configured through the web interface. 
 Go to settings (gear icon) -> events (birthday cake icon). You can set a text and color as well as an animation
 and the desired repetition rate for every event.
 
