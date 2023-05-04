@@ -2102,9 +2102,7 @@ void buttonTimePressed()
         alarmOn = false;
     }
 #endif
-#if defined(SHOW_MODE_SUNRISE_SUNSET) && defined(APIKEY)
-    settings.mySettings.color = save_color_sunrise_sunset;
-#endif
+
     modeTimeout = 0;
     setMode(MODE_TIME);
 }
