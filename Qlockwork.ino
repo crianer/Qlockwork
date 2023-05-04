@@ -1783,12 +1783,6 @@ void loop()
         default:
             if (runTransitionOnce)
             {
-                //if (settings.mySettings.transition == TRANSITION_NORMAL)
-                //    writeScreenBuffer(matrix, settings.mySettings.color, brightness);
-                //if (settings.mySettings.transition == TRANSITION_FADE)
-                //    writeScreenBufferFade(matrixOld, matrix, settings.mySettings.color, brightness);
-                //if (settings.mySettings.transition == TRANSITION_MOVEUP)
-                //    moveScreenBufferUp(matrixOld, matrix, settings.mySettings.color, brightness);
                 moveScreenBufferUp(matrixOld, matrix, settings.mySettings.color, brightness);
                 testColumn = 0;
             }
@@ -1811,10 +1805,6 @@ void loop()
     // Wait for mode timeout then switch back to time
     if ((settings.mySettings.timeout != 0) && (millis() > (modeTimeout + settings.mySettings.timeout * 1000)) && modeTimeout && (mode < MODE_SET_1ST))
     {
-// #if defined(SHOW_MODE_SUNRISE_SUNSET) && defined(APIKEY)
-//        sunrise_started = false;
-//        sunset_started = false;
-// #endif
         setMode(MODE_TIME);
     }
   
