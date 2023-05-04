@@ -5,7 +5,8 @@
 #include "LedDriver.h"
 
 LedDriver::LedDriver() {
-    strip = new Adafruit_NeoPixel(NUMPIXELS, PIN_LEDS_DATA, NEOPIXEL_TYPE);
+    calculateLedMap();
+    strip = new Adafruit_NeoPixel(getLedsCount(), PIN_LEDS_DATA, NEOPIXEL_TYPE);
     strip->begin();
 }
 
@@ -41,17 +42,7 @@ void LedDriver::setPixel(uint8_t num, uint8_t color, uint8_t brightness) {
 
 //Serial.println( "red: " + String(red) + " green: " + String(green) + " blue: " + String(blue));
 
-#ifdef NEOPIXEL_RGBW
-    uint8_t white = 0xFF;
-    if (red < white) white = red;
-    if (green < white) white = green;
-    if (blue < white) white = blue;
-    strip->setPixelColor(ledMap[num], red - white, green - white, blue - white, white);
-#endif
-
-#ifdef NEOPIXEL_RGB
-    strip->setPixelColor(ledMap[num], red, green, blue);
-#endif
+    setPixelRGB(num, red, green, blue);
 
     return;
 }
@@ -63,16 +54,32 @@ void LedDriver::setPixelRGB(uint8_t x, uint8_t y, uint8_t red, uint8_t green, ui
 
 void LedDriver::setPixelRGB(uint8_t num, uint8_t red, uint8_t green, uint8_t blue )
 {
+    uint8_t numLedsToWrite;
+
+    if(num < PIXEL_NO_CORNER_1) {
+      numLedsToWrite = ledMap.ledsPerLetter;
+    } else if (num < PIXEL_NO_ALARM) {
+      numLedsToWrite = ledMap.ledsPerCorner;
+    }else {
+      numLedsToWrite = ledMap.ledsPerAlarm;
+    }
+    
 #ifdef NEOPIXEL_RGBW
     uint8_t white = 0xFF;
     if (red < white) white = red;
     if (green < white) white = green;
     if (blue < white) white = blue;
-    strip->setPixelColor(ledMap[num], red - white, green - white, blue - white, white);
+    
+    for (uint8_t i = 0; i < numLedsToWrite; i++){
+      strip->setPixelColor(ledMapCalc[num] + i, red - white, green - white, blue - white, white);
+    }
+    
 #endif
 
 #ifdef NEOPIXEL_RGB
-    strip->setPixelColor(ledMap[num], red, green, blue);
+    for (uint8_t i = 0; i < numLedsToWrite; i++){
+      strip->setPixelColor(ledMapCalc[num] + i, red, green, blue);
+    }
 #endif
 }
 
@@ -95,4 +102,58 @@ uint32_t LedDriver::wheel(uint8_t wheelPos) {
 
 uint32_t LedDriver::getColor(uint8_t r, uint8_t g, uint8_t b) {
   return ((uint32_t) r << 16) | ((uint32_t) g << 8) | b;
+}
+
+uint8_t LedDriver::getLedsCount(void){
+  uint8_t maxLedNum = 0;
+  for(uint8_t i = 0; i < PIXEL_NO_CORNER_1; i++){
+    if (ledMapCalc[i] > maxLedNum)
+    maxLedNum = ledMapCalc[i] + (ledMap.ledsPerLetter - 1);
+  }
+
+  for(uint8_t i = 0; i < NUMPIXELS_CORNERS; i++){
+    if (ledMapCalc[PIXEL_NO_CORNER_1+i] > maxLedNum)
+      maxLedNum = ledMapCalc[PIXEL_NO_CORNER_1+i] + (ledMap.ledsPerCorner - 1);
+  }
+
+  if (ledMapCalc[PIXEL_NO_ALARM] > maxLedNum)
+    maxLedNum = ledMapCalc[PIXEL_NO_ALARM] + (ledMap.ledsPerAlarm - 1);
+
+  return maxLedNum + 1;
+}
+
+void LedDriver::calculateLedMap(void){
+  for (uint8_t i = 0; i < PIXEL_NO_CORNER_1; i++) {
+      uint8_t ledNum = 0;
+      for (uint8_t j = 0; j < PIXEL_NO_CORNER_1; j++) {
+        if (ledMap.matrix[j] < ledMap.matrix[i]) ledNum += ledMap.ledsPerLetter;
+      }
+      for (uint8_t j = 0; j < NUMPIXELS_CORNERS; j++) {
+        if (ledMap.corners[j] < ledMap.matrix[i]) ledNum += ledMap.ledsPerCorner;
+      }
+      if (ledMap.alarm < ledMap.matrix[i]) ledNum += ledMap.ledsPerAlarm;
+      ledMapCalc[i] = ledNum;
+    }
+    
+    for (uint8_t i = 0; i < NUMPIXELS_CORNERS; i++) {
+      uint8_t ledNum = 0;
+      for (uint8_t j = 0; j < PIXEL_NO_CORNER_1; j++) {
+        if (ledMap.matrix[j] < ledMap.corners[i]) ledNum += ledMap.ledsPerLetter;
+      }
+      for (uint8_t j = 0; j < NUMPIXELS_CORNERS; j++) {
+        if (ledMap.corners[j] < ledMap.corners[i]) ledNum += ledMap.ledsPerCorner;
+      }
+      if (ledMap.alarm < ledMap.corners[i]) ledNum += ledMap.ledsPerAlarm;
+      ledMapCalc[PIXEL_NO_CORNER_1 + i] = ledNum;
+    }
+    
+    uint8_t ledNum = 0;
+    for (uint8_t j = 0; j < PIXEL_NO_CORNER_1; j++) {
+      if (ledMap.matrix[j] < ledMap.alarm) ledNum += ledMap.ledsPerLetter;
+    }
+    for (uint8_t j = 0; j < NUMPIXELS_CORNERS; j++) {
+      if (ledMap.corners[j] < ledMap.alarm) ledNum += ledMap.ledsPerCorner;
+    }
+    if (ledMap.alarm < ledMap.alarm) ledNum += ledMap.ledsPerAlarm;
+    ledMapCalc[PIXEL_NO_ALARM] = ledNum;
 }
