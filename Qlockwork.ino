@@ -1820,9 +1820,9 @@ void loop()
 void writeScreenBuffer(uint16_t screenBuffer[], uint8_t color, uint8_t brightness)
 {
     ledDriver.clear();
-    for (uint8_t y = 0; y <= 9; y++)
+    for (uint8_t y = 0; y < NUMPIXELS_Y; y++)
     {
-        for (uint8_t x = 0; x <= 10; x++)
+        for (uint8_t x = 0; x < NUMPIXELS_X; x++)
         {
             if (bitRead(screenBuffer[y], 15 - x))
                 ledDriver.setPixel(x, y, color, brightness);
@@ -1830,28 +1830,28 @@ void writeScreenBuffer(uint16_t screenBuffer[], uint8_t color, uint8_t brightnes
     }
 
     // Corner LEDs
-    for (uint8_t y = 0; y <= 3; y++)
+    for (uint8_t y = 0; y < NUMPIXELS_CORNERS; y++)
     {
         if (bitRead(screenBuffer[y], 4))
-            ledDriver.setPixel(110 + y, color, brightness);
+            ledDriver.setPixel(PIXEL_NO_CORNER_1 + y, color, brightness);
     }
 
     // Alarm LED
 #ifdef BUZZER
-    if (bitRead(screenBuffer[4], 4))
+    if (bitRead(screenBuffer[NUMPIXELS_CORNERS], 4))
     {
 #ifdef ALARM_LED_COLOR
 #ifdef ABUSE_CORNER_LED_FOR_ALARM
         if (settings.mySettings.alarm1 || settings.mySettings.alarm2 || alarmTimerSet)
-            ledDriver.setPixel(111, ALARM_LED_COLOR, brightness);
+            ledDriver.setPixel(PIXEL_NO_CORNER_2, ALARM_LED_COLOR, brightness);
         else
             if (bitRead(screenBuffer[1], 4))
-                ledDriver.setPixel(111, color, brightness);
+                ledDriver.setPixel(PIXEL_NO_CORNER_2, color, brightness);
 #else
-        ledDriver.setPixel(114, ALARM_LED_COLOR, brightness);
+        ledDriver.setPixel(PIXEL_NO_ALARM, ALARM_LED_COLOR, brightness);
 #endif
 #else
-        ledDriver.setPixel(114, color, brightness);
+        ledDriver.setPixel(PIXEL_NO_ALARM, color, brightness);
 #endif
     }
 #endif
@@ -1861,11 +1861,11 @@ void writeScreenBuffer(uint16_t screenBuffer[], uint8_t color, uint8_t brightnes
 
 void moveScreenBufferUp(uint16_t screenBufferOld[], uint16_t screenBufferNew[], uint8_t color, uint8_t brightness)
 {
-    for (uint8_t z = 0; z <= 9; z++)
+    for (uint8_t z = 0; z < NUMPIXELS_Y; z++)
     {
-        for (uint8_t i = 0; i <= 8; i++)
+        for (uint8_t i = 0; i < (NUMPIXELS_Y - 1); i++)
             screenBufferOld[i] = screenBufferOld[i + 1];
-        screenBufferOld[9] = screenBufferNew[z];
+        screenBufferOld[NUMPIXELS_Y - 1] = screenBufferNew[z];
         writeScreenBuffer(screenBufferOld, color, brightness);
         webServer.handleClient();
         delay(50);
@@ -1875,12 +1875,12 @@ void moveScreenBufferUp(uint16_t screenBufferOld[], uint16_t screenBufferNew[], 
 void writeScreenBufferFade(uint16_t screenBufferOld[], uint16_t screenBufferNew[], uint8_t color, uint8_t brightness)
 {
     ledDriver.clear();
-    uint8_t brightnessBuffer[10][12] = {};
+    uint8_t brightnessBuffer[NUMPIXELS_Y][NUMPIXELS_X+1] = {};
 
     // Copy old matrix to buffer
-    for (uint8_t y = 0; y <= 9; y++)
+    for (uint8_t y = 0; y < NUMPIXELS_Y; y++)
     {
-        for (uint8_t x = 0; x <= 11; x++)
+        for (uint8_t x = 0; x < (NUMPIXELS_X + 1); x++)
         {
             if (bitRead(screenBufferOld[y], 15 - x))
                 brightnessBuffer[y][x] = brightness;
@@ -1890,9 +1890,9 @@ void writeScreenBufferFade(uint16_t screenBufferOld[], uint16_t screenBufferNew[
     // Fade old to new matrix
     for (uint8_t i = 0; i < brightness; i++)
     {
-        for (uint8_t y = 0; y <= 9; y++)
+        for (uint8_t y = 0; y < NUMPIXELS_Y; y++)
         {
-            for (uint8_t x = 0; x <= 11; x++)
+            for (uint8_t x = 0; x < (NUMPIXELS_X + 1); x++)
             {
                 ESP.wdtFeed();
                 if (!(bitRead(screenBufferOld[y], 15 - x)) && (bitRead(screenBufferNew[y], 15 - x)))
@@ -1904,22 +1904,22 @@ void writeScreenBufferFade(uint16_t screenBufferOld[], uint16_t screenBufferNew[
         }
 
         // Corner LEDs
-        for (uint8_t y = 0; y <= 3; y++)
-            ledDriver.setPixel(110 + y, color, brightnessBuffer[y][11]);
+        for (uint8_t y = 0; y < NUMPIXELS_CORNERS; y++)
+            ledDriver.setPixel(PIXEL_NO_CORNER_1 + y, color, brightnessBuffer[y][11]);
 
         // Alarm LED
 #ifdef BUZZER
 #ifdef ALARM_LED_COLOR
 #ifdef ABUSE_CORNER_LED_FOR_ALARM
         if (settings.mySettings.alarm1 || settings.mySettings.alarm2 || alarmTimerSet)
-            ledDriver.setPixel(111, ALARM_LED_COLOR, brightnessBuffer[4][11]);
+            ledDriver.setPixel(PIXEL_NO_CORNER_2, ALARM_LED_COLOR, brightnessBuffer[4][11]);
         else
-            ledDriver.setPixel(111, color, brightnessBuffer[1][11]);
+            ledDriver.setPixel(PIXEL_NO_CORNER_2, color, brightnessBuffer[1][11]);
 #else
-        ledDriver.setPixel(114, ALARM_LED_COLOR, brightnessBuffer[4][11]);
+        ledDriver.setPixel(PIXEL_NO_ALARM, ALARM_LED_COLOR, brightnessBuffer[4][11]);
 #endif
 #else
-        ledDriver.setPixel(114, color, brightnessBuffer[4][11]);
+        ledDriver.setPixel(PIXEL_NO_ALARM, color, brightnessBuffer[4][11]);
 #endif
 #endif
         webServer.handleClient();
@@ -1929,38 +1929,36 @@ void writeScreenBufferFade(uint16_t screenBufferOld[], uint16_t screenBufferNew[
 
 void writeScreenBufferMatrix(uint16_t screenBufferOld[], uint16_t screenBufferNew[], uint8_t color, uint8_t brightness)
 {
-  uint16_t mline[11] = {0};
-  uint16_t wline[11] = {0};
-  uint16_t sline[11] = {0};
+  uint16_t mline[NUMPIXELS_X] = {0};
+  uint16_t wline[NUMPIXELS_X] = {0};
+  uint16_t sline[NUMPIXELS_X] = {0};
   uint8_t aktline;
   uint16_t mleer = 0;  // zu prüfen ob wir fertig sind
 
   uint8_t mstep = 0;
-  uint16_t mline_max[11] = {0};
-  uint16_t brightnessBuffer[11][12] = {0};
+  uint16_t mline_max[NUMPIXELS_X] = {0};
+  uint16_t brightnessBuffer[NUMPIXELS_Y][NUMPIXELS_X] = {0};
   uint16_t brightness_16 = brightness;
 
-  uint16_t zufallszeile[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  uint16_t zufallszeile[NUMPIXELS_X];
   uint16_t zufallsbuffer;
   uint16_t zufallsindex;
 
-  Serial.println("writeScreenBufferMatrix - color: " + String(color));
-  Serial.println("writeScreenBufferMatrix - brightness: " + String(brightness));
-  Serial.println("writeScreenBufferMatrix - matrix [0][10] : " + String(bitRead(screenBufferNew[0], 10)));
+  for (uint8_t i = 0; i < NUMPIXELS_X; i++) zufallszeile[i] = i;
   
   // Zufälliges Vertauschen von jeweils 2 Zeilenwerten:
-  for (uint8_t i = 0; i <= 10; i++)
+  for (uint8_t i = 0; i < NUMPIXELS_X; i++)
   {
-    zufallsindex = random(0, 11);
+    zufallsindex = random(0, NUMPIXELS_X);
     zufallsbuffer = zufallszeile[zufallsindex];
     zufallszeile[zufallsindex] = zufallszeile[i];
     zufallszeile[i] = zufallsbuffer;
 
   }
   // Variablen init
-  for (uint8_t line = 0; line <= 10; line++)
+  for (uint8_t line = 0; line < NUMPIXELS_X; line++)
   {
-    sline[line] = (11 - (zufallszeile[line] % 11 )) * 5 / 2;
+    sline[line] = (NUMPIXELS_X - (zufallszeile[line] % NUMPIXELS_X )) * 5 / 2;
     mline_max[line] = 0;
     mline[line] = 0;
     wline[line] = 0;
@@ -1968,21 +1966,21 @@ void writeScreenBufferMatrix(uint16_t screenBufferOld[], uint16_t screenBufferNe
 
   for (uint16_t i = 0; i <= 1200; i++)
   {
-    aktline = zufallszeile[i % 11];
+    aktline = zufallszeile[i % NUMPIXELS_X];
 
     if ( sline[aktline] > 0 ) sline[aktline]--;
     if ( sline[aktline] == 0 )
     {
       sline[aktline] = 3 - (aktline % 2);
 
-      if ( mline[aktline] == 0 && mline_max[aktline] < 10)
+      if ( mline[aktline] == 0 && mline_max[aktline] < NUMPIXELS_Y)
       {
         mline[aktline] = 1;
         mline_max[aktline]++;
       }
       else
       {
-        if ( mline_max[aktline] < 11 )  // solange grün hinzu bis unten erreicht ist
+        if ( mline_max[aktline] < NUMPIXELS_X )  // solange grün hinzu bis unten erreicht ist
         {
           if ( random(0, 6) == 0 && (mline[aktline] & 1) == 0 )
           {
@@ -2006,9 +2004,9 @@ void writeScreenBufferMatrix(uint16_t screenBufferOld[], uint16_t screenBufferNe
         }
       }
       ledDriver.clear();
-      for ( uint16_t y = 0; y <= 9; y++ )
+      for ( uint16_t y = 0; y < NUMPIXELS_Y; y++ )
       {
-        for ( uint16_t x = 0; x <= 10; x++ )
+        for ( uint16_t x = 0; x < NUMPIXELS_X; x++ )
         {
           if ( y > mline_max[x] - 1 )
           {

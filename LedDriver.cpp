@@ -21,7 +21,7 @@ void LedDriver::show() {
 }
 
 void LedDriver::setPixel(uint8_t x, uint8_t y, uint8_t color, uint8_t brightness) {
-    setPixel(x + y * 11, color, brightness);
+    setPixel(x + y * NUMPIXELS_X, color, brightness);
 }
 
 void LedDriver::setPixel(uint8_t num, uint8_t color, uint8_t brightness) {
@@ -58,7 +58,7 @@ void LedDriver::setPixel(uint8_t num, uint8_t color, uint8_t brightness) {
 
 void LedDriver::setPixelRGB(uint8_t x, uint8_t y, uint8_t red, uint8_t green, uint8_t blue)
 {
-    setPixelRGB(x + y * 11, red, green, blue);
+    setPixelRGB(x + y * NUMPIXELS_X, red, green, blue);
 }
 
 void LedDriver::setPixelRGB(uint8_t num, uint8_t red, uint8_t green, uint8_t blue )
