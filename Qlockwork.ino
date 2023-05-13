@@ -3002,7 +3002,9 @@ void handleButtonSettings()
         message += F(TXT_COLOR);
         message += F("</td><td>");
         
-        message += F("<select name=\"co\">");
+        message += F("<select name=\"co\"");
+        if (settings.mySettings.colorChange != COLORCHANGE_NO) message += F(" disabled");
+        message += F(">");
         uint8_t colorNum = settings.mySettings.color;
         for(uint8_t j = 0; j <= COLOR_COUNT; j++){
           message += F("<option value=\"") +String(j) + F("\"");
