@@ -1115,6 +1115,10 @@ void loop()
         else
             for (uint8_t i = 0; i <= 9; i++) matrixOld[i] = matrix[i];
 
+#ifdef SHOW_MODE_TEST
+        if ( mode != MODE_TEST) testColumn = 0;
+#endif
+
         renderer.clearScreenBuffer(matrix);
 
         switch (mode)
@@ -1765,12 +1769,12 @@ void loop()
             writeScreenBuffer(matrix, feedColor, brightness);
             break;
         default:
-            if (runTransitionOnce)
-            {
-                moveScreenBufferUp(matrixOld, matrix, settings.mySettings.color, brightness);
-                testColumn = 0;
-            }
-            else
+//            if (runTransitionOnce)
+//            {
+//                moveScreenBufferUp(matrixOld, matrix, settings.mySettings.color, brightness);
+//                testColumn = 0;
+//            }
+//            else
                 writeScreenBuffer(matrix, settings.mySettings.color, brightness);
             break;
         }
