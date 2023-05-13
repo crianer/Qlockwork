@@ -2328,6 +2328,10 @@ void updateBrightness(bool forcedUpdate) {
 #ifdef LDR
 uint8_t getBrightnessFromLDR(bool forcedUpdate)
 {
+    uint32_t ldrLetterColor = ledDriver.getPixelColor(LDR_LETTER_X, LDR_LETTER_Y);
+    if (ldrLetterColor != 0){
+      return brightness;
+    }
 #ifdef LDR_IS_INVERSE
     ldrValue = 1024 - analogRead(PIN_LDR);
 #else
