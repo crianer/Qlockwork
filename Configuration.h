@@ -247,7 +247,7 @@
 #endif
 
 #ifdef RTC_BACKUP
-#define RTC_TEMPERATURE_OFFSET -1.15
+#define RTC_TEMPERATURE_OFFSET -3.0
 #endif
 
 #ifdef LDR
