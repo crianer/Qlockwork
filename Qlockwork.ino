@@ -3237,6 +3237,8 @@ void handleButtonEvents()
   message += F("<br><button title=\"Save Events.\"><i class=\"fa fa-floppy-o\"></i></button>");
   message += F("</form>");
   message += F("<button title=\"Settings\" onclick=\"window.location.href='/handleButtonSettings'\"><i class=\"fa fa-gear\"></i></button>");
+  message += F("<br>");
+  message += F("<button title=\"Home\" onclick=\"window.location.href='/'\"><i class=\"fa fa-home\"></i></button>");
   message += F("</body>");
   message += F("</html>");
   Serial.println("Free Heap: " + String(ESP.getFreeHeap()));
