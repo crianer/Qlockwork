@@ -982,24 +982,10 @@ void loop()
             else setMode(mode++);
           break;
         case IR_CODE_PLUS:
-          if (mode < MODE_SET_1ST) {
-            if(settings.mySettings.brightness <= 90){
-              settings.mySettings.brightness += 10;
-            }
-            updateBrightness(true);
-          } else {
-            buttonPlusPressed();
-          }
+          buttonPlusPressed();
           break;
         case IR_CODE_MINUS:
-          if (mode < MODE_SET_1ST) {
-            if(settings.mySettings.brightness >= 20){
-              settings.mySettings.brightness -= 10;
-            }
-            updateBrightness(true);
-          } else {
-            buttonMinusPressed();
-          }
+          buttonMinusPressed();
           break;
         case IR_CODE_SECONDS:
           setMode(MODE_SECONDS);
