@@ -98,18 +98,14 @@ void LedDriver::updateColorWheel() {
 
 uint32_t LedDriver::wheel(uint8_t wheelPos) {
   if (wheelPos < 85) {
-    return getColor(wheelPos * 3, 255 - wheelPos * 3, 0);
+    return Adafruit_NeoPixel::Color(wheelPos * 3, 255 - wheelPos * 3, 0);
   } else if (wheelPos < 170) {
     wheelPos -= 85;
-    return getColor(255 - wheelPos * 3, 0, wheelPos * 3);
+    return Adafruit_NeoPixel::Color(255 - wheelPos * 3, 0, wheelPos * 3);
   } else {
     wheelPos -= 170;
-    return getColor(0, wheelPos * 3, 255 - wheelPos * 3);
+    return Adafruit_NeoPixel::Color(0, wheelPos * 3, 255 - wheelPos * 3);
   }
-}
-
-uint32_t LedDriver::getColor(uint8_t r, uint8_t g, uint8_t b) {
-  return ((uint32_t) r << 16) | ((uint32_t) g << 8) | b;
 }
 
 uint8_t LedDriver::getLedsCount(void){

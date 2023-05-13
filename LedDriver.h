@@ -171,7 +171,6 @@ private:
     uint32_t m_wheelColor;
     uint8_t ledMapCalc[NUMPIXELS_Y * NUMPIXELS_X + NUMPIXELS_CORNERS + 1];
     uint32_t wheel(uint8_t wheelPos);
-    uint32_t getColor(uint8_t r, uint8_t g, uint8_t b);
     uint8_t getLedsCount();
     void calculateLedMap();
 };
