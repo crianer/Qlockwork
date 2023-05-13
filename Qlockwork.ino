@@ -2102,7 +2102,7 @@ void buttonModePressed()
         return;
     }
 #endif
-    if(mode == MODE_SET_1ST - 1) {
+    if((mode == MODE_SET_1ST - 1) || (mode > MODE_COUNT)) {
       setMode(MODE_TIME);
     } else {
       setMode(mode++);
