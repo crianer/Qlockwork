@@ -172,8 +172,8 @@ uint8_t brightness = maxBrightness;
 #ifdef LDR
 uint16_t ldrValue = 0;
 uint16_t lastLdrValue = 0;
-uint16_t minLdrValue = 511; // The ESP will crash if minLdrValue and maxLdrValue are equal due to an error in map()
-uint16_t maxLdrValue = 512;
+uint16_t minLdrValue = LDR_MIN_DEFAULT;
+uint16_t maxLdrValue = LDR_MAX_DEFAULT;
 #endif
 
 // Alarm
