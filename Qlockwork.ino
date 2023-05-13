@@ -516,6 +516,7 @@ void setup()
     setupFS();
     // Load Animationsliste
     getAnimationList();
+    updateBrightness(true);
 } // setup()
 
 //*****************************************************************************
