@@ -2604,11 +2604,11 @@ void setupWebServer()
     webServer.on("/handleButtonMode", []() { buttonModePressed(); callRoot(); });
     webServer.on("/handleButtonTime", []() { buttonTimePressed(); callRoot(); });
     webServer.on("/commitSettings", []() { handleCommitSettings(); callRoot(); });
-    webServer.on("/reset", handleReset);
     webServer.on(F("/wifireset"), handleWiFiReset);
     webServer.on("/commitAdminSettings", []() { handleCommitAdminSettings(); callRoot(); });
     webServer.on("/commitEvents", []() { handleCommitEvents(); handleButtonSettings(); });
     webServer.on("/admin", handleAdmin);
+    webServer.on("/reset", []() { handleReset(); callRoot(); });
     webServer.on("/showText", handleShowText);
     webServer.on("/control", handleControl);
     webServer.begin();
