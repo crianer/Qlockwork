@@ -2602,12 +2602,12 @@ void setupWebServer()
     webServer.on("/handleButtonSettings", handleButtonSettings);
     webServer.on("/handleButtonEvents", handleButtonEvents);
     webServer.on("/handleButtonMode", []() { buttonModePressed(); callRoot(); });
-    webServer.on("/handleButtonTime", []() {    buttonTimePressed(); callRoot(); });
-    webServer.on("/commitSettings", []() {    handleCommitSettings(); callRoot(); });
-    webServer.on("/commitEvents", []() {    handleCommitEvents(); handleButtonSettings(); });
+    webServer.on("/handleButtonTime", []() { buttonTimePressed(); callRoot(); });
+    webServer.on("/commitSettings", []() { handleCommitSettings(); callRoot(); });
     webServer.on("/reset", handleReset);
     webServer.on(F("/wifireset"), handleWiFiReset);
     webServer.on("/commitAdminSettings", []() { handleCommitAdminSettings(); callRoot(); });
+    webServer.on("/commitEvents", []() { handleCommitEvents(); handleButtonSettings(); });
     webServer.on("/admin", handleAdmin);
     webServer.on("/showText", handleShowText);
     webServer.on("/control", handleControl);
