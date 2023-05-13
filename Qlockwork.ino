@@ -3128,6 +3128,7 @@ void handleButtonSettings()
         message += F("</table>");
         message += F("<br><button title=\"Save Settings.\"><i class=\"fa fa-floppy-o\"></i></button>");
         message += F("</form>");
+        message += F("<br><br>");
         message += F("<button title=\"Events\" onclick=\"window.location.href='/handleButtonEvents'\"><i class=\"fa fa-birthday-cake\"></i></button>");
         message += F("<br>");
         message += F("<button title=\"Home\" onclick=\"window.location.href='/'\"><i class=\"fa fa-home\"></i></button>");
@@ -3236,6 +3237,7 @@ void handleButtonEvents()
   message += F("</table>");
   message += F("<br><button title=\"Save Events.\"><i class=\"fa fa-floppy-o\"></i></button>");
   message += F("</form>");
+  message += F("<br><br>");
   message += F("<button title=\"Settings\" onclick=\"window.location.href='/handleButtonSettings'\"><i class=\"fa fa-gear\"></i></button>");
   message += F("<br>");
   message += F("<button title=\"Home\" onclick=\"window.location.href='/'\"><i class=\"fa fa-home\"></i></button>");
