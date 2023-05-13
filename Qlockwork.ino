@@ -3126,11 +3126,11 @@ void handleButtonSettings()
         message += F("</td></tr>");
     // ------------------------------------------------------------------------
         message += F("</table>");
-        message += F("<br><button title=\"Save Settings.\"><i class=\"fa fa-check\"></i></button>");
+        message += F("<br><button title=\"Save Settings.\"><i class=\"fa fa-floppy-o\"></i></button>");
         message += F("</form>");
         message += F("<button title=\"Events\" onclick=\"window.location.href='/handleButtonEvents'\"><i class=\"fa fa-birthday-cake\"></i></button>");
         message += F("<br>");
-        message += F("<button title=\"Back\" onclick=\"window.location.href='/'\"><i class=\"fa fa-reply\"></i></button>");
+        message += F("<button title=\"Home\" onclick=\"window.location.href='/'\"><i class=\"fa fa-home\"></i></button>");
         message += F("</body></html>");
     webServer.send(200, "text/html", message);
 }
@@ -3234,9 +3234,9 @@ void handleButtonEvents()
   // ------------------------------------------------------------------------
 
   message += F("</table>");
-  message += F("<br><button title=\"Save Settings.\"><i class=\"fa fa-check\"></i></button>");
+  message += F("<br><button title=\"Save Events.\"><i class=\"fa fa-floppy-o\"></i></button>");
   message += F("</form>");
-  message += F("<button title=\"Back\" onclick=\"window.location.href='/handleButtonSettings'\"><i class=\"fa fa-reply\"></i></button>");
+  message += F("<button title=\"Settings\" onclick=\"window.location.href='/handleButtonSettings'\"><i class=\"fa fa-gear\"></i></button>");
   message += F("</body>");
   message += F("</html>");
   Serial.println("Free Heap: " + String(ESP.getFreeHeap()));
