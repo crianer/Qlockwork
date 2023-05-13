@@ -42,6 +42,7 @@ void Settings::resetToDefault() {
       mySettings.events[i].repRate = EVT_REP_60;
       mySettings.events[i].time = 0;
     }
+    mySettings.frontCover = FRONTCOVER_CH_GS;
     
     saveToEEPROM();
 }

@@ -513,9 +513,6 @@ void setup()
     lastMinute = minute();
     lastSecond = second();
 
-#ifdef FRONTCOVER_BINARY
-    settings.setTransition(TRANSITION_NORMAL);
-#endif
     setupFS();
     // Load Animationsliste
     getAnimationList();
@@ -823,15 +820,15 @@ void loop()
         }
 #endif
 
-#ifdef FRONTCOVER_BINARY
-        if (mode != MODE_BLANK)
-            screenBufferNeedsUpdate = true;
-#else
+        if (settings.mySettings.frontCover == FRONTCOVER_BINARY) {
+          if (mode != MODE_BLANK)
+              screenBufferNeedsUpdate = true;
+        } else {
         // General Screenbuffer-Update every second.
         // (not in MODE_TIME or MODE_BLANK because it will lock the ESP due to TRANSITION_FADE)
-        if ((mode != MODE_TIME) && (mode != MODE_BLANK))
-            screenBufferNeedsUpdate = true;
-#endif
+          if ((mode != MODE_TIME) && (mode != MODE_BLANK))
+              screenBufferNeedsUpdate = true;
+        }
 
         // Flash ESP LED
 #ifdef ESP_LED
@@ -1136,39 +1133,39 @@ void loop()
         switch (mode)
         {
         case MODE_TIME:
-#ifdef FRONTCOVER_BINARY
-            matrix[0] = 0b1111000000000000;
-            matrix[1] = hour() << 5;
-            matrix[2] = minute() << 5;
-            matrix[3] = second() << 5;
-            matrix[5] = 0b1111000000000000;
-            matrix[6] = day() << 5;
-            matrix[7] = month() << 5;
-            matrix[8] = year() - 2000 << 5;
-#else
-            if (runTransitionDemo) {
-              runTransitionOnce = true;
-              uint8_t simHour = hour();
-              uint8_t simMinute = 0;
-              if (minute() < 55) {
-                simMinute = (minute() / 5 + 1) * 5;
-              } else {
-                if (hour() < 23){
-                  simHour++;
+            if (settings.mySettings.frontCover == FRONTCOVER_BINARY) {
+              matrix[0] = 0b1111000000000000;
+              matrix[1] = hour() << 5;
+              matrix[2] = minute() << 5;
+              matrix[3] = second() << 5;
+              matrix[5] = 0b1111000000000000;
+              matrix[6] = day() << 5;
+              matrix[7] = month() << 5;
+              matrix[8] = year() - 2000 << 5;
+            } else {
+              if (runTransitionDemo) {
+                runTransitionOnce = true;
+                uint8_t simHour = hour();
+                uint8_t simMinute = 0;
+                if (minute() < 55) {
+                  simMinute = (minute() / 5 + 1) * 5;
                 } else {
-                  simHour = 0;
+                  if (hour() < 23){
+                    simHour++;
+                  } else {
+                    simHour = 0;
+                  }
                 }
+                renderer.setTime(simHour, simMinute, settings.mySettings.frontCover, matrix);
+                renderer.setCorners(simMinute, matrix);
+                if (!settings.mySettings.itIs && ((simMinute / 5) % 6)) renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
               }
-              renderer.setTime(simHour, simMinute, matrix);
-              renderer.setCorners(simMinute, matrix);
-              if (!settings.mySettings.itIs && ((simMinute / 5) % 6)) renderer.clearEntryWords(matrix);
+              else {
+                renderer.setTime(hour(), minute(), settings.mySettings.frontCover, matrix);
+                renderer.setCorners(minute(), matrix);
+                if (!settings.mySettings.itIs && ((minute() / 5) % 6)) renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
+              }
             }
-            else {
-              renderer.setTime(hour(), minute(), matrix);
-              renderer.setCorners(minute(), matrix);
-              if (!settings.mySettings.itIs && ((minute() / 5) % 6)) renderer.clearEntryWords(matrix);
-            }
-#endif
 #ifdef BUZZER
             if (settings.mySettings.alarm1 || settings.mySettings.alarm2 || alarmTimerSet) renderer.setAlarmLed(matrix);
 #endif
@@ -1265,9 +1262,9 @@ void loop()
             //else if (millis() < sunrise_millis + SUNSET_SUNRISE_SPEED * 1.5)
             else if (millis() < sunrise_millis + 4500 + settings.mySettings.timeout * 1000)
             {
-                renderer.setTime(hour(sunrise_unix), minute(sunrise_unix), matrix);
+                renderer.setTime(hour(sunrise_unix), minute(sunrise_unix), settings.mySettings.frontCover, matrix);
                 renderer.setCorners(minute(sunrise_unix), matrix);
-                renderer.clearEntryWords(matrix);
+                renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
             }
             else
             {
@@ -1335,9 +1332,9 @@ void loop()
             // else if (millis() < sunset_millis + SUNSET_SUNRISE_SPEED * 1.5)
             else if (millis() < sunset_millis + 4500 + settings.mySettings.timeout * 1000)
             {
-                renderer.setTime(hour(sunset_unix), minute(sunset_unix), matrix);
+                renderer.setTime(hour(sunset_unix), minute(sunset_unix), settings.mySettings.frontCover, matrix);
                 renderer.setCorners(minute(sunset_unix), matrix);
-                renderer.clearEntryWords(matrix);
+                renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
             }
             else
             {
@@ -1639,10 +1636,10 @@ void loop()
           }
           else if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0)
           {
-            renderer.setTime(hour(), minute(), matrix);
+            renderer.setTime(hour(), minute(), settings.mySettings.frontCover, matrix);
             renderer.setCorners(minute(), matrix);
-            renderer.clearEntryWords(matrix);
-            renderer.setAMPM(hour(), matrix);
+            renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
+            renderer.setAMPM(hour(), settings.mySettings.frontCover, matrix);
           }
           break;
         case MODE_SET_DAY:
@@ -1676,9 +1673,9 @@ void loop()
           }
           else if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0)
           {
-            renderer.setTime(hour(settings.mySettings.nightOffTime), minute(settings.mySettings.nightOffTime), matrix);
-            renderer.clearEntryWords(matrix);
-            renderer.setAMPM(hour(settings.mySettings.nightOffTime), matrix);
+            renderer.setTime(hour(settings.mySettings.nightOffTime), minute(settings.mySettings.nightOffTime), settings.mySettings.frontCover, matrix);
+            renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
+            renderer.setAMPM(hour(settings.mySettings.nightOffTime), settings.mySettings.frontCover, matrix);
           }
           break;
         case MODE_SET_DAYON:
@@ -1688,9 +1685,9 @@ void loop()
           }
           else if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0)
           {
-            renderer.setTime(hour(settings.mySettings.dayOnTime), minute(settings.mySettings.dayOnTime), matrix);
-            renderer.clearEntryWords(matrix);
-            renderer.setAMPM(hour(settings.mySettings.dayOnTime), matrix);
+            renderer.setTime(hour(settings.mySettings.dayOnTime), minute(settings.mySettings.dayOnTime), settings.mySettings.frontCover, matrix);
+            renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
+            renderer.setAMPM(hour(settings.mySettings.dayOnTime), settings.mySettings.frontCover, matrix);
           }
           break;
         case MODE_SET_TIMEOUT:
@@ -3046,7 +3043,6 @@ void handleButtonSettings()
         message += F("> Off");
         message += F("</td></tr>");
     // ------------------------------------------------------------------------
-#ifndef FRONTCOVER_BINARY
         message += F("<tr><td>");
         message += F(TXT_TRANSITION);
         message += F("</td><td>");
@@ -3067,7 +3063,7 @@ void handleButtonSettings()
         message += F(" checked");
         message += F("> None");
         message += F("</td></tr>");
-#endif
+
     // ------------------------------------------------------------------------
         message += F("<tr><td>");
         message += F(TXT_TIMEOUT);

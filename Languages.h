@@ -5,7 +5,46 @@
 #ifndef LANGUAGES_H
 #define LANGUAGES_H
 
-#if defined(FRONTCOVER_EN) || defined(FRONTCOVER_BINARY)
+enum eFrontCover : uint8_t
+{
+  FRONTCOVER_DE_DE,
+  FRONTCOVER_DE_SW,
+  FRONTCOVER_DE_BA,
+  FRONTCOVER_DE_SA,
+  FRONTCOVER_D3,
+  FRONTCOVER_CH,
+  FRONTCOVER_CH_GS,
+  FRONTCOVER_EN,
+  FRONTCOVER_ES,
+  FRONTCOVER_FR,
+  FRONTCOVER_IT,
+  FRONTCOVER_NL,
+  FRONTCOVER_SW,
+  FRONTCOVER_BINARY,
+  FRONTCOVER_COUNT
+};
+
+const char sLanguageStr[][20] PROGMEM =
+{
+  { "German" }, // 00
+  { "German SW" }, // 01
+  { "German BA" }, // 02
+  { "German SA" }, // 03
+  { "German MK D3"}, // 04
+  { "Swiss German" }, // 05
+  { "Swiss German GSI" }, // 06
+  { "English" }, // 07
+  { "Spanish" }, // 08
+  { "French" }, // 09
+  { "Italian" }, // 10
+  { "Dutch" },  // 11
+  { "Swedish" },// 12
+  { "Binary" }// 13
+};
+
+
+
+#ifdef LANGUAGE_EN
 const char sWeekday[][2] = {
     { ' ', ' ' }, // 00
     { 'S', 'U' }, // 01
@@ -42,7 +81,7 @@ const char sWeekday[][2] = {
 #define TXT_REP_RATE "Repetition rate"
 #endif
 
-#if defined(FRONTCOVER_DE_DE) || defined(FRONTCOVER_DE_SW) || defined(FRONTCOVER_DE_BA) || defined(FRONTCOVER_DE_SA) || defined(FRONTCOVER_D3) || defined(FRONTCOVER_DE_MKF_DE) || defined(FRONTCOVER_DE_MKF_SW) || defined(FRONTCOVER_DE_MKF_BA) || defined(FRONTCOVER_DE_MKF_SA) || defined(FRONTCOVER_CH) || defined(FRONTCOVER_CH_GS)
+#ifdef LANGUAGE_DE
 const char sWeekday[][2] = {
     { ' ', ' ' }, // 00
     { 'S', 'O' }, // 01
@@ -79,7 +118,7 @@ const char sWeekday[][2] = {
 #define TXT_REP_RATE "Wiederholrate"
 #endif
 
-#if defined(FRONTCOVER_FR)
+#ifdef LANGUAGE_FR
 const char sWeekday[][2] = {
     { ' ', ' ' }, // 00
     { 'D', 'I' }, // 01
@@ -116,7 +155,7 @@ const char sWeekday[][2] = {
 #define TXT_REP_RATE "Repetition rate"
 #endif
 
-#if defined(FRONTCOVER_IT)
+#ifdef LANGUAGE_IT
 const char sWeekday[][2] = {
     { ' ', ' ' }, // 00
     { 'D', 'O' }, // 01
@@ -153,7 +192,7 @@ const char sWeekday[][2] = {
 #define TXT_REP_RATE "Repetition rate"
 #endif
 
-#if defined(FRONTCOVER_ES)
+#ifdef LANGUAGE_ES
 const char sWeekday[][2] = {
     { ' ', ' ' }, // 00
     { 'D', 'O' }, // 01
@@ -190,7 +229,7 @@ const char sWeekday[][2] = {
 #define TXT_REP_RATE "Repetition rate"
 #endif
 
-#if defined(FRONTCOVER_NL)
+#ifdef LANGUAGE_NL
 const char sWeekday[][2] = {
     { ' ', ' ' }, // 00
     { 'Z', 'O' }, // 01

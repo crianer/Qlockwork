@@ -47,6 +47,7 @@ public:
         boolean hourBeep;
         uint8_t moodRate;
         event_t events[NUM_EVTS];
+        eFrontCover frontCover;
     } mySettings;
 
     void saveToEEPROM();

@@ -49,23 +49,12 @@
 #define SETTINGS_TITLE_TIMEOUT 2500
 #endif
 
-//#define FRONTCOVER_EN
-#define FRONTCOVER_DE_DE
-//#define FRONTCOVER_DE_SW
-//#define FRONTCOVER_DE_BA
-//#define FRONTCOVER_DE_SA
-//#define FRONTCOVER_DE_MKF_DE
-//#define FRONTCOVER_DE_MKF_SW
-//#define FRONTCOVER_DE_MKF_BA
-//#define FRONTCOVER_DE_MKF_SA
-//#define FRONTCOVER_D3
-//#define FRONTCOVER_CH
-//#define FRONTCOVER_CH_GS
-//#define FRONTCOVER_ES
-//#define FRONTCOVER_FR
-//#define FRONTCOVER_IT
-//#define FRONTCOVER_NL
-//#define FRONTCOVER_BINARY
+//#define LANGUAGE_EN
+#define LANGUAGE_DE
+//#define LANGUAGE_FR
+//#define LANGUAGE_IT
+//#define LANGUAGE_ES
+//#define LANGUAGE_NL
 
 //*****************************************************************************
 // Timezone
