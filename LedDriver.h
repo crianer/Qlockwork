@@ -161,6 +161,8 @@ public:
     uint32_t getPixelColor(uint8_t num);
     void setPixel(uint8_t x, uint8_t y, uint8_t color, uint8_t brightness);
     void setPixel(uint8_t num, uint8_t color, uint8_t brightness);
+    void setPixelColor(uint8_t x, uint8_t y, uint32_t color32bit);
+    void setPixelColor(uint8_t num, uint32_t color32bit);
     void setPixelRGB(uint8_t x, uint8_t y, uint8_t red, uint8_t green, uint8_t blue);
     void setPixelRGB(uint8_t num, uint8_t red, uint8_t green, uint8_t blue );
     void updateColorWheel();

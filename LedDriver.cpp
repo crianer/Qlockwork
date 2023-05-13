@@ -61,34 +61,40 @@ void LedDriver::setPixelRGB(uint8_t x, uint8_t y, uint8_t red, uint8_t green, ui
 }
 
 void LedDriver::setPixelRGB(uint8_t num, uint8_t red, uint8_t green, uint8_t blue )
-{
-    uint8_t numLedsToWrite;
-
-    if(num < PIXEL_NO_CORNER_1) {
-      numLedsToWrite = ledMap.ledsPerLetter;
-    } else if (num < PIXEL_NO_ALARM) {
-      numLedsToWrite = ledMap.ledsPerCorner;
-    }else {
-      numLedsToWrite = ledMap.ledsPerAlarm;
-    }
-    
+{   
 #ifdef NEOPIXEL_RGBW
     uint8_t white = 0xFF;
     if (red < white) white = red;
     if (green < white) white = green;
     if (blue < white) white = blue;
     
-    for (uint8_t i = 0; i < numLedsToWrite; i++){
-      strip->setPixelColor(ledMapCalc[num] + i, red - white, green - white, blue - white, white);
-    }
+    setPixelColor(num, Adafruit_NeoPixel::Color(red - white, green - white, blue - white, white));
     
 #endif
 
 #ifdef NEOPIXEL_RGB
-    for (uint8_t i = 0; i < numLedsToWrite; i++){
-      strip->setPixelColor(ledMapCalc[num] + i, red, green, blue);
-    }
+    setPixelColor(num, Adafruit_NeoPixel::Color(red, green, blue));
 #endif
+}
+
+void LedDriver::setPixelColor(uint8_t x, uint8_t y, uint32_t color32bit){
+  setPixelColor(x + y * NUMPIXELS_X, color32bit);
+}
+
+void LedDriver::setPixelColor(uint8_t num, uint32_t color32bit) {
+  uint8_t numLedsToWrite;
+
+  if(num < PIXEL_NO_CORNER_1) {
+    numLedsToWrite = ledMap.ledsPerLetter;
+  } else if (num < PIXEL_NO_ALARM) {
+    numLedsToWrite = ledMap.ledsPerCorner;
+  }else {
+    numLedsToWrite = ledMap.ledsPerAlarm;
+  }
+
+  for (uint8_t i = 0; i < numLedsToWrite; i++){
+    strip->setPixelColor(ledMapCalc[num] + i, color32bit);
+  }
 }
 
 void LedDriver::updateColorWheel() {
