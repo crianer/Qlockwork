@@ -2127,6 +2127,7 @@ void buttonPlusPressed()
 #ifdef LDR
   case MODE_SET_LDR:
     settings.mySettings.useAbc = !settings.mySettings.useAbc;
+    updateBrightness(true);
   break;
 #endif
   case MODE_SET_COLOR:
@@ -2194,6 +2195,7 @@ void buttonMinusPressed()
 #ifdef LDR
   case MODE_SET_LDR:
     settings.mySettings.useAbc = !settings.mySettings.useAbc;
+    updateBrightness(true);
   break;
 #endif
   case MODE_SET_COLOR:
