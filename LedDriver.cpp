@@ -21,6 +21,14 @@ void LedDriver::show() {
     strip->show();
 }
 
+uint32_t LedDriver::getPixelColor(uint8_t x, uint8_t y) {
+  return getPixelColor(x + y * NUMPIXELS_X);
+}
+
+uint32_t LedDriver::getPixelColor(uint8_t num) {
+  return strip->getPixelColor(ledMapCalc[num]);
+}
+
 void LedDriver::setPixel(uint8_t x, uint8_t y, uint8_t color, uint8_t brightness) {
     setPixel(x + y * NUMPIXELS_X, color, brightness);
 }
