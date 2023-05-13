@@ -978,7 +978,7 @@ void loop()
             buttonModePressed();
             break;
         case IR_CODE_SETTINGS:
-            if (mode < MODE_SET_1ST) setMode(MODE_SET_1ST);
+            if ((mode < MODE_SET_1ST) || (mode > MODE_COUNT)) setMode(MODE_SET_1ST);
             else setMode(mode++);
           break;
         case IR_CODE_PLUS:
