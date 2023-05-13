@@ -79,6 +79,11 @@ const char sWeekday[][2] = {
 #define TXT_TEXT "Text"
 #define TXT_ANIMATION "Animation"
 #define TXT_REP_RATE "Repetition rate"
+#define TXT_ADMIN "Admin"
+#define TXT_TIME_SERVER "Time Server URL"
+#define TXT_OW_API_KEY "OpenWeather API Key"
+#define TXT_OW_LOCATION "OpenWeather Location"
+#define TXT_COVER_LANGUAGE "Language/Dialect"
 #endif
 
 #ifdef LANGUAGE_DE
@@ -116,6 +121,11 @@ const char sWeekday[][2] = {
 #define TXT_TEXT "Text"
 #define TXT_ANIMATION "Animation"
 #define TXT_REP_RATE "Wiederholrate"
+#define TXT_ADMIN "Admin"
+#define TXT_TIME_SERVER "Zeitserver"
+#define TXT_OW_API_KEY "OpenWeather API Key"
+#define TXT_OW_LOCATION "OpenWeather Standort"
+#define TXT_COVER_LANGUAGE "Sprache/Dialekt"
 #endif
 
 #ifdef LANGUAGE_FR
@@ -153,6 +163,11 @@ const char sWeekday[][2] = {
 #define TXT_TEXT "Text"
 #define TXT_ANIMATION "Animation"
 #define TXT_REP_RATE "Repetition rate"
+#define TXT_ADMIN "Admin"
+#define TXT_TIME_SERVER "Time Server URL"
+#define TXT_OW_API_KEY "OpenWeather API Key"
+#define TXT_OW_LOCATION "OpenWeather Location"
+#define TXT_COVER_LANGUAGE "Language/Dialect"
 #endif
 
 #ifdef LANGUAGE_IT
@@ -190,6 +205,11 @@ const char sWeekday[][2] = {
 #define TXT_TEXT "Text"
 #define TXT_ANIMATION "Animation"
 #define TXT_REP_RATE "Repetition rate"
+#define TXT_ADMIN "Admin"
+#define TXT_TIME_SERVER "Time Server URL"
+#define TXT_OW_API_KEY "OpenWeather API Key"
+#define TXT_OW_LOCATION "OpenWeather Location"
+#define TXT_COVER_LANGUAGE "Language/Dialect"
 #endif
 
 #ifdef LANGUAGE_ES
@@ -227,6 +247,11 @@ const char sWeekday[][2] = {
 #define TXT_TEXT "Text"
 #define TXT_ANIMATION "Animation"
 #define TXT_REP_RATE "Repetition rate"
+#define TXT_ADMIN "Admin"
+#define TXT_TIME_SERVER "Time Server URL"
+#define TXT_OW_API_KEY "OpenWeather API Key"
+#define TXT_OW_LOCATION "OpenWeather Location"
+#define TXT_COVER_LANGUAGE "Language/Dialect"
 #endif
 
 #ifdef LANGUAGE_NL
@@ -264,6 +289,11 @@ const char sWeekday[][2] = {
 #define TXT_TEXT "Text"
 #define TXT_ANIMATION "Animation"
 #define TXT_REP_RATE "Repetition rate"
+#define TXT_ADMIN "Admin"
+#define TXT_TIME_SERVER "Time Server URL"
+#define TXT_OW_API_KEY "OpenWeather API Key"
+#define TXT_OW_LOCATION "OpenWeather Location"
+#define TXT_COVER_LANGUAGE "Language/Dialect"
 #endif
 
 #endif

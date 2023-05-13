@@ -18,6 +18,10 @@
 
 #define MOOD_LEVEL_MAX 9
 
+#define LEN_TS_URL 30
+#define LEN_OW_API_KEY 33
+#define LEN_OW_LOCATION 30
+
 #define NUM_EVTS 8
 
 class Settings {
@@ -47,6 +51,9 @@ public:
         boolean hourBeep;
         uint8_t moodRate;
         event_t events[NUM_EVTS];
+        char timeServer[LEN_TS_URL];
+        char owApiKey[LEN_OW_API_KEY];
+        char owLocation[LEN_OW_LOCATION];
         eFrontCover frontCover;
     } mySettings;
 

@@ -117,7 +117,7 @@ Settings settings;
 
 // NTP
 Ntp ntp;
-char ntpServer[] = NTP_SERVER;
+char ntpServer[] = NTP_DEFAULT_SERVER;
 uint8_t errorCounterNTP = 0;
 
 // Screenbuffer
@@ -405,7 +405,7 @@ void setup()
 #ifdef DEBUG
         Serial.println("Getting outdoor weather:");
 #endif
-        !outdoorWeather.getOutdoorConditions(LOCATION, APIKEY, LANGSTR) ? errorCounterOutdoorWeather++ : errorCounterOutdoorWeather = 0;
+        !outdoorWeather.getOutdoorConditions(String(settings.mySettings.owLocation), String(settings.mySettings.owApiKey), LANGSTR) ? errorCounterOutdoorWeather++ : errorCounterOutdoorWeather = 0;
 #ifdef DEBUG
         Serial.println("Weather description: " + String(outdoorWeather.description));
         Serial.println("Outdoor temperature: " + String(outdoorWeather.temperature));
@@ -704,9 +704,9 @@ void loop()
 #ifdef DEBUG
                 Serial.println("Getting outdoor weather for location " + String(LOCATION) +":");
 #endif
-                !outdoorWeather.getOutdoorConditions(LOCATION, APIKEY, LANGSTR) ? errorCounterOutdoorWeather++ : errorCounterOutdoorWeather = 0;
+                !outdoorWeather.getOutdoorConditions(String(settings.mySettings.owLocation), String(settings.mySettings.owApiKey), LANGSTR) ? errorCounterOutdoorWeather++ : errorCounterOutdoorWeather = 0;
 #ifdef DEBUG
-                Serial.println("Location: " + String(LOCATION));
+                Serial.println("Location: " + String(settings.mySettings.owLocation));
                 Serial.println("Weather description: " + String(outdoorWeather.description));
                 Serial.println("Outdoor temperature: " + String(outdoorWeather.temperature));
                 Serial.println("Outdoor humidity: " + String(outdoorWeather.humidity));
@@ -2614,6 +2614,8 @@ void setupWebServer()
     webServer.on("/commitEvents", []() {    handleCommitEvents(); handleButtonSettings(); });
     webServer.on("/reset", handleReset);
     webServer.on(F("/wifireset"), handleWiFiReset);
+    webServer.on("/commitAdminSettings", []() { handleCommitAdminSettings(); callRoot(); });
+    webServer.on("/admin", handleAdmin);
     webServer.on("/showText", handleShowText);
     webServer.on("/control", handleControl);
     webServer.begin();
@@ -3247,6 +3249,78 @@ void handleButtonEvents()
   webServer.send(200, "text/html", message);
 }
 
+void handleAdmin()
+{
+  #ifdef DEBUG
+    Serial.println("Admin settings entered.");
+#endif
+    String message = F("<!doctype html>");
+        message += F("<html>");
+        message += F("<head>");
+        message += F("<title>") + String(WEBSITE_TITLE) + F(" ");
+        message += F(TXT_ADMIN);
+        message += F("</title>");
+        message += F("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+        message += F("<meta charset=\"UTF-8\">");
+        message += F("<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">");
+        message += F("<style>");
+        message += F("body{background-color:#FFFFFF;text-align:center;color:#333333;font-family:Sans-serif;font-size:16px;}");
+        message += F("input[type=submit]{background-color:#1FA3EC;text-align:center;color:#FFFFFF;width:200px;padding:12px;border:5px solid #FFFFFF;font-size:20px;border-radius:10px;}");
+        message += F("table{border-collapse:collapse;margin:0px auto;} td{padding:12px;border-bottom:1px solid #ddd;} tr:first-child{border-top:1px solid #ddd;} td:first-child{text-align:right;} td:last-child{text-align:left;}");
+        message += F("select{font-size:16px;}");
+        message += F("button{background-color:#1FA3EC;text-align:center;color:#FFFFFF;width:200px;padding:10px;border:5px solid #FFFFFF;font-size:24px;border-radius:10px;}");
+        message += F("</style>");
+        message += F("</head>");
+        message += F("<body>");
+        message += F("<h1>") + String(WEBSITE_TITLE) + F(" ");
+        message += F(TXT_ADMIN);
+        message += F("</h1>");
+        message += F("<form action=\"/commitAdminSettings\">");
+        message += F("<table>");
+    // ------------------------------------------------------------------------
+        message += F("<tr><td>");
+        message += F(TXT_TIME_SERVER);
+        message += F("</td><td>");
+        message += F("<input type=\"text\" name=\"adts\" value=\"");
+        message += String(settings.mySettings.timeServer)+ F("\" pattern=\"[\\x20-\\x7e]{0,") + String(LEN_TS_URL-1) + F("}\" placeholder=\"e.g. pool.ntp.org\">");
+        message += F("</td></tr>");
+        message += F("<tr><td>");
+        message += F(TXT_OW_API_KEY);
+        message += F("</td><td>");
+        message += F("<input type=\"text\" name=\"adwk\" value=\"");
+        message += String(settings.mySettings.owApiKey)+ F("\" pattern=\"[\\x20-\\x7e]{0,") + String(LEN_OW_API_KEY-1) + F("}\" placeholder=\"API Key\">");
+        message += F("</td></tr>");
+        message += F("<tr><td>");
+        message += F(TXT_OW_LOCATION);
+        message += F("</td><td>");
+        message += F("<input type=\"text\" name=\"adwl\" value=\"");
+        message += String(settings.mySettings.owLocation)+ F("\" pattern=\"[\\x20-\\x7e]{0,") + String(LEN_OW_LOCATION-1) + F("}\" placeholder=\"e.g. Bern, CH\">");
+        message += F("</td></tr>");
+        message += F("<tr><td>");
+        message += F(TXT_COVER_LANGUAGE);
+        message += F("</td><td>");
+        message += F("<select name=\"adfc\">");
+        for(uint8_t j = 0; j < FRONTCOVER_COUNT; j++){
+        message += F("<option value=\"") + String(j) + F("\"");
+          if (settings.mySettings.frontCover == j) message += F(" selected");
+          message += F(">") + String(FPSTR(sLanguageStr[j])) + F("</option>");
+        }
+        message += F("</select>");
+        message += F("</td></tr>");
+    // ------------------------------------------------------------------------
+        message += F("</table>");
+        message += F("<br><button title=\"Save Settings.\"><i class=\"fa fa-floppy-o\"></i></button>");
+        message += F("</form>");
+        message += F("<br><br>");
+        message += F("<button title=\"File System\" onclick=\"window.location.href='/fs'\"><i class=\"fa fa-folder-open\"></i></button>");
+        message += F("<br>");
+        message += F("<button title=\"Settings\" onclick=\"window.location.href='/handleButtonSettings'\"><i class=\"fa fa-gear\"></i></button>");
+        message += F("<br>");
+        message += F("<button title=\"Home\" onclick=\"window.location.href='/'\"><i class=\"fa fa-home\"></i></button>");
+        message += F("</body></html>");
+    webServer.send(200, "text/html", message);
+}
+
 void handleCommitSettings()
 {
 #ifdef DEBUG
@@ -3422,6 +3496,16 @@ void handleCommitEvents()
       Serial.println("Rep" + String(i) + ": " + webServer.arg("ev" + String(i) + "rep").toInt());
   }
 #endif
+  settings.saveToEEPROM();
+  screenBufferNeedsUpdate = true;
+}
+
+void handleCommitAdminSettings()
+{
+  webServer.arg("adts").toCharArray(settings.mySettings.timeServer, sizeof(settings.mySettings.timeServer), 0);
+  webServer.arg("adwk").toCharArray(settings.mySettings.owApiKey, sizeof(settings.mySettings.owApiKey), 0);
+  webServer.arg("adwl").toCharArray(settings.mySettings.owLocation, sizeof(settings.mySettings.owLocation), 0);
+  settings.mySettings.frontCover = (eFrontCover)webServer.arg("adfc").toInt();
   settings.saveToEEPROM();
   screenBufferNeedsUpdate = true;
 }

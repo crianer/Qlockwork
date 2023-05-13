@@ -16,7 +16,7 @@
 #define WIFI_SETUP_TIMEOUT 120
 #define WIFI_AP_PASS "12345678"
 #define OTA_PASS "1234"
-#define NTP_SERVER "pool.ntp.org"
+#define NTP_DEFAULT_SERVER "pool.ntp.org"
 #define SHOW_IP
 //#define WIFI_BEEPS
 
@@ -35,11 +35,10 @@
 #define SHOW_MODE_TEST
 #define SHOW_MODE_SETTINGS
 
-//#define APIKEY "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-#define LOCATION "Berlin, DE"
-//#define LOCATION "Zurich, CH"
-//#define LOCATION "Hong Kong, HK"
+#define APIKEY
+#define DEFAULT_LOCATION "Bern, CH"
 
+//--------------
 #define MOOD_INTERVAL_MIN 300
 #define MOOD_INTERVAL_MAX 4000
 
