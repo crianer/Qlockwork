@@ -83,10 +83,12 @@ Support for 16 frontcovers (original and DIY) in 6 languages.
 NTP timesync with timezone support.
 Automatic adjustment of daylight saving time.
 USB and over-the-air firmware updates.
+Admin settings page to configure time server, OpenWeather API key & location and the front cover.
 
 ******************************************************************************
 Pages:
 ******************************************************************************
+
 Modes:
 Time
 AM/PM
@@ -120,7 +122,6 @@ Day
 Daily switch off time
 Daily switch on time
 Fallback timeout back to time
-
 
 ******************************************************************************
 Needed libraries: (recommended/tested versions in brackets)
@@ -169,6 +170,7 @@ Don't forget to install Python 2.7 and to select "Add python.exe to path" while 
 Call "http://your_clocks_ip/update" to upload a new firmware via webbrowser.
 Call "http://your_clocks_ip/reset" to restart the ESP.
 Call "http://your_clocks_ip/wifireset" to forget all WiFi networks and credentials.
+Call "http://your_clocks_ip/admin" to open the admin settings page.
 Call "http://your_clocks_ip/fs" to open the file system on the ESP and upload animation files, e.g. stored in the repository in the folder "web".
 
 ******************************************************************************
@@ -244,6 +246,13 @@ Daily switch off time:              Set the time the clock turns itself off at n
 Daily switch on time:               Set the time the clock turns itself on at day.
 Show "IT IS":                       Enable (on) or disable (off) "It is". It will be shown every half and full hour anyway.
 Set date/time:                      Date and time of the clock. The seconds are set to zero if you press save.
+
+*** Admin Settings (web): ****************************************************
+Time server:						URL of the preferred time server
+OpenWeather API key:				API key provided by Openweather allowing to get weather information through API.
+OpenWeather location				Location which the weather information should refer to. Needs to follow the location format of 
+									OpenWeather, e.g. "Bern, CH". Check out on https://openweathermap.org/ and check for your city.
+Language/dialect:					Language or dialect of the used front cover.
 
 ******************************************************************************
 Configuration.h - Software settings:
@@ -403,6 +412,7 @@ Configuration.h - Hardware settings:
 112                                           113
 
 #define LED_LAYOUT_VERTICAL_4       Vertical and corner and alarm LEDs at the end of the strip. (As seen from the front.)
+#define LED_LAYOUT_VERTICAL_4_XXL	Indentically with LED_LAYOUT_VERTICAL_4 but with 2 LEDs per letter.
 
 011                    114                    113
    010 012 031 032 051 052 071 072 091 092 112
@@ -487,6 +497,12 @@ ev0d=YYYY-MM-DD						Date for event no.7
 ev0c=0								Color [0~24] for event no.7
 ev7rep=4							Repetition rate [0~4] for event no.7
 
+http://your_clocks_ip/commitAdminSettings?
+adts=pool.ntp.org                   URL of preferred time server
+adwk=123...                         API key used for OpenWeather
+adwl=bern, ch						Openweather location
+adfc=0								Front cover [0~13]
+
 http://your_clocks_ip/showText?
 buzzer=1                            Number of times the buzzer will beep before showing the text (optional)
 color=0                             Color of the textfeed, 0 to 24 (optional)
@@ -501,6 +517,10 @@ mode=0                              Set clock to mode=0 (time), mode=1 (am/pm), 
 ******************************************************************************
 Changelog:
 ******************************************************************************
+20230514:
+Admin settings accesible by calling "http://your_clocks_ip/admin". Here you can find settings which should not change open or
+even never throughout the lifetime of the clock.
+
 20230502:
 Introduced on-screen settings menu, plus/minus buttons, file storage and events 
 using animations (thanks Manfred), enhanced IR control (especially for QlockWiFive IR control), 
