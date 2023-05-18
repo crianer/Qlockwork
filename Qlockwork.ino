@@ -895,6 +895,7 @@ void loop()
         serialPrintUint64(irDecodeResult.value, HEX);
         Serial.println();
 #endif
+      bool codeValid = true;
         switch (irDecodeResult.value)
         {
         case IR_CODE_ONOFF:
@@ -986,10 +987,14 @@ void loop()
           settings.mySettings.colorChange = COLORCHANGE_DAY;
           colorNeedsChange = true;
           break;
+        default:
+          codeValid = false;
         }
+      if (codeValid) {
         settings.saveToEEPROM();
         screenBufferNeedsUpdate = true;
       }
+    }
       irrecv.resume();
     }
 #endif
