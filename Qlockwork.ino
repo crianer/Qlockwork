@@ -1623,6 +1623,15 @@ void loop()
             renderer.setSmallText(String(settings.mySettings.timeout), TEXT_POS_BOTTOM, matrix);
           }
           break;
+      case MODE_SET_BRIGHTNESS:
+        for (uint8_t x = 0; x < map(settings.mySettings.brightness, 10, 100, 1, 10); x++)
+        {
+          for (uint8_t y = 0; y <= x; y++)
+          {
+            matrix[9 - y] |= 1 << (14 - x);
+          }
+        }
+        break;
 #ifdef BUZZER
 //        case MODE_SET_TIMER:
 //        case MODE_SET_ALARM_1:
@@ -1737,6 +1746,12 @@ void loop()
         setMode(MODE_TIME);
     }
   
+  // Wait for brightness timeout then switch back to time
+  if ((millis() > (modeTimeout + BRIGHTNESS_TIMEOUT)) && modeTimeout && (mode == MODE_SET_BRIGHTNESS))
+  {
+    setMode(MODE_TIME);
+  }
+
 #ifdef DEBUG_FPS
     debugFps();
 #endif
@@ -2116,6 +2131,7 @@ void buttonPlusPressed()
     if(settings.mySettings.brightness <= 90){
       settings.mySettings.brightness += 10;
     }
+      setMode(MODE_SET_BRIGHTNESS);
     updateBrightness(true);
 #endif
   }
@@ -2184,6 +2200,7 @@ void buttonMinusPressed()
     if(settings.mySettings.brightness >= 20){
       settings.mySettings.brightness -= 10;
     }
+      setMode(MODE_SET_BRIGHTNESS);
     updateBrightness(true);
 #endif
   }
@@ -2244,6 +2261,7 @@ void setMode(Mode newMode)
     case MODE_SET_TIME:
     case MODE_SET_NIGHTOFF:
     case MODE_SET_DAYON:
+    case MODE_SET_BRIGHTNESS:
 #endif
         modeTimeout = millis();
         break;

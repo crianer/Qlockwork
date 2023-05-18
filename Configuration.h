@@ -15,6 +15,7 @@
 //#define DEDICATION "The only reason for time is so that everything doesn't happen at once.<br>(Albert Einstein)"
 #define WIFI_SETUP_TIMEOUT 15
 #define WIFI_CONNECT_TIMEOUT 15000
+#define BRIGHTNESS_TIMEOUT 1000
 #define WIFI_AP_PASS "12345678"
 #define OTA_PASS "1234"
 #define NTP_DEFAULT_SERVER "pool.ntp.org"
