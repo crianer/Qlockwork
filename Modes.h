@@ -74,6 +74,7 @@ typedef enum eMode : uint8_t
     MODE_COUNT,				// 18
     MODE_BLANK,				// 19
     MODE_FEED,				// 20
+    MODE_WPS,     // 21
 } Mode;
 
 // Overload the ControlType++ operator.

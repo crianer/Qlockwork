@@ -203,9 +203,14 @@ int updateInfo = 0;
 IPAddress myIP = { 0,0,0,0 };
 uint32_t lastButtonPress = 0;
 uint32_t lastModePress = 0;
+uint8_t modeButtonStage = 0;
 bool testFlag = false;
 unsigned long mood_millis = 0;
 uint32_t lastMillis2Hz = 0;
+
+uint32_t connectMillis = 0;
+bool connecting = false;
+bool startWps = false;
 
 //Animationen
 s_myanimation myanimation;
@@ -849,12 +854,29 @@ void loop()
               }
           }
       }
+    if (connecting && (WiFi.isConnected() || (millis() > connectMillis + WIFI_CONNECT_TIMEOUT))) {
+      connecting = false;
+      postWiFiSetup();
+    }
     }
 
     //*************************************************************************
     // Run always
     //*************************************************************************
 
+  if (mode == MODE_WPS){
+    if (startWps) {
+      startWps = false;
+      if(!WiFi.isConnected()){
+        WiFi.beginWPSConfig();
+        connecting = true;
+        connectMillis = millis();
+      } else {
+        postWiFiSetup();
+      }
+    }
+  }
+  
     if (mode == MODE_FEED)
         screenBufferNeedsUpdate = true;
 
@@ -973,8 +995,8 @@ void loop()
 #endif
 
 #if defined(SHOW_MODE_SETTINGS) && defined(MODE_BUTTON)
-      if (!digitalRead(PIN_MODE_BUTTON) && (millis() > (lastModePress + 2000))) {
-        lastModePress = millis();
+  if (!digitalRead(PIN_MODE_BUTTON) && (millis() > (lastModePress + 2000)) && modeButtonStage < 1) {
+    modeButtonStage = 1;
         if (mode < MODE_SET_1ST) {
           setMode(MODE_SET_1ST);
         } else {
@@ -982,6 +1004,11 @@ void loop()
         }
       }
 #endif
+
+  if (!digitalRead(PIN_MODE_BUTTON) && (millis() > (lastModePress + 5000)) && modeButtonStage < 2) {
+    modeButtonStage = 2;
+    setupWPS();
+  }
 
     if (settings.mySettings.colorChange == COLORCHANGE_MOOD){
       if((mood_millis + MOOD_INTERVAL_MIN + ((MOOD_INTERVAL_MAX - MOOD_INTERVAL_MIN) * (MOOD_LEVEL_MAX - settings.mySettings.moodRate) / MOOD_LEVEL_MAX)) < millis()){
@@ -1622,6 +1649,10 @@ void loop()
                 goBackToTime = true;
             }
             break;
+      case MODE_WPS:
+        renderer.setSmallText("WP", TEXT_POS_TOP, matrix);
+        renderer.setSmallText("S", TEXT_POS_BOTTOM, matrix);
+        break;
         }
 
         // turn off LED behind IR-sensor
@@ -1675,6 +1706,9 @@ void loop()
         case MODE_FEED:
             writeScreenBuffer(matrix, feedColor, brightness);
             break;
+      case MODE_WPS:
+        writeScreenBuffer(matrix, LIGHTBLUE, brightness);
+        break;
         default:
 //            if (runTransitionOnce)
 //            {
@@ -2167,6 +2201,13 @@ void setMode(Mode newMode)
     lastMode = mode;
     mode = newMode;
 
+  if (mode != MODE_WPS) {
+    if (connecting){
+      connecting = false;
+      postWiFiSetup();
+    }
+  }
+
     // set timeout for selected mode
     switch (mode)
     {
@@ -2361,6 +2402,7 @@ ICACHE_RAM_ATTR void buttonModeInterrupt()
     {
         lastButtonPress = millis();
         lastModePress = lastButtonPress;
+    modeButtonStage = 0;
         buttonModePressed();
     }
 }
@@ -3592,6 +3634,15 @@ void updateOutdoorWeather (void) {
 #endif
   }
 }
+
+void setupWPS (void) {
+  WiFi.softAPdisconnect();
+  WiFi.mode(WIFI_STA);
+  Serial.println("Starting WPS.");
+  setMode(MODE_WPS);
+  startWps = true;
+}
+
 void setupWiFi (void) {
   renderer.clearScreenBuffer(matrix);
   renderer.setSmallText("WI", TEXT_POS_TOP, matrix);
