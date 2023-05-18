@@ -14,13 +14,18 @@ The sequence of the colors should be: red, green, blue and white. If not, your L
 The clock also shows the local IP address it received via DHCP.
 Use this address in a browser to access the clocks web site to set it up.
 
-WiFi manager: If the clock can not connect to any WLAN at startup, it turns on an access point.
+WiFi manager: If the clock can not connect to any WLAN at startup, it turns on an access point(AP).
 Connect a mobile phone or tablet to the AP and enter the WLAN credentials. A white "WiFi" is shown on the clock.
 On success there are three short beeps and "WiFi" will be green.
 If no WLAN is connected or the timeout has expired, there is a long beep and "WiFi" turns red.
 After the WLAN timeout the clock works without NTP but you can still control it via its AP.
 Without WLAN the clock uses the optional RTC to set the time or if no RTC is present has to be set manually.
 In either ways the clocks IP is shown as a textfeed.
+
+WPS: First press the WPS button on your WLAN router, then press the mode button on the QlockWiFive for more than 
+5 seconds. While keeping the menu button pressed, don't get confused about the mode first increments (e.g. seconds),
+then after 2s jumps to settings and only after 5 seconds "WPS" is shown in blue color on the clock display. Release
+the button and wait. On success "WPS" will turn green. At failure it turns red.
 
 Events can be shown at a certain repetition rate (every 5/15/30/60 minutes) on a particular day of the year as an 
 animation (e.g. a firework) followed by a textfeed. Up to 8 events can be configured through the web interface. 
@@ -38,7 +43,7 @@ The clock can run even with an ESP8266 module only.
 
 Warning:    Do not power up the clock from USB only.
             This would blow up the ESP or even the USB port because of high power demand of the LED stripe.
-            Always use an external 5V powersupply with at least 4A.
+            Always use an external 5V powersupply with at least 3A.
 
 Disclaimer: Qlockwork uses lots of third party libraries.
             We can not guarantee the integrity of these libraries.
@@ -66,6 +71,7 @@ Optional support for LDR/photo transistor, buzzer, temperature and humidity sens
 Support for NeoPixel (RGB and RGBW) LED-stripes.
 Support for various horizontal and vertical LED layouts. 5 layouts included.
 Webpage to control and configure the clock via WiFi.
+WPS functionality for a quick and easy WiFi setup.
 Settings via on-screen menu using tactile buttons or IR-remote to control.
 Adaptive brightness control when using an LDR or photo transistor.
 3 transitions for timechange.
@@ -517,6 +523,9 @@ mode=0                              Set clock to mode=0 (time), mode=1 (am/pm), 
 ******************************************************************************
 Changelog:
 ******************************************************************************
+20230518:
+Optimized and stabilized WiFi connectivity. WPS functionality. Brightness setting visualization.
+
 20230514:
 Admin settings accesible by calling "http://your_clocks_ip/admin". Here you can find settings which should not change open or
 even never throughout the lifetime of the clock.
