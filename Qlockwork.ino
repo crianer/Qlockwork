@@ -31,6 +31,7 @@
 #include <ESP8266mDNS.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266WiFi.h>
+#include <WiFiManager.h>
 #include <TimeLib.h>
 #include <LittleFS.h>
 
@@ -46,7 +47,6 @@
 #include "Syslog.h"
 #include "Timezone.h"
 #include "Timezones.h"
-#include "WiFiManager.h"
 #include "Animation.h"
 #include "html_content.h"
 
@@ -73,6 +73,8 @@
 //*****************************************************************************
 // Init
 //*****************************************************************************
+char HostName[32];
+char HostNameAp[32];
 
 // Servers
 ESP8266WebServer webServer(80);
@@ -98,7 +100,7 @@ unsigned long last_ir_millis = 0;
 // Syslog
 #ifdef SYSLOGSERVER_SERVER
 WiFiUDP wifiUdp;
-Syslog syslog(wifiUdp, SYSLOGSERVER_SERVER, SYSLOGSERVER_PORT, HOSTNAME, "QLOCKWIFIVE", LOG_INFO);
+Syslog syslog(wifiUdp, SYSLOGSERVER_SERVER, SYSLOGSERVER_PORT, HostName, "QLOCKWIFIVE", LOG_INFO);
 #endif
 
 // RTC
@@ -220,6 +222,19 @@ uint16_t minFreeBlockSize = 10000;
 uint16_t codeline = 0;
 String codetab;
 
+WiFiEventHandler wifiConnectHandler;
+WiFiEventHandler wifiDisconnectHandler;
+
+void onWifiConnect(const WiFiEventStationModeGotIP& event) {
+  Serial.println("Connected to Wi-Fi sucessfully.");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void onWifiDisconnect(const WiFiEventStationModeDisconnected& event) {
+  Serial.println("Disconnected from Wi-Fi.");
+}
+
 //*****************************************************************************
 // Setup()
 //*****************************************************************************
@@ -235,6 +250,10 @@ void setup()
     Serial.println();
     Serial.println("*** QLOCKWIFIVE ***");
     Serial.println("Firmware: " + String(FIRMWARE_VERSION));
+  memset(HostName, 0, sizeof(HostName));
+  sprintf(HostName, "%s-%06X", PRODUCT_NAME, ESP.getChipId());
+  memcpy(HostNameAp, HostName, sizeof(HostName));
+  strcat(HostNameAp, "-AP");
 
 #ifdef POWERON_SELFTEST
     renderer.setAllScreenBuffer(matrix);
@@ -317,56 +336,33 @@ void setup()
 #endif
 
     // Start WiFi and services
+  wifiConnectHandler = WiFi.onStationModeGotIP(onWifiConnect);
+  wifiDisconnectHandler = WiFi.onStationModeDisconnected(onWifiDisconnect);
+
     renderer.clearScreenBuffer(matrix);
     renderer.setSmallText("WI", TEXT_POS_TOP, matrix);
     renderer.setSmallText("FI", TEXT_POS_BOTTOM, matrix);
     writeScreenBuffer(matrix, WHITE, brightness);
-    Serial.println("Setting up WiFiManager.");
-    WiFiManager wifiManager;
-    //wifiManager.resetSettings();
-    wifiManager.setTimeout(WIFI_SETUP_TIMEOUT);
-    wifiManager.autoConnect(HOSTNAME, WIFI_AP_PASS);
-    WiFi.hostname(HOSTNAME);
-    WiFi.setAutoReconnect(true);
-    WiFi.setAutoConnect(true);
-    if (!WiFi.isConnected())
-    {
-        WiFi.mode(WIFI_AP);
-        Serial.println("No WLAN connected. Staying in AP mode.");
-        writeScreenBuffer(matrix, RED, brightness);
-#if defined(BUZZER) && defined(WIFI_BEEPS)
-        digitalWrite(PIN_BUZZER, HIGH);
-        delay(1500);
-        digitalWrite(PIN_BUZZER, LOW);
-#endif
-        delay(1000);
-        myIP = WiFi.softAPIP();
-    }
-    else
-    {
-        WiFi.mode(WIFI_STA);
-        Serial.println("WLAN connected. Switching to STA mode.");
-        Serial.println("RSSI: " + String(WiFi.RSSI()));
-        writeScreenBuffer(matrix, GREEN, brightness);
-#if defined(BUZZER) && defined(WIFI_BEEPS)
-        for (uint8_t i = 0; i <= 2; i++)
-        {
-#ifdef DEBUG
-            Serial.println("Beep!");
-#endif
-            digitalWrite(PIN_BUZZER, HIGH);
-            delay(100);
-            digitalWrite(PIN_BUZZER, LOW);
-            delay(100);
-        }
-#endif
-        delay(1000);
-        myIP = WiFi.localIP();
 
-        // mDNS is needed to see HOSTNAME in Arduino IDE
-        Serial.println("Starting mDNS responder.");
-        MDNS.begin(HOSTNAME);
-        //MDNS.addService("http", "tcp", 80);
+    WiFi.setAutoConnect(true);
+  WiFi.hostname(HostName);
+  setupWiFi();
+  postWiFiSetup();
+
+  Serial.println("Starting webserver.");
+  setupWebServer();
+
+  Serial.println("Starting updateserver.");
+  httpUpdater.setup(&webServer);
+  
+#ifdef SYSLOGSERVER_SERVER
+    Serial.println("Starting syslog.");
+#ifdef APIKEY
+    syslog.log(LOG_INFO, ";#;dateTime;roomTemperature;roomHumidity;outdoorTemperature;outdoorHumidity;sunriseTime;sunsetTime;ldrValue;errorCounterNTP;errorCounterDHT;errorCounterMCP;errorCounterOutdoorWeather;freeHeapSize;upTime");
+#else
+    syslog.log(LOG_INFO, ";#;dateTime;roomTemperature;roomHumidity;ldrValue;errorCounterNTP;errorCounterDHT;errorCounterMCP;freeHeapSize;upTime");
+#endif
+#endif
 
         Serial.println("Starting OTA service.");
 #ifdef DEBUG
@@ -390,50 +386,6 @@ void setup()
 #endif
         ArduinoOTA.setPassword(OTA_PASS);
         ArduinoOTA.begin();
-
-#ifdef SYSLOGSERVER_SERVER
-        Serial.println("Starting syslog.");
-#ifdef APIKEY
-        syslog.log(LOG_INFO, ";#;dateTime;roomTemperature;roomHumidity;outdoorTemperature;outdoorHumidity;sunriseTime;sunsetTime;ldrValue;errorCounterNTP;errorCounterDHT;errorCounterMCP;errorCounterOutdoorWeather;freeHeapSize;upTime");
-#else
-        syslog.log(LOG_INFO, ";#;dateTime;roomTemperature;roomHumidity;ldrValue;errorCounterNTP;errorCounterDHT;errorCounterMCP;freeHeapSize;upTime");
-#endif
-#endif
-
-        // Get weather from OpenWeather
-#ifdef APIKEY
-#ifdef DEBUG
-        Serial.println("Getting outdoor weather:");
-#endif
-        !outdoorWeather.getOutdoorConditions(String(settings.mySettings.owLocation), String(settings.mySettings.owApiKey), LANGSTR) ? errorCounterOutdoorWeather++ : errorCounterOutdoorWeather = 0;
-#ifdef DEBUG
-        Serial.println("Weather description: " + String(outdoorWeather.description));
-        Serial.println("Outdoor temperature: " + String(outdoorWeather.temperature));
-        Serial.println("Outdoor humidity: " + String(outdoorWeather.humidity));
-        Serial.println("Pressure: " + String(outdoorWeather.pressure));
-        Serial.println("Sunrise: " + String(hour(timeZone.toLocal(outdoorWeather.sunrise))) + ":" + String(minute(timeZone.toLocal(outdoorWeather.sunrise))));
-        Serial.println("Sunset: " + String(hour(timeZone.toLocal(outdoorWeather.sunset))) + ":" + String(minute(timeZone.toLocal(outdoorWeather.sunset))));
-#endif
-#endif
-    }
-
-#ifdef SHOW_IP
-    WiFi.isConnected() ? feedText = "  IP: " : feedText = "  AP-IP: ";
-    feedText += String(myIP[0]) + "." + String(myIP[1]) + "." + String(myIP[2]) + "." + String(myIP[3]) + "   ";
-    feedPosition = 0;
-    feedColor = WHITE;
-    setMode(MODE_FEED);
-#else
-    setMode(MODE_TIME);
-#endif
-
-    Serial.println("Starting webserver.");
-    setupWebServer();
-
-    Serial.println("Starting updateserver.");
-    httpUpdater.setup(&webServer);
-
-    renderer.clearScreenBuffer(matrix);
 
 #ifdef RTC_BACKUP
     RTC.begin();
@@ -478,7 +430,6 @@ void setup()
     }
     else
     {
-        WiFi.reconnect();
     }
 
     // Define a random time
@@ -653,8 +604,6 @@ void loop()
 #endif
             setMode(lastMode);
 
-            if (!WiFi.isConnected())
-                ESP.restart();
         }
 
         //*********************************************************************
@@ -690,37 +639,11 @@ void loop()
 #endif
                 }
             }
-            else
-            {
-                WiFi.reconnect();
-            }
         }
 
         if (minute() == randomMinute)
         {
-            if (WiFi.isConnected())
-            {
-                // Get weather from OpenWeather
-#ifdef APIKEY
-#ifdef DEBUG
-                Serial.println("Getting outdoor weather for location " + String(LOCATION) +":");
-#endif
-                !outdoorWeather.getOutdoorConditions(String(settings.mySettings.owLocation), String(settings.mySettings.owApiKey), LANGSTR) ? errorCounterOutdoorWeather++ : errorCounterOutdoorWeather = 0;
-#ifdef DEBUG
-                Serial.println("Location: " + String(settings.mySettings.owLocation));
-                Serial.println("Weather description: " + String(outdoorWeather.description));
-                Serial.println("Outdoor temperature: " + String(outdoorWeather.temperature));
-                Serial.println("Outdoor humidity: " + String(outdoorWeather.humidity));
-                Serial.println("Pressure: " + String(outdoorWeather.pressure));
-                Serial.println("Sunrise: " + String(hour(timeZone.toLocal(outdoorWeather.sunrise))) + ":" + String(minute(timeZone.toLocal(outdoorWeather.sunrise))));
-                Serial.println("Sunset: " + String(hour(timeZone.toLocal(outdoorWeather.sunset))) + ":" + String(minute(timeZone.toLocal(outdoorWeather.sunset))));
-#endif
-#endif
-            }
-            else
-            {
-                WiFi.reconnect();
-            }
+      updateOutdoorWeather();
         }
 
         //*********************************************************************
@@ -871,15 +794,7 @@ void loop()
                 {
                 case 0:
 #ifdef APIKEY
-                    if (WiFi.isConnected())
-                    {
                         setMode(MODE_EXT_TEMP);
-                    }
-                    else
-                    {
-                        WiFi.reconnect();
-                        setMode(MODE_EXT_TEMP);
-                    }
 #endif
                     autoMode = 1;
                     break;
@@ -888,15 +803,7 @@ void loop()
                     setMode(MODE_TEMP);
 #else
 #ifdef APIKEY
-                    if (WiFi.isConnected())
-                    {
                         setMode(MODE_EXT_TEMP);
-                    }
-                    else
-                    {
-                        WiFi.reconnect();
-                        setMode(MODE_EXT_TEMP);
-                    }
 #endif
 #endif
                     autoMode = 0;
@@ -3662,4 +3569,96 @@ bool showAnimation(uint8_t brightness)
     screenBufferNeedsUpdate = true;
     return true;
   }
+}
+
+void updateOutdoorWeather (void) {
+  if (WiFi.isConnected())
+  {
+    // Get weather from OpenWeather
+#ifdef APIKEY
+#ifdef DEBUG
+    Serial.println("Getting outdoor weather for location " + String(settings.mySettings.owLocation) + ":");
+#endif
+    !outdoorWeather.getOutdoorConditions(String(settings.mySettings.owLocation), String(settings.mySettings.owApiKey), LANGSTR) ? errorCounterOutdoorWeather++ : errorCounterOutdoorWeather = 0;
+#ifdef DEBUG
+    Serial.println("Location: " + String(settings.mySettings.owLocation));
+    Serial.println("Weather description: " + String(outdoorWeather.description));
+    Serial.println("Outdoor temperature: " + String(outdoorWeather.temperature));
+    Serial.println("Outdoor humidity: " + String(outdoorWeather.humidity));
+    Serial.println("Pressure: " + String(outdoorWeather.pressure));
+    Serial.println("Sunrise: " + String(hour(timeZone.toLocal(outdoorWeather.sunrise))) + ":" + String(minute(timeZone.toLocal(outdoorWeather.sunrise))));
+    Serial.println("Sunset: " + String(hour(timeZone.toLocal(outdoorWeather.sunset))) + ":" + String(minute(timeZone.toLocal(outdoorWeather.sunset))));
+#endif
+#endif
+  }
+}
+void setupWiFi (void) {
+  renderer.clearScreenBuffer(matrix);
+  renderer.setSmallText("WI", TEXT_POS_TOP, matrix);
+  renderer.setSmallText("FI", TEXT_POS_BOTTOM, matrix);
+  writeScreenBuffer(matrix, WHITE, brightness);
+  WiFi.mode(WIFI_STA);
+  Serial.println("Setting up WiFiManager.");
+  WiFiManager wifiManager;
+  wifiManager.setTimeout(WIFI_SETUP_TIMEOUT);
+  wifiManager.autoConnect(HostName, WIFI_AP_PASS);
+}
+
+void postWiFiSetup (void) {
+  if (!WiFi.isConnected())
+  {
+    WiFi.mode(WIFI_AP);
+    WiFi.softAP(HostNameAp);
+    Serial.println("No WLAN connected. Switching to AP mode.");
+    writeScreenBuffer(matrix, RED, brightness);
+#if defined(BUZZER) && defined(WIFI_BEEPS)
+    digitalWrite(PIN_BUZZER, HIGH);
+    delay(1500);
+    digitalWrite(PIN_BUZZER, LOW);
+#endif
+    delay(1000);
+    myIP = WiFi.softAPIP();
+  }
+  else
+  {
+    WiFi.mode(WIFI_STA);
+    WiFi.setAutoReconnect(true);
+    WiFi.persistent(true);
+    Serial.println("WLAN connected. Switching to STA mode.");
+    Serial.println("RSSI: " + String(WiFi.RSSI()));
+    writeScreenBuffer(matrix, GREEN, brightness);
+#if defined(BUZZER) && defined(WIFI_BEEPS)
+    for (uint8_t i = 0; i <= 2; i++)
+    {
+#ifdef DEBUG
+      Serial.println("Beep!");
+#endif
+      digitalWrite(PIN_BUZZER, HIGH);
+      delay(100);
+      digitalWrite(PIN_BUZZER, LOW);
+      delay(100);
+    }
+#endif
+    delay(1000);
+    myIP = WiFi.localIP();
+
+    // mDNS is needed to see HostName in Arduino IDE
+    Serial.println("Starting mDNS responder.");
+    MDNS.begin(HostName);
+    //MDNS.addService("http", "tcp", 80);
+  }
+  renderer.clearScreenBuffer(matrix);
+  screenBufferNeedsUpdate = true;
+
+  updateOutdoorWeather();
+
+#ifdef SHOW_IP
+  WiFi.isConnected() ? feedText = "  IP: " : feedText = "  AP-IP: ";
+  feedText += String(myIP[0]) + "." + String(myIP[1]) + "." + String(myIP[2]) + "." + String(myIP[3]) + "   ";
+  feedPosition = 0;
+  feedColor = WHITE;
+  setMode(MODE_FEED);
+#else
+  setMode(MODE_TIME);
+#endif
 }
