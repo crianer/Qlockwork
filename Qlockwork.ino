@@ -999,21 +999,23 @@ void loop()
     }
 #endif
 
-#if defined(SHOW_MODE_SETTINGS) && defined(MODE_BUTTON)
+#ifdef MODE_BUTTON
+#ifdef SHOW_MODE_SETTINGS
   if (!digitalRead(PIN_MODE_BUTTON) && (millis() > (lastModePress + 2000)) && modeButtonStage < 1) {
     modeButtonStage = 1;
-        if (mode < MODE_SET_1ST) {
-          setMode(MODE_SET_1ST);
-        } else {
-          setMode(MODE_TIME);
-        }
-      }
+    if (mode < MODE_SET_1ST) {
+      setMode(MODE_SET_1ST);
+    } else {
+      setMode(MODE_TIME);
+    }
+  }
 #endif
-
   if (!digitalRead(PIN_MODE_BUTTON) && (millis() > (lastModePress + 5000)) && modeButtonStage < 2) {
     modeButtonStage = 2;
     setupWPS();
   }
+#endif
+
 
     if (settings.mySettings.colorChange == COLORCHANGE_MOOD){
       if((mood_millis + MOOD_INTERVAL_MIN + ((MOOD_INTERVAL_MAX - MOOD_INTERVAL_MIN) * (MOOD_LEVEL_MAX - settings.mySettings.moodRate) / MOOD_LEVEL_MAX)) < millis()){
