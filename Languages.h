@@ -53,6 +53,35 @@ const char sWeekday[][2] = {
     { 'F', 'R' }, // 06
     { 'S', 'A' }  // 07
 };
+const char sColorStr[][15] PROGMEM =
+{
+  "White",
+  "Red",
+  "Red 75%",
+  "Red 20%",
+  "Orange",
+  "Yellow",
+  "Yellow 25%",
+  "Yellow 50%",
+  "Green-Yellow",
+  "Green",
+  "Green 25%",
+  "Green 50%",
+  "Mintgreen",
+  "Cyan",
+  "Cyan 25%",
+  "Cyan 50%",
+  "Light Blue",
+  "Blue",
+  "Blue 25%",
+  "Blue 50%",
+  "Purple",
+  "Magenta",
+  "Magenta 25%",
+  "Magenta 50%",
+  "Pink",
+  "Mood"
+};
 #define LANGSTR "en"
 #define TXT_SETTINGS "Settings"
 #define TXT_ALARM "Alarm"
@@ -95,6 +124,35 @@ const char sWeekday[][2] = {
     { 'D', 'O' }, // 05
     { 'F', 'R' }, // 06
     { 'S', 'A' }  // 07
+};
+const char sColorStr[][15] PROGMEM =
+{
+  "Weiss",
+  "Rot",
+  "Rot 75%",
+  "Rot 20%",
+  "Orange",
+  "Gelb",
+  "Gelb 25%",
+  "Gelb 50%",
+  "Grün-Gelb",
+  "Grün",
+  "Grün 25%",
+  "Grün 50%",
+  "Mintgrün",
+  "Cyan",
+  "Cyan 25%",
+  "Cyan 50%",
+  "Hellblau",
+  "Blau",
+  "Blau 25%",
+  "Blau 50%",
+  "Violett",
+  "Magenta",
+  "Magenta 25%",
+  "Magenta 50%",
+  "Pink",
+  "Mood"
 };
 #define LANGSTR "de"
 #define TXT_SETTINGS "Einstellungen"
@@ -139,6 +197,35 @@ const char sWeekday[][2] = {
     { 'V', 'E' }, // 06
     { 'S', 'A' }  // 07
 };
+const char sColorStr[][15] PROGMEM =
+{
+  "White",
+  "Red",
+  "Red 75%",
+  "Red 20%",
+  "Orange",
+  "Yellow",
+  "Yellow 25%",
+  "Yellow 50%",
+  "Green-Yellow",
+  "Green",
+  "Green 25%",
+  "Green 50%",
+  "Mintgreen",
+  "Cyan",
+  "Cyan 25%",
+  "Cyan 50%",
+  "Light Blue",
+  "Blue",
+  "Blue 25%",
+  "Blue 50%",
+  "Purple",
+  "Magenta",
+  "Magenta 25%",
+  "Magenta 50%",
+  "Pink",
+  "Mood"
+};
 #define LANGSTR "fr"
 #define TXT_SETTINGS "Param�tres"
 #define TXT_ALARM "R�veil"
@@ -181,6 +268,35 @@ const char sWeekday[][2] = {
     { 'G', 'I' }, // 05
     { 'V', 'E' }, // 06
     { 'S', 'A' }  // 07
+};
+const char sColorStr[][15] PROGMEM =
+{
+  "White",
+  "Red",
+  "Red 75%",
+  "Red 20%",
+  "Orange",
+  "Yellow",
+  "Yellow 25%",
+  "Yellow 50%",
+  "Green-Yellow",
+  "Green",
+  "Green 25%",
+  "Green 50%",
+  "Mintgreen",
+  "Cyan",
+  "Cyan 25%",
+  "Cyan 50%",
+  "Light Blue",
+  "Blue",
+  "Blue 25%",
+  "Blue 50%",
+  "Purple",
+  "Magenta",
+  "Magenta 25%",
+  "Magenta 50%",
+  "Pink",
+  "Mood"
 };
 #define LANGSTR "it"
 #define TXT_SETTINGS "Settings"
@@ -225,6 +341,35 @@ const char sWeekday[][2] = {
     { 'V', 'I' }, // 06
     { 'S', 'A' }  // 07
 };
+const char sColorStr[][15] PROGMEM =
+{
+  "White",
+  "Red",
+  "Red 75%",
+  "Red 20%",
+  "Orange",
+  "Yellow",
+  "Yellow 25%",
+  "Yellow 50%",
+  "Green-Yellow",
+  "Green",
+  "Green 25%",
+  "Green 50%",
+  "Mintgreen",
+  "Cyan",
+  "Cyan 25%",
+  "Cyan 50%",
+  "Light Blue",
+  "Blue",
+  "Blue 25%",
+  "Blue 50%",
+  "Purple",
+  "Magenta",
+  "Magenta 25%",
+  "Magenta 50%",
+  "Pink",
+  "Mood"
+};
 #define LANGSTR "es"
 #define TXT_SETTINGS "Settings"
 #define TXT_ALARM "Alarm"
@@ -267,6 +412,35 @@ const char sWeekday[][2] = {
     { 'D', 'O' }, // 05
     { 'V', 'R' }, // 06
     { 'Z', 'A' }  // 07
+};
+const char sColorStr[][15] PROGMEM =
+{
+  "White",
+  "Red",
+  "Red 75%",
+  "Red 20%",
+  "Orange",
+  "Yellow",
+  "Yellow 25%",
+  "Yellow 50%",
+  "Green-Yellow",
+  "Green",
+  "Green 25%",
+  "Green 50%",
+  "Mintgreen",
+  "Cyan",
+  "Cyan 25%",
+  "Cyan 50%",
+  "Light Blue",
+  "Blue",
+  "Blue 25%",
+  "Blue 50%",
+  "Purple",
+  "Magenta",
+  "Magenta 25%",
+  "Magenta 50%",
+  "Pink",
+  "Mood"
 };
 #define LANGSTR "nl"
 #define TXT_SETTINGS "Settings"

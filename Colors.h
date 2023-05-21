@@ -46,36 +46,6 @@ enum eColor : uint8_t
   MOOD
 };
 
-const char sColorStr[][15] PROGMEM =
-{
-  "White",
-  "Red",
-  "Red 75%",
-  "Red 20%",
-  "Orange",
-  "Yellow",
-  "Yellow 25%",
-  "Yellow 50%",
-  "Green-Yellow",
-  "Green",
-  "Green 25%",
-  "Green 50%",
-  "Mintgreen",
-  "Cyan",
-  "Cyan 25%",
-  "Cyan 50%",
-  "Light Blue",
-  "Blue",
-  "Blue 25%",
-  "Blue 50%",
-  "Purple",
-  "Magenta",
-  "Magenta 25%",
-  "Magenta 50%",
-  "Pink",
-  "Mood"
-};
-
 struct color_s
 {
 	uint8_t red;
