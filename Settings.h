@@ -39,7 +39,7 @@ public:
         uint8_t transition;
         uint8_t timeout;
         boolean modeChange;
-        boolean itIs;
+        boolean purist;
         boolean alarm1;
         time_t  alarm1Time;
         uint8_t alarm1Weekdays;

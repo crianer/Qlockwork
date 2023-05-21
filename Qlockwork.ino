@@ -1090,12 +1090,12 @@ void loop()
                 }
                 renderer.setTime(simHour, simMinute, settings.mySettings.frontCover, settings.mySettings.chGsi, matrix);
                 renderer.setCorners(simMinute, matrix);
-                if (!settings.mySettings.itIs && ((simMinute / 5) % 6)) renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
+                if (settings.mySettings.purist && ((simMinute / 5) % 6)) renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
               }
               else {
                 renderer.setTime(hour(), minute(), settings.mySettings.frontCover, settings.mySettings.chGsi, matrix);
                 renderer.setCorners(minute(), matrix);
-                if (!settings.mySettings.itIs && ((minute() / 5) % 6)) renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
+                if (settings.mySettings.purist && ((minute() / 5) % 6)) renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
               }
             }
 #ifdef BUZZER
@@ -1547,11 +1547,11 @@ void loop()
           }
           break;
         case MODE_SET_IT_IS:
-          renderer.setSmallText("IT", TEXT_POS_TOP, matrix);
+          renderer.setSmallText("PT", TEXT_POS_TOP, matrix);
           if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0) for (uint8_t i = 5; i <= 9; i++) matrix[i] = 0;
           else
           {
-            if (settings.mySettings.itIs)
+            if (settings.mySettings.purist)
             {
               renderer.setSmallText("EN", TEXT_POS_BOTTOM, matrix);
             }
@@ -2109,7 +2109,7 @@ void buttonPlusPressed()
     else settings.mySettings.transition = 0;
   break;
   case MODE_SET_IT_IS:
-    settings.mySettings.itIs = !settings.mySettings.itIs;
+    settings.mySettings.purist = !settings.mySettings.purist;
   break;
   case MODE_SET_TIME:
     setTime(hour() + 1, minute(), second(), day(), month(), year());
@@ -2178,7 +2178,7 @@ void buttonMinusPressed()
     else settings.mySettings.transition = TRANSITION_COUNT;
   break;
   case MODE_SET_IT_IS:
-    settings.mySettings.itIs = !settings.mySettings.itIs;
+    settings.mySettings.purist = !settings.mySettings.purist;
   break;
   case MODE_SET_TIME:
     setTime(hour(), minute() + 1, second(), day(), month(), year());
@@ -3085,15 +3085,15 @@ void handleButtonSettings()
         message += F("</td></tr>");
     // ------------------------------------------------------------------------
         message += F("<tr><td>");
-        message += F(TXT_SHOW_IT_IS);
+        message += F(TXT_PURIST_MODE);
         message += F("</td><td>");
         message += F("<input type=\"radio\" name=\"ii\" value=\"1\"");
-    if (settings.mySettings.itIs)
+    if (settings.mySettings.purist)
         message += F(" checked");
         message += F("> ");
         message += TXT_ON;
         message += F(" <input type=\"radio\" name=\"ii\" value=\"0\"");
-    if (!settings.mySettings.itIs)
+    if (!settings.mySettings.purist)
         message += F(" checked");
         message += F("> ");
         message += TXT_OFF;
@@ -3441,7 +3441,7 @@ void handleCommitSettings()
     // ------------------------------------------------------------------------
     settings.mySettings.dayOnTime = webServer.arg("do").substring(0, 2).toInt() * 3600 + webServer.arg("do").substring(3, 5).toInt() * 60;
     // ------------------------------------------------------------------------
-    webServer.arg("ii") == "0" ? settings.mySettings.itIs = false : settings.mySettings.itIs = true;
+    webServer.arg("ii") == "0" ? settings.mySettings.purist = false : settings.mySettings.purist = true;
     // ------------------------------------------------------------------------
     if(settings.mySettings.frontCover == FRONTCOVER_CH) {
       webServer.arg("gs") == "0" ? settings.mySettings.chGsi = false : settings.mySettings.chGsi = true;

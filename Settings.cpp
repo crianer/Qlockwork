@@ -22,7 +22,7 @@ void Settings::resetToDefault() {
     mySettings.transition = TRANSITION_FADE;
     mySettings.timeout = 10;
     mySettings.modeChange = false;
-    mySettings.itIs = true;
+    mySettings.purist = false;
     mySettings.alarm1 = false;
     mySettings.alarm1Time = 0;
     mySettings.alarm1Weekdays = 0b11111110;
