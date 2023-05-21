@@ -648,7 +648,7 @@ void loop()
 
         if (minute() == randomMinute)
         {
-      updateOutdoorWeather();
+          updateOutdoorWeather();
         }
 
         //*********************************************************************
@@ -800,7 +800,13 @@ void loop()
                 {
                 case 0:
 #ifdef APIKEY
-                        setMode(MODE_EXT_TEMP);
+                    if (String(settings.mySettings.owApiKey) != "") {
+                      setMode(MODE_EXT_TEMP);
+                    }
+#else
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
+                    setMode(MODE_TEMP);
+#endif
 #endif
                     autoMode = 1;
                     break;
@@ -809,7 +815,9 @@ void loop()
                     setMode(MODE_TEMP);
 #else
 #ifdef APIKEY
+                    if (String(settings.mySettings.owApiKey) != "") {
                         setMode(MODE_EXT_TEMP);
+                    }
 #endif
 #endif
                     autoMode = 0;
@@ -2303,6 +2311,23 @@ void setMode(Mode newMode)
         modeTimeout = 0;
         break;
     }
+
+    switch (mode) {
+#ifdef APIKEY
+#ifdef SHOW_MODE_SUNRISE_SUNSET
+    case MODE_SUNRISE:
+    case MODE_SUNSET:
+#endif
+    case MODE_EXT_TEMP:
+    case MODE_EXT_HUMIDITY:
+      if (String(settings.mySettings.owApiKey) == "") {
+        buttonModePressed();
+      }
+    break;
+#endif
+    default:
+      break;
+    }
 }
 
 void updateBrightness(bool forcedUpdate) {
@@ -2690,6 +2715,7 @@ void handleRoot()
     message += F("</span>");
 #endif
 #ifdef APIKEY
+    if (String(settings.mySettings.owApiKey) != "") {
     message += F("<br><br><i class = \"fa fa-tree\" style=\"font-size:20px;\"></i>");
         message += F("<br><i class = \"fa fa-thermometer\" style=\"font-size:20px;\"></i> ") + String(outdoorWeather.temperature) + F("&deg;C / ") + String(outdoorWeather.temperature * 1.8 + 32.0) + F("&deg;F");
         message += F("<br><i class = \"fa fa-tint\" style=\"font-size:20px;\"></i> ") + String(outdoorWeather.humidity) + F("% RH");
@@ -2697,6 +2723,7 @@ void handleRoot()
         message += F("<br><i class = \"fa fa-sun-o\" style=\"font-size:20px;\"></i> ") + String(hour(timeZone.toLocal(outdoorWeather.sunrise))) + F(":") + String(minute(timeZone.toLocal(outdoorWeather.sunrise)));
         message += F(" <i class = \"fa fa-moon-o\" style=\"font-size:20px;\"></i> ") + String(hour(timeZone.toLocal(outdoorWeather.sunset))) + F(":") + String(minute(timeZone.toLocal(outdoorWeather.sunset)));
         message += F("<br>") + outdoorWeather.description;
+    }
 #endif
     message += F("<span style=\"font-size:12px;\">");
         message += F("<br><br><a href=\"http://shop.bracci.ch/\">QlockWiFive</a> was <i class=\"fa fa-code\"></i> with <i class=\"fa fa-heart\"></i> by <a href=\"https://github.com/ch570512/Qlockwork/\">ch570512</a> and <a href=\"https://github.com/bracci/Qlockwork/\">bracci</a>");
@@ -3309,6 +3336,7 @@ void handleAdmin()
         message += F("<input type=\"text\" name=\"adts\" value=\"");
         message += String(settings.mySettings.timeServer)+ F("\" pattern=\"[\\x20-\\x7e]{0,") + String(LEN_TS_URL-1) + F("}\" placeholder=\"e.g. pool.ntp.org\">");
         message += F("</td></tr>");
+#ifdef APIKEY
         message += F("<tr><td>");
         message += F(TXT_OW_API_KEY);
         message += F("</td><td>");
@@ -3321,6 +3349,7 @@ void handleAdmin()
         message += F("<input type=\"text\" name=\"adwl\" value=\"");
         message += String(settings.mySettings.owLocation)+ F("\" pattern=\"[\\x20-\\x7e]{0,") + String(LEN_OW_LOCATION-1) + F("}\" placeholder=\"e.g. Bern, CH\">");
         message += F("</td></tr>");
+#endif
         message += F("<tr><td>");
         message += F(TXT_COVER_LANGUAGE);
         message += F("</td><td>");
@@ -3691,7 +3720,7 @@ bool showAnimation(uint8_t brightness)
 }
 
 void updateOutdoorWeather (void) {
-  if (WiFi.isConnected())
+  if (WiFi.isConnected() && (String(settings.mySettings.owApiKey) != ""))
   {
     // Get weather from OpenWeather
 #ifdef APIKEY
