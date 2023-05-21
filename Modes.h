@@ -58,6 +58,7 @@ typedef enum eMode : uint8_t
     MODE_SET_COLORCHANGE,
     MODE_SET_TRANSITION,
     MODE_SET_IT_IS,
+    MODE_SET_GSI,
     MODE_SET_TIME,
     MODE_SET_YEAR,
     MODE_SET_MONTH,

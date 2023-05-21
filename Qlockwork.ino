@@ -711,6 +711,7 @@ void loop()
         case MODE_SET_TRANSITION:
         case MODE_SET_TIME:
         case MODE_SET_IT_IS:
+        case MODE_SET_GSI:
         case MODE_SET_DAY:
         case MODE_SET_MONTH:
         case MODE_SET_YEAR:
@@ -1561,6 +1562,26 @@ void loop()
             }
           }
           break;
+        case MODE_SET_GSI:
+          if(settings.mySettings.frontCover == FRONTCOVER_CH) {
+            renderer.setSmallText("GS", TEXT_POS_TOP, matrix);
+            if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0) for (uint8_t i = 5; i <= 9; i++) matrix[i] = 0;
+            else
+            {
+              if (settings.mySettings.chGsi)
+              {
+                renderer.setSmallText("EN", TEXT_POS_BOTTOM, matrix);
+              }
+              else
+              {
+                renderer.setSmallText("DA", TEXT_POS_BOTTOM, matrix);
+              }
+            }
+          } else {
+            setMode(mode++);
+          }
+          
+          break;
         case MODE_SET_TIME:
           if (millis() < (modeTimeout + SETTINGS_TITLE_TIMEOUT)){
             renderer.setSmallText("TI", TEXT_POS_TOP, matrix);
@@ -2111,6 +2132,9 @@ void buttonPlusPressed()
   case MODE_SET_IT_IS:
     settings.mySettings.purist = !settings.mySettings.purist;
   break;
+  case MODE_SET_GSI:
+    settings.mySettings.chGsi = !settings.mySettings.chGsi;
+  break;
   case MODE_SET_TIME:
     setTime(hour() + 1, minute(), second(), day(), month(), year());
   break;
@@ -2179,6 +2203,9 @@ void buttonMinusPressed()
   break;
   case MODE_SET_IT_IS:
     settings.mySettings.purist = !settings.mySettings.purist;
+  break;
+  case MODE_SET_GSI:
+    settings.mySettings.chGsi = !settings.mySettings.chGsi;
   break;
   case MODE_SET_TIME:
     setTime(hour(), minute() + 1, second(), day(), month(), year());
