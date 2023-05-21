@@ -1571,22 +1571,18 @@ void loop()
           }
           break;
         case MODE_SET_GSI:
-          if(settings.mySettings.frontCover == FRONTCOVER_CH) {
-            renderer.setSmallText("GS", TEXT_POS_TOP, matrix);
-            if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0) for (uint8_t i = 5; i <= 9; i++) matrix[i] = 0;
+          renderer.setSmallText("GS", TEXT_POS_TOP, matrix);
+          if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0) for (uint8_t i = 5; i <= 9; i++) matrix[i] = 0;
+          else
+          {
+            if (settings.mySettings.chGsi)
+            {
+              renderer.setSmallText("EN", TEXT_POS_BOTTOM, matrix);
+            }
             else
             {
-              if (settings.mySettings.chGsi)
-              {
-                renderer.setSmallText("EN", TEXT_POS_BOTTOM, matrix);
-              }
-              else
-              {
-                renderer.setSmallText("DA", TEXT_POS_BOTTOM, matrix);
-              }
+              renderer.setSmallText("DA", TEXT_POS_BOTTOM, matrix);
             }
-          } else {
-            setMode(mode++);
           }
           
           break;
@@ -2325,6 +2321,11 @@ void setMode(Mode newMode)
       }
     break;
 #endif
+    case MODE_SET_GSI:
+      if(settings.mySettings.frontCover != FRONTCOVER_CH) {
+        buttonModePressed();
+      }
+      break;
     default:
       break;
     }
