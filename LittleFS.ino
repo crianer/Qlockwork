@@ -513,6 +513,7 @@ void handleFSExplorer() {
     message += F("<head>");
     message += F("<meta charset=\"UTF-8\">");
     message += F("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
+    message += F("<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"web/favicon.ico\">");
     message += F("<link rel=\"stylesheet\" href=\"fsstyle.css\">");
     message += F("<title>");
     message += "Datei Manager";

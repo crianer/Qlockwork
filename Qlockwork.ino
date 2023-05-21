@@ -2612,6 +2612,7 @@ void handleRoot()
         message += F("<title>") + String(WEBSITE_TITLE) + F("</title>");
         message += F("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
         message += F("<meta http-equiv=\"refresh\" content=\"60\" charset=\"UTF-8\">");
+        message += F("<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"web/favicon.ico\">");
         message += F("<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">");
         message += F("<style>");
         message += F("body{background-color:#FFFFFF;text-align:center;color:#333333;font-family:Sans-serif;font-size:16px;}");
@@ -2771,6 +2772,7 @@ void handleButtonSettings()
         message += F("</title>");
         message += F("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
         message += F("<meta charset=\"UTF-8\">");
+        message += F("<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"web/favicon.ico\">");
         message += F("<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">");
         message += F("<style>");
         message += F("body{background-color:#FFFFFF;text-align:center;color:#333333;font-family:Sans-serif;font-size:16px;}");
@@ -3125,6 +3127,7 @@ void handleButtonEvents()
   message += F("<head>");
   message += F("<title>") + String(WEBSITE_TITLE) + F(" Events</title>");
   message += F("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+  message += F("<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"web/favicon.ico\">");
   message += F("<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">");
   message += F("<style>");
   message += F("body{background-color:#FFFFFF;text-align:center;color:#333333;font-family:Sans-serif;font-size:16px;}");
@@ -3239,6 +3242,7 @@ void handleAdmin()
         message += F("</title>");
         message += F("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
         message += F("<meta charset=\"UTF-8\">");
+        message += F("<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"web/favicon.ico\">");
         message += F("<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">");
         message += F("<style>");
         message += F("body{background-color:#FFFFFF;text-align:center;color:#333333;font-family:Sans-serif;font-size:16px;}");
