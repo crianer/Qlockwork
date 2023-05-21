@@ -2798,12 +2798,12 @@ void handleButtonSettings()
         message += F(" checked");
         message += F("> ");
         message += F(TXT_ON);
-        message += F("<input type=\"radio\" name=\"a1\" value=\"0\"");
+        message += F(" <input type=\"radio\" name=\"a1\" value=\"0\"");
     if (!settings.mySettings.alarm1)
         message += F(" checked");
         message += F("> ");
         message += F(TXT_OFF);
-        message += F("<input type=\"time\" name=\"a1t\" value=\"");
+        message += F(" <input type=\"time\" name=\"a1t\" value=\"");
     if (hour(settings.mySettings.alarm1Time) < 10)
         message += F("0");
         message += String(hour(settings.mySettings.alarm1Time)) + F(":");
@@ -2849,12 +2849,12 @@ void handleButtonSettings()
         message += F(" checked");
         message += F(">) ");
         message += F(TXT_ON);
-        message += F("<input type=\"radio\" name=\"a2\" value=\"0\"");
+        message += F(" <input type=\"radio\" name=\"a2\" value=\"0\"");
     if (!settings.mySettings.alarm2)
         message += F(" checked");
         message += F("> ");
         message += F(TXT_OFF);
-        message += F("<input type=\"time\" name=\"a2t\" value=\"");
+        message += F(" <input type=\"time\" name=\"a2t\" value=\"");
     if (hour(settings.mySettings.alarm2Time) < 10)
         message += F("0");
         message += String(hour(settings.mySettings.alarm2Time)) + F(":");
@@ -2921,12 +2921,12 @@ void handleButtonSettings()
         message += F(" checked");
         message += F("> ");
         message += F(TXT_ON);
-        message += F("<input type=\"radio\" name=\"hb\" value=\"0\"");
+        message += F(" <input type=\"radio\" name=\"hb\" value=\"0\"");
     if (!settings.mySettings.hourBeep)
         message += F(" checked");
         message += F("> ");
         message += F(TXT_OFF);
-        message += F("</td></tr>");
+        message += F(" </td></tr>");
 #endif
     // ------------------------------------------------------------------------
 #if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
@@ -2938,12 +2938,12 @@ void handleButtonSettings()
         message += F(" checked");
         message += F("> ");
         message += F(TXT_ON);
-        message += F("<input type=\"radio\" name=\"mc\" value=\"0\"");
+        message += F(" <input type=\"radio\" name=\"mc\" value=\"0\"");
     if (!settings.mySettings.modeChange)
         message += F(" checked");
         message += F("> ");
         message += F(TXT_OFF);
-        message += F("</td></tr>");
+        message += F(" </td></tr>");
 #endif
     // ------------------------------------------------------------------------
 #ifdef LDR
@@ -2955,12 +2955,12 @@ void handleButtonSettings()
         message += F(" checked");
         message += F("> ");
         message += F(TXT_ON);
-        message += F("<input type=\"radio\" name=\"ab\" value=\"0\"");
+        message += F(" <input type=\"radio\" name=\"ab\" value=\"0\"");
     if (!settings.mySettings.useAbc)
         message += F(" checked");
         message += F("> ");
         message += F(TXT_OFF);
-        message += F("</td></tr>");
+        message += F(" </td></tr>");
 #endif
     // ------------------------------------------------------------------------
     message += F("<tr><td>");
@@ -3017,8 +3017,9 @@ void handleButtonSettings()
         message += F("<input type=\"radio\" name=\"cc\" value=\"0\"");
     if (settings.mySettings.colorChange == 0)
         message += F(" checked");
-        message += F("> Off");
-        message += F("</td></tr>");
+        message += F("> ");
+        message += F(TXT_OFF);
+        message += F(" </td></tr>");
     // ------------------------------------------------------------------------
         message += F("<tr><td>");
         message += F(TXT_TRANSITION);
@@ -3038,8 +3039,9 @@ void handleButtonSettings()
         message += F("<input type=\"radio\" name=\"tr\" value=\"0\"");
     if (settings.mySettings.transition == 0)
         message += F(" checked");
-        message += F("> None");
-        message += F("</td></tr>");
+        message += F("> ");
+        message += F(TXT_OFF);
+        message += F(" </td></tr>");
 
     // ------------------------------------------------------------------------
         message += F("<tr><td>");
@@ -3055,7 +3057,7 @@ void handleButtonSettings()
             message += F("0");
         message += String(i) + F("</option>");
     }
-        message += F("</select> sec.");
+        message += F("</select> s");
         message += F("</td></tr>");
     // ------------------------------------------------------------------------
         message += F("<tr><td>");
@@ -3068,7 +3070,6 @@ void handleButtonSettings()
     if (minute(settings.mySettings.nightOffTime) < 10)
         message += F("0");
         message += String(minute(settings.mySettings.nightOffTime)) + F("\">");
-        message += F(" h");
         message += F("</td></tr>");
     // ------------------------------------------------------------------------
         message += F("<tr><td>");
@@ -3081,7 +3082,6 @@ void handleButtonSettings()
     if (minute(settings.mySettings.dayOnTime) < 10)
         message += F("0");
         message += String(minute(settings.mySettings.dayOnTime)) + F("\">");
-        message += F(" h");
         message += F("</td></tr>");
     // ------------------------------------------------------------------------
         message += F("<tr><td>");
@@ -3092,12 +3092,12 @@ void handleButtonSettings()
         message += F(" checked");
         message += F("> ");
         message += TXT_ON;
-        message += F("<input type=\"radio\" name=\"ii\" value=\"0\"");
+        message += F(" <input type=\"radio\" name=\"ii\" value=\"0\"");
     if (!settings.mySettings.itIs)
         message += F(" checked");
         message += F("> ");
         message += TXT_OFF;
-        message += F("</td></tr>");
+        message += F(" </td></tr>");
     // ------------------------------------------------------------------------
     if(settings.mySettings.frontCover == FRONTCOVER_CH) {
         message += F("<tr><td>");
@@ -3108,12 +3108,12 @@ void handleButtonSettings()
         message += F(" checked");
         message += F("> ");
         message += TXT_ON;
-        message += F("<input type=\"radio\" name=\"gs\" value=\"0\"");
+        message += F(" <input type=\"radio\" name=\"gs\" value=\"0\"");
     if (!settings.mySettings.chGsi)
         message += F(" checked");
         message += F("> ");
         message += TXT_OFF;
-        message += F("</td></tr>");
+        message += F(" </td></tr>");
     }
     // ------------------------------------------------------------------------
         message += F("<tr><td>");
@@ -3171,11 +3171,11 @@ void handleButtonEvents()
     if (settings.mySettings.events[i].enabled) message += F(" checked");
     message += F(">");
     message += F(TXT_ON);
-    message += F("<input type=\"radio\" name=\"ev") + String(i) + F("\" value=\"0\"");
+    message += F(" <input type=\"radio\" name=\"ev") + String(i) + F("\" value=\"0\"");
     if (!settings.mySettings.events[i].enabled) message += F(" checked");
-    message += F(">");
+    message += F("> ");
     message += F(TXT_OFF);
-    message += F("</td></tr>");
+    message += F(" </td></tr>");
     message += F("<tr><td>");
     message += F(TXT_DATE);
     message += F("</td><td>");
