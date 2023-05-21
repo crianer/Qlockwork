@@ -46,7 +46,8 @@ void Settings::resetToDefault() {
     String(NTP_DEFAULT_SERVER).toCharArray(mySettings.timeServer, sizeof(mySettings.timeServer), 0);
     memset(mySettings.owApiKey, 0, sizeof(mySettings.owApiKey));
     String(DEFAULT_LOCATION).toCharArray(mySettings.owLocation, sizeof(mySettings.owLocation), 0);
-    mySettings.frontCover = FRONTCOVER_CH_GS;
+    mySettings.frontCover = FRONTCOVER_CH;
+    mySettings.chGsi = true;
     
     saveToEEPROM();
 }

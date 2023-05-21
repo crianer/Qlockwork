@@ -13,7 +13,6 @@ enum eFrontCover : uint8_t
   FRONTCOVER_DE_SA,
   FRONTCOVER_D3,
   FRONTCOVER_CH,
-  FRONTCOVER_CH_GS,
   FRONTCOVER_EN,
   FRONTCOVER_ES,
   FRONTCOVER_FR,
@@ -32,14 +31,13 @@ const char sLanguageStr[][20] PROGMEM =
   { "German SA" }, // 03
   { "German MK D3"}, // 04
   { "Swiss German" }, // 05
-  { "Swiss German GSI" }, // 06
-  { "English" }, // 07
-  { "Spanish" }, // 08
-  { "French" }, // 09
-  { "Italian" }, // 10
-  { "Dutch" },  // 11
-  { "Swedish" },// 12
-  { "Binary" }// 13
+  { "English" }, // 06
+  { "Spanish" }, // 07
+  { "French" }, // 08
+  { "Italian" }, // 9
+  { "Dutch" },  // 10
+  { "Swedish" },// 11
+  { "Binary" }// 12
 };
 
 
@@ -73,6 +71,7 @@ const char sWeekday[][2] = {
 #define TXT_NIGHT_OFF "Switch off at"
 #define TXT_DAY_ON "Switch on at"
 #define TXT_SHOW_IT_IS "Show \"IT IS\"" 
+#define TXT_SHOW_GSI "Show \"GSI\""
 #define TXT_SET_DATE_TIME "Set date/time"
 #define TXT_ACTIVE "Active"
 #define TXT_DATE "Date"
@@ -115,6 +114,7 @@ const char sWeekday[][2] = {
 #define TXT_NIGHT_OFF "Ausschalten um"
 #define TXT_DAY_ON "Einschalten um"
 #define TXT_SHOW_IT_IS "\"ES IST\" anzeigen"
+#define TXT_SHOW_GSI "\"GSI\" anzeigen"
 #define TXT_SET_DATE_TIME "Datum/Zeit setzen"
 #define TXT_ACTIVE "Aktiv"
 #define TXT_DATE "Datum"
@@ -157,6 +157,7 @@ const char sWeekday[][2] = {
 #define TXT_NIGHT_OFF "Switch off at"
 #define TXT_DAY_ON "Switch on at"
 #define TXT_SHOW_IT_IS "Show \"IT IS\""
+#define TXT_SHOW_GSI "Show \"GSI\""
 #define TXT_SET_DATE_TIME "Set date/time"
 #define TXT_ACTIVE "Active"
 #define TXT_DATE "Date"
@@ -199,6 +200,7 @@ const char sWeekday[][2] = {
 #define TXT_NIGHT_OFF "Switch off at"
 #define TXT_DAY_ON "Switch on at"
 #define TXT_SHOW_IT_IS "Show \"IT IS\""
+#define TXT_SHOW_GSI "Show \"GSI\""
 #define TXT_SET_DATE_TIME "Set date/time"
 #define TXT_ACTIVE "Active"
 #define TXT_DATE "Date"
@@ -241,6 +243,7 @@ const char sWeekday[][2] = {
 #define TXT_NIGHT_OFF "Switch off at"
 #define TXT_DAY_ON "Switch on at"
 #define TXT_SHOW_IT_IS "Show \"IT IS\""
+#define TXT_SHOW_GSI "Show \"GSI\""
 #define TXT_SET_DATE_TIME "Set date/time"
 #define TXT_ACTIVE "Active"
 #define TXT_DATE "Date"
@@ -283,6 +286,7 @@ const char sWeekday[][2] = {
 #define TXT_NIGHT_OFF "Switch off at"
 #define TXT_DAY_ON "Switch on at"
 #define TXT_SHOW_IT_IS "Show \"IT IS\""
+#define TXT_SHOW_GSI "Show \"GSI\""
 #define TXT_SET_DATE_TIME "Set date/time"
 #define TXT_ACTIVE "Active"
 #define TXT_DATE "Date"

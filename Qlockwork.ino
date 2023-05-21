@@ -1088,12 +1088,12 @@ void loop()
                     simHour = 0;
                   }
                 }
-                renderer.setTime(simHour, simMinute, settings.mySettings.frontCover, matrix);
+                renderer.setTime(simHour, simMinute, settings.mySettings.frontCover, settings.mySettings.chGsi, matrix);
                 renderer.setCorners(simMinute, matrix);
                 if (!settings.mySettings.itIs && ((simMinute / 5) % 6)) renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
               }
               else {
-                renderer.setTime(hour(), minute(), settings.mySettings.frontCover, matrix);
+                renderer.setTime(hour(), minute(), settings.mySettings.frontCover, settings.mySettings.chGsi, matrix);
                 renderer.setCorners(minute(), matrix);
                 if (!settings.mySettings.itIs && ((minute() / 5) % 6)) renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
               }
@@ -1194,7 +1194,7 @@ void loop()
             //else if (millis() < sunrise_millis + SUNSET_SUNRISE_SPEED * 1.5)
             else if (millis() < sunrise_millis + 4500 + settings.mySettings.timeout * 1000)
             {
-                renderer.setTime(hour(sunrise_unix), minute(sunrise_unix), settings.mySettings.frontCover, matrix);
+                renderer.setTime(hour(sunrise_unix), minute(sunrise_unix), settings.mySettings.frontCover, false, matrix);
                 renderer.setCorners(minute(sunrise_unix), matrix);
                 renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
             }
@@ -1264,7 +1264,7 @@ void loop()
             // else if (millis() < sunset_millis + SUNSET_SUNRISE_SPEED * 1.5)
             else if (millis() < sunset_millis + 4500 + settings.mySettings.timeout * 1000)
             {
-                renderer.setTime(hour(sunset_unix), minute(sunset_unix), settings.mySettings.frontCover, matrix);
+                renderer.setTime(hour(sunset_unix), minute(sunset_unix), settings.mySettings.frontCover, false, matrix);
                 renderer.setCorners(minute(sunset_unix), matrix);
                 renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
             }
@@ -1568,7 +1568,7 @@ void loop()
           }
           else if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0)
           {
-            renderer.setTime(hour(), minute(), settings.mySettings.frontCover, matrix);
+            renderer.setTime(hour(), minute(), settings.mySettings.frontCover, settings.mySettings.chGsi, matrix);
             renderer.setCorners(minute(), matrix);
             renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
             renderer.setAMPM(hour(), settings.mySettings.frontCover, matrix);
@@ -1605,7 +1605,7 @@ void loop()
           }
           else if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0)
           {
-            renderer.setTime(hour(settings.mySettings.nightOffTime), minute(settings.mySettings.nightOffTime), settings.mySettings.frontCover, matrix);
+            renderer.setTime(hour(settings.mySettings.nightOffTime), minute(settings.mySettings.nightOffTime), settings.mySettings.frontCover, false, matrix);
             renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
             renderer.setAMPM(hour(settings.mySettings.nightOffTime), settings.mySettings.frontCover, matrix);
           }
@@ -1617,7 +1617,7 @@ void loop()
           }
           else if ((lastMillis2Hz/MILLIS_2_HZ) % 2 == 0)
           {
-            renderer.setTime(hour(settings.mySettings.dayOnTime), minute(settings.mySettings.dayOnTime), settings.mySettings.frontCover, matrix);
+            renderer.setTime(hour(settings.mySettings.dayOnTime), minute(settings.mySettings.dayOnTime), settings.mySettings.frontCover, false, matrix);
             renderer.clearEntryWords(settings.mySettings.frontCover, matrix);
             renderer.setAMPM(hour(settings.mySettings.dayOnTime), settings.mySettings.frontCover, matrix);
           }
@@ -3099,6 +3099,23 @@ void handleButtonSettings()
         message += TXT_OFF;
         message += F("</td></tr>");
     // ------------------------------------------------------------------------
+    if(settings.mySettings.frontCover == FRONTCOVER_CH) {
+        message += F("<tr><td>");
+        message += F(TXT_SHOW_GSI);
+        message += F("</td><td>");
+        message += F("<input type=\"radio\" name=\"gs\" value=\"1\"");
+    if (settings.mySettings.chGsi)
+        message += F(" checked");
+        message += F("> ");
+        message += TXT_ON;
+        message += F("<input type=\"radio\" name=\"gs\" value=\"0\"");
+    if (!settings.mySettings.chGsi)
+        message += F(" checked");
+        message += F("> ");
+        message += TXT_OFF;
+        message += F("</td></tr>");
+    }
+    // ------------------------------------------------------------------------
         message += F("<tr><td>");
         message += F(TXT_SET_DATE_TIME);
         message += F("</td><td>");
@@ -3425,6 +3442,10 @@ void handleCommitSettings()
     settings.mySettings.dayOnTime = webServer.arg("do").substring(0, 2).toInt() * 3600 + webServer.arg("do").substring(3, 5).toInt() * 60;
     // ------------------------------------------------------------------------
     webServer.arg("ii") == "0" ? settings.mySettings.itIs = false : settings.mySettings.itIs = true;
+    // ------------------------------------------------------------------------
+    if(settings.mySettings.frontCover == FRONTCOVER_CH) {
+      webServer.arg("gs") == "0" ? settings.mySettings.chGsi = false : settings.mySettings.chGsi = true;
+    }
     // ------------------------------------------------------------------------
     if (webServer.arg("st").length())
     {

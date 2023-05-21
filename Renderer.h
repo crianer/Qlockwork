@@ -24,7 +24,7 @@ class Renderer
 public:
   Renderer();
   void setHours(uint8_t hours, boolean glatt, uint8_t language, uint16_t matrix[]);
-  void setTime(uint8_t hours, uint8_t minutes, uint8_t language, uint16_t matrix[]);
+  void setTime(uint8_t hours, uint8_t minutes, uint8_t language, bool chGsi, uint16_t matrix[]);
   void setCorners(uint8_t minutes, uint16_t matrix[]);
   void setAlarmLed(uint16_t matrix[]);
   void deactivateAlarmLed(uint16_t matrix[]);

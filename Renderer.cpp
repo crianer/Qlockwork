@@ -9,7 +9,7 @@ Renderer::Renderer()
 }
 
 // Write time to screenbuffer.
-void Renderer::setTime(uint8_t hours, uint8_t minutes, uint8_t language, uint16_t matrix[])
+void Renderer::setTime(uint8_t hours, uint8_t minutes, uint8_t language, bool chGsi, uint16_t matrix[])
 {
   switch (language)
   {
@@ -208,8 +208,6 @@ void Renderer::setTime(uint8_t hours, uint8_t minutes, uint8_t language, uint16_
       break;
     }
     break;
-  case FRONTCOVER_CH_GS:
-    if (minutes % 5) CH_GSI;
   case FRONTCOVER_CH:
     CH_ESISCH;
     switch (minutes / 5)
@@ -288,6 +286,7 @@ void Renderer::setTime(uint8_t hours, uint8_t minutes, uint8_t language, uint16_
     default:
       ;
     }
+    if (chGsi && minutes % 5) CH_GSI;
     break;
   case FRONTCOVER_EN:
     EN_ITIS;
@@ -921,7 +920,6 @@ void Renderer::setHours(uint8_t hours, boolean glatt, uint8_t language, uint16_t
     }
     break;
   case FRONTCOVER_CH:
-  case FRONTCOVER_CH_GS:
     switch (hours)
     {
     case 0:
@@ -1326,7 +1324,6 @@ void Renderer::clearEntryWords(uint8_t language, uint16_t matrix[])
     D3_ESISCH_R; // remove ISCH
     break;
   case FRONTCOVER_CH:
-  case FRONTCOVER_CH_GS:
     CH_ESISCH_R; // remove ES ISCH
     break;
   case FRONTCOVER_EN:
@@ -1371,7 +1368,6 @@ void Renderer::setAMPM(uint8_t hours, uint8_t language, uint16_t matrix[])
     else D3_PM;
     break;
   case FRONTCOVER_CH:
-  case FRONTCOVER_CH_GS:
     if (hours < 12) CH_AM;
     else CH_PM;
     break;

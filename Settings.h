@@ -14,7 +14,7 @@
 #include "Event.h"
 
 #define SETTINGS_MAGIC_NUMBER 0x2A
-#define SETTINGS_VERSION 25
+#define SETTINGS_VERSION 0
 
 #define MOOD_LEVEL_MAX 9
 
@@ -55,6 +55,7 @@ public:
         char owApiKey[LEN_OW_API_KEY];
         char owLocation[LEN_OW_LOCATION];
         eFrontCover frontCover;
+        bool chGsi;
     } mySettings;
 
     void saveToEEPROM();
