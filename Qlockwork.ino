@@ -1141,8 +1141,6 @@ void loop()
                 renderer.setSmallText(("0" + String(month())), TEXT_POS_BOTTOM, matrix);
             else
                 renderer.setSmallText(String(month()), TEXT_POS_BOTTOM, matrix);
-            renderer.setPixelInScreenBuffer(5, 4, matrix);
-            renderer.setPixelInScreenBuffer(5, 9, matrix);
             break;
 #endif
 #if defined(SHOW_MODE_SUNRISE_SUNSET) && defined(APIKEY)
