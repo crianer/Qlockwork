@@ -2719,8 +2719,12 @@ void handleRoot()
         message += F("<br><i class = \"fa fa-thermometer\" style=\"font-size:20px;\"></i> ") + String(outdoorWeather.temperature) + F("&deg;C / ") + String(outdoorWeather.temperature * 1.8 + 32.0) + F("&deg;F");
         message += F("<br><i class = \"fa fa-tint\" style=\"font-size:20px;\"></i> ") + String(outdoorWeather.humidity) + F("% RH");
         message += F("<br>") + String(outdoorWeather.pressure) + F(" hPa / ") + String(outdoorWeather.pressure / 33.865) + F(" inHg");
-        message += F("<br><i class = \"fa fa-sun-o\" style=\"font-size:20px;\"></i> ") + String(hour(timeZone.toLocal(outdoorWeather.sunrise))) + F(":") + String(minute(timeZone.toLocal(outdoorWeather.sunrise)));
-        message += F(" <i class = \"fa fa-moon-o\" style=\"font-size:20px;\"></i> ") + String(hour(timeZone.toLocal(outdoorWeather.sunset))) + F(":") + String(minute(timeZone.toLocal(outdoorWeather.sunset)));
+        message += F("<br><i class = \"fa fa-sun-o\" style=\"font-size:20px;\"></i> ") + String(hour(timeZone.toLocal(outdoorWeather.sunrise))) + F(":");
+        if (minute(timeZone.toLocal(outdoorWeather.sunrise)) < 10) message += F("0");
+        message += String(minute(timeZone.toLocal(outdoorWeather.sunrise)));
+        message += F(" <i class = \"fa fa-moon-o\" style=\"font-size:20px;\"></i> ") + String(hour(timeZone.toLocal(outdoorWeather.sunset))) + F(":");
+        if (minute(timeZone.toLocal(outdoorWeather.sunset)) < 10) message += F("0");
+        message += String(minute(timeZone.toLocal(outdoorWeather.sunset)));
         message += F("<br>") + outdoorWeather.description;
     }
 #endif
