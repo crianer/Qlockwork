@@ -3284,7 +3284,7 @@ void handleButtonEvents()
       if (settings.mySettings.events[i].repRate == j) message += F(" selected");
       message += F(">") + String(FPSTR(sEvtRep[j])) + F("</option>");
     }
-    message += F("</select> minutes.");
+    message += F("</select> min.");
     message += F("</td></tr>");
   }
   // ------------------------------------------------------------------------
