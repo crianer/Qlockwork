@@ -857,7 +857,7 @@ void loop()
                     Serial.println("Starte Event Animation: " + String(myanimation.name) );
 #endif
                     uint32_t animationMillis = millis();
-                    while( millis() < (animationMillis + MIN_ANI_DURATION)){ while ( showAnimation(brightness) ) {};};
+                    while( millis() < (animationMillis + MIN_ANI_DURATION)){ while ( showAnimation(brightness) ) {yield();}; yield();};
                     setMode(MODE_FEED);
                   }
               }

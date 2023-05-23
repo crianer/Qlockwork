@@ -23,6 +23,7 @@ uint8_t OpenWeather::getOutdoorConditions(String location, String apiKey, String
                 client.stop();
                 return 0;
             }
+            yield();
         }
         while (client.available())
             response = client.readStringUntil('\r');

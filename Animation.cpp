@@ -33,6 +33,7 @@ void getAnimationList()
         }
       }
     }
+    yield();
   }
 
 // sortieren
@@ -159,7 +160,7 @@ bool loadAnimation(String aniname )
       jsonBuffer="";
     }
 //    Serial.printf("AnimationFrames ESP.getMaxFreeBlockSize: %i Codezeile: %u\n", ESP.getMaxFreeBlockSize(),  __LINE__);
-
+    yield();
   }
   file.close();
 #ifdef DEBUG_ANIMATION
