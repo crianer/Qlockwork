@@ -526,6 +526,9 @@ mode=0                              Set clock to mode=0 (time), mode=1 (am/pm), 
 ******************************************************************************
 Changelog:
 ******************************************************************************
+20230526:
+Improoved stability and robustness against watchdog attacks. Some cosmetics to the web interface.
+
 20230521:
 GSI optional for swiss german. Renamed "IT IS" to purist mpde.
 
