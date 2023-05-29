@@ -227,6 +227,8 @@ uint16_t minFreeBlockSize = 10000;
 uint16_t codeline = 0;
 String codetab;
 
+struct rst_info *rtc_info;
+
 WiFiEventHandler wifiConnectHandler;
 WiFiEventHandler wifiDisconnectHandler;
 
@@ -250,6 +252,8 @@ void setup()
     Serial.begin(SERIAL_SPEED);
     while (!Serial);
     delay(1000);
+
+    rtc_info = system_get_rst_info();
 
     // And the monkey flips the switch. (Akiva Goldsman)
     Serial.println();
@@ -2769,6 +2773,16 @@ void handleRoot()
     message += F("<br>Error (OpenWeather): ") + String(errorCounterOutdoorWeather);
 #endif
     message += F("<br>Reset reason: ") + ESP.getResetReason();
+    if (rtc_info->reason ==  REASON_WDT_RST  ||
+    rtc_info->reason ==  REASON_EXCEPTION_RST  ||
+    rtc_info->reason ==  REASON_SOFT_WDT_RST)  {
+      if (rtc_info->reason ==  REASON_EXCEPTION_RST) {
+        message += F("<br>Fatal exception (") + String(rtc_info->exccause) + F("):");
+      }
+      char exceptionAdr[64];
+      sprintf(exceptionAdr, "<br>epc1=0x%08x, epc2=0x%08x, epc3=0x%08x, excvaddr=0x%08x, depc=0x%08x\n", rtc_info->epc1,  rtc_info->epc2, rtc_info->epc3, rtc_info->excvaddr,  rtc_info->depc); //The address of the last crash is printed, which is used to debug garbled output.
+      message += String(exceptionAdr);
+    }
     message += F("<br>Flags: ");
 #ifdef RTC_BACKUP
     message += F("RTC ");
