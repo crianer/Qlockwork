@@ -28,13 +28,13 @@
 //#define ABUSE_CORNER_LED_FOR_ALARM
 
 //#define POWERON_SELFTEST
-#define SHOW_MODE_AMPM
+//#define SHOW_MODE_AMPM
 #define SHOW_MODE_SECONDS
 #define SHOW_MODE_WEEKDAY
 #define SHOW_MODE_DATE
-#define SHOW_MODE_MOONPHASE
-//#define SHOW_MODE_SUNRISE_SUNSET // works only if APIKEY is defined
-#define SHOW_MODE_TEST
+//#define SHOW_MODE_MOONPHASE
+#define SHOW_MODE_SUNRISE_SUNSET // works only if APIKEY is defined
+//#define SHOW_MODE_TEST
 #define SHOW_MODE_SETTINGS
 
 #define APIKEY
