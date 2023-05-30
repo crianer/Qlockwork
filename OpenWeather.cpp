@@ -25,8 +25,10 @@ uint8_t OpenWeather::getOutdoorConditions(String location, String apiKey, String
             }
             yield();
         }
-        while (client.available())
+        while (client.available()){
             response = client.readStringUntil('\r');
+            yield();
+        }
         response.trim();
         //response.replace('[', ' ');
         //response.replace(']', ' ');
