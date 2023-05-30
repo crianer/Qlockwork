@@ -299,8 +299,8 @@
 #define IR_CODE_24H          (0xFFE817) // QWF V1.0 Remote 24h
 
 //#define IR_LETTER_OFF
-#define IR_LETTER_X 8
-#define IR_LETTER_Y 10
+#define IR_LETTER_X 6 // left column = 0
+#define IR_LETTER_Y 9 // top row = 0
 
 #define IR_DEBOUNCE_T 500
 #endif

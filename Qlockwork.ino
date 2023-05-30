@@ -1700,7 +1700,7 @@ void loop()
 
         // turn off LED behind IR-sensor
 #ifdef IR_LETTER_OFF
-        renderer.unsetPixelInScreenBuffer(IR_LETTER_X, IR_LETTER_Y - 1, matrix);
+        renderer.unsetPixelInScreenBuffer(IR_LETTER_X, IR_LETTER_Y, matrix);
 #endif
 
         //debugScreenBuffer(matrixOld);
