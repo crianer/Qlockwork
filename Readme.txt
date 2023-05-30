@@ -526,6 +526,9 @@ mode=0                              Set clock to mode=0 (time), mode=1 (am/pm), 
 ******************************************************************************
 Changelog:
 ******************************************************************************
+20230531:
+Optimized configuration. Little bug fixing.
+
 20230530:
 Watchdog optimization.
 
