@@ -302,7 +302,7 @@
 #define IR_LETTER_X 6 // left column = 0
 #define IR_LETTER_Y 9 // top row = 0
 
-#define IR_DEBOUNCE_T 500
+#define IR_DEBOUNCE_T 250
 #endif
 
 //*****************************************************************************
