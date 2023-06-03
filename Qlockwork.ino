@@ -2029,7 +2029,7 @@ void writeScreenBufferMatrix(uint16_t screenBufferOld[], uint16_t screenBufferNe
 //*****************************************************************************
 void updateColor()
 {
-  settings.mySettings.color = random(0, COLORCHANGE_COUNT + 1);
+  settings.mySettings.color = random(0, COLOR_COUNT);
 #ifdef DEBUG
   Serial.printf("Color changed to: %u\r\n", settings.mySettings.color);
 #endif
