@@ -123,8 +123,8 @@ char ntpServer[] = NTP_DEFAULT_SERVER;
 uint8_t errorCounterNTP = 0;
 
 // Screenbuffer
-uint16_t matrix[10] = {};
-uint16_t matrixOld[10] = {};
+uint16_t matrix[NUMPIXELS_Y] = {};
+uint16_t matrixOld[NUMPIXELS_Y] = {};
 bool screenBufferNeedsUpdate = true;
 bool colorNeedsChange = false;
 uint8_t colorOld;
