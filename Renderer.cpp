@@ -208,8 +208,8 @@ void Renderer::setTime(uint8_t hours, uint8_t minutes, uint8_t language, bool ch
       break;
     }
     break;
-  case FRONTCOVER_CH:
-    CH_ESISCH;
+  case FRONTCOVER_CH_BE:
+    CH_BE_ESISCH;
     switch (minutes / 5)
     {
     case 0:
@@ -218,75 +218,155 @@ void Renderer::setTime(uint8_t hours, uint8_t minutes, uint8_t language, bool ch
       break;
     case 1:
       // 5 ab
-      CH_FUEF;
-      CH_AB;
+      CH_BE_FUEF;
+      CH_BE_AB;
       setHours(hours, false, language, matrix);
       break;
     case 2:
       // 10 ab
-      CH_ZAEAE;
-      CH_AB;
+      CH_BE_ZAEAE;
+      CH_BE_AB;
       setHours(hours, false, language, matrix);
       break;
     case 3:
       // viertel ab
-      CH_VIERTU;
-      CH_AB;
+      CH_BE_VIERTU;
+      CH_BE_AB;
       setHours(hours, false, language, matrix);
       break;
     case 4:
       // 20 ab
-      CH_ZWAENZG;
-      CH_AB;
+      CH_BE_ZWAENZG;
+      CH_BE_AB;
       setHours(hours, false, language, matrix);
       break;
     case 5:
       // 5 vor halb
-      CH_FUEF;
-      CH_VOR;
-      CH_HAUBI;
+      CH_BE_FUEF;
+      CH_BE_VOR;
+      CH_BE_HAUBI;
       setHours(hours + 1, false, language, matrix);
       break;
     case 6:
       // halb
-      CH_HAUBI;
+      CH_BE_HAUBI;
       setHours(hours + 1, false, language, matrix);
       break;
     case 7:
       // 5 ab halb
-      CH_FUEF;
-      CH_AB;
-      CH_HAUBI;
+      CH_BE_FUEF;
+      CH_BE_AB;
+      CH_BE_HAUBI;
       setHours(hours + 1, false, language, matrix);
       break;
     case 8:
       // 20 vor
-      CH_ZWAENZG;
-      CH_VOR;
+      CH_BE_ZWAENZG;
+      CH_BE_VOR;
       setHours(hours + 1, false, language, matrix);
       break;
     case 9:
       // viertel vor
-      CH_VIERTU;
-      CH_VOR;
+      CH_BE_VIERTU;
+      CH_BE_VOR;
       setHours(hours + 1, false, language, matrix);
       break;
     case 10:
       // 10 vor
-      CH_ZAEAE;
-      CH_VOR;
+      CH_BE_ZAEAE;
+      CH_BE_VOR;
       setHours(hours + 1, false, language, matrix);
       break;
     case 11:
       // 5 vor
-      CH_FUEF;
-      CH_VOR;
+      CH_BE_FUEF;
+      CH_BE_VOR;
       setHours(hours + 1, false, language, matrix);
       break;
     default:
       ;
     }
-    if (chGsi && minutes % 5) CH_GSI;
+    if (chGsi && minutes % 5) CH_BE_GSI;
+    break;
+  case FRONTCOVER_CH_ZH:
+    CH_ZH_ESISCH;
+    switch (minutes / 5)
+    {
+    case 0:
+      // glatte Stunde
+      setHours(hours, true, language, matrix);
+      break;
+    case 1:
+      // 5 ab
+      CH_ZH_FUEF;
+      CH_ZH_AB;
+      setHours(hours, false, language, matrix);
+      break;
+    case 2:
+      // 10 ab
+      CH_ZH_ZAEAE;
+      CH_ZH_AB;
+      setHours(hours, false, language, matrix);
+      break;
+    case 3:
+      // viertel ab
+      CH_ZH_VIERTU;
+      CH_ZH_AB;
+      setHours(hours, false, language, matrix);
+      break;
+    case 4:
+      // 20 ab
+      CH_ZH_ZWAENZG;
+      CH_ZH_AB;
+      setHours(hours, false, language, matrix);
+      break;
+    case 5:
+      // 5 vor halb
+      CH_ZH_FUEF;
+      CH_ZH_VOR;
+      CH_ZH_HAUBI;
+      setHours(hours + 1, false, language, matrix);
+      break;
+    case 6:
+      // halb
+      CH_ZH_HAUBI;
+      setHours(hours + 1, false, language, matrix);
+      break;
+    case 7:
+      // 5 ab halb
+      CH_ZH_FUEF;
+      CH_ZH_AB;
+      CH_ZH_HAUBI;
+      setHours(hours + 1, false, language, matrix);
+      break;
+    case 8:
+      // 20 vor
+      CH_ZH_ZWAENZG;
+      CH_ZH_VOR;
+      setHours(hours + 1, false, language, matrix);
+      break;
+    case 9:
+      // viertel vor
+      CH_ZH_VIERTU;
+      CH_ZH_VOR;
+      setHours(hours + 1, false, language, matrix);
+      break;
+    case 10:
+      // 10 vor
+      CH_ZH_ZAEAE;
+      CH_ZH_VOR;
+      setHours(hours + 1, false, language, matrix);
+      break;
+    case 11:
+      // 5 vor
+      CH_ZH_FUEF;
+      CH_ZH_VOR;
+      setHours(hours + 1, false, language, matrix);
+      break;
+    default:
+      ;
+    }
+    if (chGsi && minutes % 5) CH_ZH_GSI;
     break;
   case FRONTCOVER_EN:
     EN_ITIS;
@@ -919,57 +999,113 @@ void Renderer::setHours(uint8_t hours, boolean glatt, uint8_t language, uint16_t
       break;
     }
     break;
-  case FRONTCOVER_CH:
+  case FRONTCOVER_CH_BE:
     switch (hours)
     {
     case 0:
     case 12:
     case 24:
-      CH_H_ZWOEUFI;
+      CH_BE_H_ZWOEUFI;
       break;
     case 1:
     case 13:
-      CH_H_EIS;
+      CH_BE_H_EIS;
       break;
     case 2:
     case 14:
-      CH_H_ZWOEI;
+      CH_BE_H_ZWOEI;
       break;
     case 3:
     case 15:
-      CH_H_DRUE;
+      CH_BE_H_DRUE;
       break;
     case 4:
     case 16:
-      CH_H_VIER;
+      CH_BE_H_VIER;
       break;
     case 5:
     case 17:
-      CH_H_FUEFI;
+      CH_BE_H_FUEFI;
       break;
     case 6:
     case 18:
-      CH_H_SAECHSI;
+      CH_BE_H_SAECHSI;
       break;
     case 7:
     case 19:
-      CH_H_SIEBNI;
+      CH_BE_H_SIEBNI;
       break;
     case 8:
     case 20:
-      CH_H_ACHTI;
+      CH_BE_H_ACHTI;
       break;
     case 9:
     case 21:
-      CH_H_NUENI;
+      CH_BE_H_NUENI;
       break;
     case 10:
     case 22:
-      CH_H_ZAENI;
+      CH_BE_H_ZAENI;
       break;
     case 11:
     case 23:
-      CH_H_EUFI;
+      CH_BE_H_EUFI;
+      break;
+    default:
+      ;
+    }
+    break;
+  case FRONTCOVER_CH_ZH:
+    switch (hours)
+    {
+    case 0:
+    case 12:
+    case 24:
+      CH_ZH_H_ZWOEUFI;
+      break;
+    case 1:
+    case 13:
+      CH_ZH_H_EIS;
+      break;
+    case 2:
+    case 14:
+      CH_ZH_H_ZWOEI;
+      break;
+    case 3:
+    case 15:
+      CH_ZH_H_DRUE;
+      break;
+    case 4:
+    case 16:
+      CH_ZH_H_VIER;
+      break;
+    case 5:
+    case 17:
+      CH_ZH_H_FUEFI;
+      break;
+    case 6:
+    case 18:
+      CH_ZH_H_SAECHSI;
+      break;
+    case 7:
+    case 19:
+      CH_ZH_H_SIEBNI;
+      break;
+    case 8:
+    case 20:
+      CH_ZH_H_ACHTI;
+      break;
+    case 9:
+    case 21:
+      CH_ZH_H_NUENI;
+      break;
+    case 10:
+    case 22:
+      CH_ZH_H_ZAENI;
+      break;
+    case 11:
+    case 23:
+      CH_ZH_H_EUFI;
       break;
     default:
       ;
@@ -1323,8 +1459,11 @@ void Renderer::clearEntryWords(uint8_t language, uint16_t matrix[])
   case FRONTCOVER_D3:
     D3_ESISCH_R; // remove ISCH
     break;
-  case FRONTCOVER_CH:
-    CH_ESISCH_R; // remove ES ISCH
+  case FRONTCOVER_CH_BE:
+    CH_BE_ESISCH_R; // remove ES ISCH
+    break;
+  case FRONTCOVER_CH_ZH:
+    CH_ZH_ESISCH_R; // remove ES ISCH
     break;
   case FRONTCOVER_EN:
     EN_ITIS_R; // remove IT IS
@@ -1367,9 +1506,13 @@ void Renderer::setAMPM(uint8_t hours, uint8_t language, uint16_t matrix[])
     if (hours < 12) D3_AM;
     else D3_PM;
     break;
-  case FRONTCOVER_CH:
-    if (hours < 12) CH_AM;
-    else CH_PM;
+  case FRONTCOVER_CH_BE:
+    if (hours < 12) CH_BE_AM;
+    else CH_BE_PM;
+    break;
+  case FRONTCOVER_CH_ZH:
+    if (hours < 12) CH_ZH_AM;
+    else CH_ZH_PM;
     break;
   case FRONTCOVER_EN:
     if (hours < 12) EN_AM;
