@@ -526,6 +526,9 @@ mode=0                              Set clock to mode=0 (time), mode=1 (am/pm), 
 ******************************************************************************
 Changelog:
 ******************************************************************************
+20230620:
+New swiss german dialect: Zurich (ZH). Available in the admin area.
+
 20230604:
 Fixed bug: color range of random color change.
 
