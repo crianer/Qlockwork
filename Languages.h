@@ -14,6 +14,8 @@ enum eFrontCover : uint8_t
   FRONTCOVER_D3,
   FRONTCOVER_CH_BE,
   FRONTCOVER_CH_ZH,
+  FRONTCOVER_CH_AG,
+  FRONTCOVER_CH_GR,
   FRONTCOVER_EN,
   FRONTCOVER_ES,
   FRONTCOVER_FR,
@@ -33,13 +35,15 @@ const char sLanguageStr[][20] PROGMEM =
   { "German Schwaebisch"}, // 04
   { "Swiss German BE" }, // 05
   { "Swiss German ZH" }, // 06
-  { "English" }, // 07
-  { "Spanish" }, // 08
-  { "French" }, // 09
-  { "Italian" }, // 10
-  { "Dutch" },  // 11
-  { "Swedish" },// 12
-  { "Binary" }// 13
+  { "Swiss German AG" }, // 07
+  { "Swiss German GR" }, // 08
+  { "English" }, // 09
+  { "Spanish" }, // 10
+  { "French" }, // 11
+  { "Italian" }, // 12
+  { "Dutch" },  // 13
+  { "Swedish" },// 14
+  { "Binary" }// 15
 };
 
 
