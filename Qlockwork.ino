@@ -20,7 +20,7 @@
 //
 //*****************************************************************************
 
-#define FIRMWARE_VERSION 20230620
+#define FIRMWARE_VERSION 20231024
 
 #include <Arduino.h>
 #include <Arduino_JSON.h>
@@ -355,6 +355,7 @@ void setup()
 
     WiFi.setAutoConnect(true);
   WiFi.hostname(HostName);
+  WiFi.setSleepMode(WIFI_NONE_SLEEP);
   setupWiFi();
   postWiFiSetup();
 
@@ -2422,13 +2423,13 @@ void getUpdateInfo()
 #if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
 void getRoomConditions()
 {
-#if defined(RTC_BACKUP) && !defined(SENSOR_DHT22) && !defined(SENSOR_MCP9808)
+#if defined(RTC_BACKUP)// && !defined(SENSOR_DHT22) && !defined(SENSOR_MCP9808)
     roomTemperature = RTC.temperature() / 4.0 + RTC_TEMPERATURE_OFFSET;
 #ifdef DEBUG
     Serial.println("Temperature (RTC): " + String(roomTemperature) + "C");
 #endif
 #endif
-#if defined(SENSOR_MCP9808) && !defined(SENSOR_DHT22)
+#if defined(SENSOR_MCP9808)// && !defined(SENSOR_DHT22)
     float mcpTemperature = mcp.readTempC();
     if (!isnan(mcpTemperature)){
       errorCounterMCP = 0;

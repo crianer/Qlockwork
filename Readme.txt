@@ -526,6 +526,10 @@ mode=0                              Set clock to mode=0 (time), mode=1 (am/pm), 
 ******************************************************************************
 Changelog:
 ******************************************************************************
+20231024:
+New swiss german dialect: Aargau (AG) & Graubuenden (GR). Available in the admin area.
+Force WiFi not to go to any sleep mode.
+
 20230620:
 New swiss german dialect: Zurich (ZH). Available in the admin area.
 
