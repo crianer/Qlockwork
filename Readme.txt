@@ -75,7 +75,7 @@ WPS functionality for a quick and easy WiFi setup.
 Settings via on-screen menu using tactile buttons or IR-remote to control.
 Adaptive brightness control when using an LDR or photo transistor.
 3 transitions for timechange.
-Indoor temperature from RTC or MCP9808 or temperature and humidity from DHT sensor.
+Indoor temperature from RTC, MCP9808 or BME280 or temperature and humidity from DHT or BME280 sensor.
 Outdoor temperature and humidity from OpenWeather. You need an APIKey from OpenWeather to use this feature.
 Visualisation of moonphase.
 Show sunrise and sunset times with animation.
@@ -200,8 +200,8 @@ Date:                               Shows day and month.
 Sunrise:                            Time of sunrise.
 Sunset:                             Time of sunset.
 Moonphase:                          Shows the moonphase.
-Room temperature:                   Display of the measured temperature in the room (only with RTC, MCP9808 or DHT22).
-Room humidity:                      Display of the measured humidity in the room (only with DHT22).
+Room temperature:                   Display of the measured temperature in the room (only with RTC, MCP9808, BME280 or DHT22).
+Room humidity:                      Display of the measured humidity in the room (only with BME280 or DHT22).
 Outdoor temperature:                Display the temperature for your location from OpenWeather.
 Outdoor humidity:                   Display the humidity for your location from OpenWeather.
 Timer:                              Display of the remaining time if a timer is set.
@@ -326,6 +326,10 @@ Configuration.h - Hardware settings:
 
 #define SENSOR_MCP9808				Use a MCP9808 sensor or sensor module.
 #define MCP_TEMPERATURE_OFFSET		Sets how many degrees the measured room temperature (+ or -) should be corrected.
+
+#define SENSOR_BME					Use a BME280 sensor or sensor module.
+#define BME_TEMPERATURE_OFFSET		Sets how many degrees the measured room temperature (+ or -) should be corrected.
+#define BME_HUMIDITY_OFFSET         Sets how many degrees the measured room humidity (+ or -) should be corrected.
 
 #define RTC_BACKUP                  Use an RTC as backup and room temperature.
 #define RTC_TEMPERATURE_OFFSET      Sets how many degrees the measured room temperature (+ or -) should be corrected.
@@ -526,6 +530,9 @@ mode=0                              Set clock to mode=0 (time), mode=1 (am/pm), 
 ******************************************************************************
 Changelog:
 ******************************************************************************
+20231026:
+Introduced BME280 sensor to measure and display temperature and humidity.
+
 20231024:
 New swiss german dialect: Aargau (AG) & Graubuenden (GR). Available in the admin area.
 Force WiFi not to go to any sleep mode.
