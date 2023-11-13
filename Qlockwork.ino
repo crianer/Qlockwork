@@ -64,6 +64,10 @@
 #include <DHT.h>
 #endif
 
+#ifdef SENSOR_BME280
+#include <Adafruit_BME280.h>
+#endif
+
 #ifdef SENSOR_MCP9808
 #include <Adafruit_MCP9808.h>
 #endif
@@ -83,6 +87,11 @@ ESP8266HTTPUpdateServer httpUpdater;
 // DHT22
 #ifdef SENSOR_DHT22
 DHT dht(PIN_DHT22, DHT22);
+#endif
+
+// BME280
+#ifdef SENSOR_BME280
+Adafruit_BME280 bme;
 #endif
 
 // MCP9808
@@ -164,9 +173,10 @@ uint8_t errorCounterOutdoorWeather = 0;
 float roomTemperature = 0;
 uint8_t errorCounterMCP = 0;
 
-// DHT22
+// Humidity Sensor
 float roomHumidity = 0;
 uint8_t errorCounterDHT = 0;
+uint8_t errorCounterBME = 0;
 
 // Brightness and LDR
 uint8_t maxBrightness = map(settings.mySettings.brightness, 0, 100, MIN_BRIGHTNESS, MAX_BRIGHTNESS);
@@ -326,6 +336,18 @@ void setup()
     dht.begin();
 #endif
 
+#ifdef SENSOR_BME280
+    Serial.println(F("Setting up BME280."));
+    bool bme_status;
+    bme_status = bme.begin();
+    if (!bme_status) {
+      bme.begin(BME280_ADDRESS_ALTERNATE);
+      if (!bme_status) {
+        Serial.println(F("Could not find a valid BME280 sensor, check wiring, address!"));
+      }
+    }
+#endif
+
 #ifdef SENSOR_MCP9808
     Serial.println(F("Setting up MCP9808."));
     bool mcp_status;
@@ -368,9 +390,9 @@ void setup()
 #ifdef SYSLOGSERVER_SERVER
     Serial.println("Starting syslog.");
 #ifdef APIKEY
-    syslog.log(LOG_INFO, ";#;dateTime;roomTemperature;roomHumidity;outdoorTemperature;outdoorHumidity;sunriseTime;sunsetTime;ldrValue;errorCounterNTP;errorCounterDHT;errorCounterMCP;errorCounterOutdoorWeather;freeHeapSize;upTime");
+    syslog.log(LOG_INFO, ";#;dateTime;roomTemperature;roomHumidity;outdoorTemperature;outdoorHumidity;sunriseTime;sunsetTime;ldrValue;errorCounterNTP;errorCounterDHT;errorCounterMCP;errorCounterBME;errorCounterOutdoorWeather;freeHeapSize;upTime");
 #else
-    syslog.log(LOG_INFO, ";#;dateTime;roomTemperature;roomHumidity;ldrValue;errorCounterNTP;errorCounterDHT;errorCounterMCP;freeHeapSize;upTime");
+    syslog.log(LOG_INFO, ";#;dateTime;roomTemperature;roomHumidity;ldrValue;errorCounterNTP;errorCounterDHT;errorCounterMCP;errorCounterBME;freeHeapSize;upTime");
 #endif
 #endif
 
@@ -449,7 +471,7 @@ void setup()
     randomSecond = random(5, 56);
 
     // Update room conditions
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808) || defined(SENSOR_BME280)
     getRoomConditions();
 #endif
 
@@ -564,7 +586,7 @@ void loop()
         lastMinute = minute();
         screenBufferNeedsUpdate = true;
 
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808) || defined(SENSOR_BME280)
         // Update room conditions
         getRoomConditions();
 #endif
@@ -671,10 +693,10 @@ void loop()
                 syslog.log(LOG_INFO, ";D;" + String(tempEspTime) + ";" + String(roomTemperature) + ";" + String(roomHumidity) + ";" + String(outdoorWeather.temperature) + ";" + String(outdoorWeather.humidity) + ";" \
                 +String(hour(timeZone.toLocal(outdoorWeather.sunrise))) + ":" + String(minute(timeZone.toLocal(outdoorWeather.sunrise))) + ";" \
                 + String(hour(timeZone.toLocal(outdoorWeather.sunset))) + ":" + String(minute(timeZone.toLocal(outdoorWeather.sunset))) + ";" + String(ldrValue)\
-                    + ";" + String(errorCounterNTP) + ";" + String(errorCounterDHT) + ";" + String(errorCounterMCP) + ";" + String(errorCounterOutdoorWeather) + ";" + String(ESP.getFreeHeap()) + ";" + String(upTime));
+                    + ";" + String(errorCounterNTP) + ";" + String(errorCounterDHT) + ";" + String(errorCounterMCP) + ";" + String(errorCounterBME) + ";" + String(errorCounterOutdoorWeather) + ";" + String(ESP.getFreeHeap()) + ";" + String(upTime));
 #else
                 syslog.log(LOG_INFO, ";D;" + String(tempEspTime) + ";" + String(roomTemperature) + ";" + String(roomHumidity) + ";" + String(ldrValue)\
-                    + ";" + String(errorCounterNTP) + ";" + String(errorCounterDHT) + ";" + String(errorCounterMCP) + ";" + String(ESP.getFreeHeap()) + ";" + String(upTime));
+                    + ";" + String(errorCounterNTP) + ";" + String(errorCounterDHT) + ";" + String(errorCounterMCP) + ";" + String(errorCounterBME) + ";" + String(ESP.getFreeHeap()) + ";" + String(upTime));
 #endif
 #ifdef DEBUG
                 Serial.println("Data written to syslog.");
@@ -809,14 +831,14 @@ void loop()
                       setMode(MODE_EXT_TEMP);
                     }
 #else
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808) || defined(SENSOR_BME280)
                     setMode(MODE_TEMP);
 #endif
 #endif
                     autoMode = 1;
                     break;
                 case 1:
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808) || defined(SENSOR_BME280)
                     setMode(MODE_TEMP);
 #else
 #ifdef APIKEY
@@ -1391,7 +1413,7 @@ void loop()
             }
             break;
 #endif
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808) || defined(SENSOR_BME280)
         case MODE_TEMP:
 #ifdef DEBUG
             Serial.println("Room Temperature: " + String(roomTemperature));
@@ -1419,7 +1441,7 @@ void loop()
             }
             renderer.setSmallText(String(int(abs(roomTemperature))), TEXT_POS_BOTTOM, matrix);
             break;
-#ifdef SENSOR_DHT22
+#if defined(SENSOR_DHT22) || defined(SENSOR_BME280)
         case MODE_HUMIDITY:
 #ifdef DEBUG
             Serial.println("Room Humidity: " + String(roomHumidity));
@@ -2288,10 +2310,10 @@ void setMode(Mode newMode)
 #ifdef SHOW_MODE_MOONPHASE
     case MODE_MOONPHASE:
 #endif
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808) || defined(SENSOR_BME280)
     case MODE_TEMP:
 #endif
-#ifdef SENSOR_DHT22
+#if defined(SENSOR_DHT22) || defined(SENSOR_BME280)
     case MODE_HUMIDITY:
 #endif
 #ifdef APIKEY
@@ -2420,7 +2442,7 @@ void getUpdateInfo()
 // Get room conditions
 //*****************************************************************************
 
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808) || defined(SENSOR_BME280)
 void getRoomConditions()
 {
 #if defined(RTC_BACKUP)// && !defined(SENSOR_DHT22) && !defined(SENSOR_MCP9808)
@@ -2466,6 +2488,28 @@ void getRoomConditions()
             errorCounterDHT++;
 #ifdef DEBUG
         Serial.printf("Error (DHT): %u\r\n", errorCounterDHT);
+#endif
+    }
+#endif
+#ifdef SENSOR_BME280
+    float bmeTemperature = bme.readTemperature();
+    float bmeHumidity = bme.readHumidity();
+    if (!isnan(bmeTemperature) && !isnan(bmeHumidity))
+    {
+        errorCounterBME = 0;
+        roomTemperature = bmeTemperature + BME_TEMPERATURE_OFFSET;
+        roomHumidity = bmeHumidity + BME_HUMIDITY_OFFSET;
+#ifdef DEBUG
+        Serial.println("Temperature (BME): " + String(roomTemperature) + "C");
+        Serial.println("Humidity (BME): " + String(roomHumidity) + "%");
+#endif
+    }
+    else
+    {
+        if (errorCounterBME < 255)
+            errorCounterBME++;
+#ifdef DEBUG
+        Serial.printf("Error (BME): %u\r\n", errorCounterBME);
 #endif
     }
 #endif

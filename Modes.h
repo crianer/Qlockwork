@@ -27,10 +27,10 @@ typedef enum eMode : uint8_t
 #ifdef SHOW_MODE_MOONPHASE
     MODE_MOONPHASE,			// 7
 #endif
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808) || defined(SENSOR_BME280)
     MODE_TEMP,				// 8
 #endif
-#ifdef SENSOR_DHT22
+#if defined(SENSOR_DHT22) || defined(SENSOR_BME280)
     MODE_HUMIDITY,			// 9
 #endif
 #ifdef APIKEY
