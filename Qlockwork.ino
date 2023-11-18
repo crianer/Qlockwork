@@ -1,5 +1,5 @@
 //*****************************************************************************
-// QLOCKWIFIVE
+// zytQuadrat
 // An advanced firmware for a DIY "word-clock"
 //
 // @mc ESP8266
@@ -109,7 +109,7 @@ unsigned long last_ir_millis = 0;
 // Syslog
 #ifdef SYSLOGSERVER_SERVER
 WiFiUDP wifiUdp;
-Syslog syslog(wifiUdp, SYSLOGSERVER_SERVER, SYSLOGSERVER_PORT, HostName, "QLOCKWIFIVE", LOG_INFO);
+Syslog syslog(wifiUdp, SYSLOGSERVER_SERVER, SYSLOGSERVER_PORT, HostName, "zytQuadrat", LOG_INFO);
 #endif
 
 // RTC
@@ -267,7 +267,7 @@ void setup()
 
     // And the monkey flips the switch. (Akiva Goldsman)
     Serial.println();
-    Serial.println("*** QLOCKWIFIVE ***");
+    Serial.println("*** zytQuadrat ***");
     Serial.println("Firmware: " + String(FIRMWARE_VERSION));
   memset(HostName, 0, sizeof(HostName));
   sprintf(HostName, "%s-%06X", PRODUCT_NAME, ESP.getChipId());
@@ -2778,7 +2778,7 @@ void handleRoot()
     }
 #endif
     message += F("<span style=\"font-size:12px;\">");
-        message += F("<br><br><a href=\"http://shop.bracci.ch/\">QlockWiFive</a> was <i class=\"fa fa-code\"></i> with <i class=\"fa fa-heart\"></i> by <a href=\"https://github.com/ch570512/Qlockwork/\">ch570512</a> and <a href=\"https://github.com/bracci/Qlockwork/\">bracci</a>");
+        message += F("<br><br><a href=\"http://shop.bracci.ch/\">zytQuadrat</a> was <i class=\"fa fa-code\"></i> with <i class=\"fa fa-heart\"></i> by <a href=\"https://github.com/ch570512/Qlockwork/\">ch570512</a> and <a href=\"https://github.com/bracci/Qlockwork/\">bracci</a>");
         message += F("<br>Firmware: ") + String(FIRMWARE_VERSION);
 #ifdef UPDATE_INFOSERVER
     if (updateInfo > int(FIRMWARE_VERSION))

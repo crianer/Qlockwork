@@ -10,8 +10,8 @@
 // Software settings
 //*****************************************************************************
 
-#define PRODUCT_NAME "QLOCKWIFIVE"
-#define WEBSITE_TITLE "QLOCKWIFIVE"
+#define PRODUCT_NAME "zytQuadrat"
+#define WEBSITE_TITLE "zytQuadrat"
 //#define DEDICATION "The only reason for time is so that everything doesn't happen at once.<br>(Albert Einstein)"
 #define WIFI_SETUP_TIMEOUT 30
 #define WIFI_CONNECT_TIMEOUT 15000
