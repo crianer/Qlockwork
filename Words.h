@@ -320,6 +320,39 @@ Words.h
 #define IT_DIECI      matrix[9] |= 0b1111100000000000
 #define IT_MEZZA      matrix[9] |= 0b0000001111100000
 
+// SD
+
+#define SD_SUNUSAS_BM  0b1111000011100000
+#define SD_SUNUSAS     matrix[0] |= SD_SUNUSAS_BM
+#define SD_SUNUSAS_R   matrix[0] &= ~SD_SUNUSAS_BM
+#define SD_ESA_BM       0b0000100011000000
+#define SD_ESA        matrix[0] |= SD_ESA_BM
+#define SD_ESA_R      matrix[0] &= ~SD_ESA_BM
+#define SD_AM       matrix[0] |= 0b1000000000000000
+#define SD_PM       matrix[0] |= 0b0100000000000000
+
+#define SD_H_UNA     matrix[1] |= 0b1110000000000000
+#define SD_H_DUAS      matrix[1] |= 0b0001111000000000
+#define SD_H_TRES      matrix[2] |= 0b1111000000000000
+#define SD_H_OTTO     matrix[3] |= 0b0000000111100000
+#define SD_H_NOE     matrix[5] |= 0b0000000011100000
+#define SD_H_DEGHE      matrix[6] |= 0b1111100000000000
+#define SD_H_UNDIGHI     matrix[3] |= 0b1111111000000000
+#define SD_H_DOIGHI     matrix[4] |= 0b1111110000000000
+#define SD_H_SETTE      matrix[1] |= 0b0000001111100000
+#define SD_H_BATTORO    matrix[5] |= 0b1111111000000000
+#define SD_H_SESE      matrix[4] |= 0b0000000111100000
+#define SD_H_CHIMBE     matrix[2] |= 0b0000011111100000
+
+#define SD_MANCU       matrix[6] |= 0b0000001111100000
+#define SD_E       matrix[7] |= 0b1000000000000000
+#define SD_UNU       matrix[7] |= 0b0011100000000000
+#define SD_QUASTU     matrix[9] |= 0b1111110000000000
+#define SD_VINTI      matrix[8] |= 0b1111100000000000
+#define SD_CHIMBE     matrix[8] |= 0b0000011111100000
+#define SD_DEGHE      matrix[7] |= 0b0000001111100000
+#define SD_MESA      matrix[9] |= 0b0000000111100000
+
 // NL
 
 #define NL_VOOR       matrix[1] |= 0b0000000111100000

@@ -20,6 +20,7 @@ enum eFrontCover : uint8_t
   FRONTCOVER_ES,
   FRONTCOVER_FR,
   FRONTCOVER_IT,
+  FRONTCOVER_SD,
   FRONTCOVER_NL,
   FRONTCOVER_SW,
   FRONTCOVER_BINARY,
@@ -41,9 +42,10 @@ const char sLanguageStr[][20] PROGMEM =
   { "Spanish" }, // 10
   { "French" }, // 11
   { "Italian" }, // 12
-  { "Dutch" },  // 13
-  { "Swedish" },// 14
-  { "Binary" }// 15
+  { "Sardinia" }, // 13
+  { "Dutch" },  // 14
+  { "Swedish" },// 15
+  { "Binary" }// 16
 };
 
 

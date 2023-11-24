@@ -40,6 +40,7 @@ private:
   boolean isNumber(char symbol);
   void FR_hours(uint8_t hours, uint16_t matrix[]);
   void IT_hours(uint8_t hours, uint16_t matrix[]);
+  void SD_hours(uint8_t hours, uint16_t matrix[]);
   void ES_hours(uint8_t hours, uint16_t matrix[]);
 };
 

@@ -875,6 +875,96 @@ void Renderer::setTime(uint8_t hours, uint8_t minutes, uint8_t language, bool ch
       break;
     }
     break;
+  case FRONTCOVER_SD:
+    switch (minutes / 5)
+    {
+    case 0:
+      // glatte Stunde
+      setHours(hours, true, language, matrix);
+      SD_hours(hours, matrix);
+      break;
+    case 1:
+      // 5 nach
+      SD_E;
+      SD_CHIMBE;
+      setHours(hours, false, language, matrix);
+      SD_hours(hours, matrix);
+      break;
+    case 2:
+      // 10 nach
+      SD_E;
+      SD_DEGHE;
+      setHours(hours, false, language, matrix);
+      SD_hours(hours, matrix);
+      break;
+    case 3:
+      // viertel nach
+      SD_E;
+      SD_QUASTU;
+      setHours(hours, false, language, matrix);
+      SD_hours(hours, matrix);
+      break;
+    case 4:
+      // 20 nach
+      SD_E;
+      SD_VINTI;
+      setHours(hours, false, language, matrix);
+      SD_hours(hours, matrix);
+      break;
+    case 5:
+      // 5 vor halb
+      SD_E;
+      SD_VINTI;
+      SD_CHIMBE;
+      setHours(hours, false, language, matrix);
+      SD_hours(hours, matrix);
+      break;
+    case 6:
+      // halb
+      SD_E;
+      SD_MESA;
+      setHours(hours, false, language, matrix);
+      SD_hours(hours, matrix);
+      break;
+    case 7:
+      // 5 nach halb
+      SD_MANCU;
+      SD_VINTI;
+      SD_CHIMBE;
+      setHours(hours + 1, false, language, matrix);
+      SD_hours(hours + 1, matrix);
+      break;
+    case 8:
+      // 20 vor
+      SD_MANCU;
+      SD_VINTI;
+      setHours(hours + 1, false, language, matrix);
+      SD_hours(hours + 1, matrix);
+      break;
+    case 9:
+      // viertel vor
+      SD_MANCU;
+      SD_UNU;
+      SD_QUASTU;
+      setHours(hours + 1, false, language, matrix);
+      SD_hours(hours + 1, matrix);
+      break;
+    case 10:
+      // 10 vor
+      SD_MANCU;
+      SD_DEGHE;
+      setHours(hours + 1, false, language, matrix);
+      SD_hours(hours + 1, matrix);
+      break;
+    case 11:
+      // 5 vor
+      SD_MANCU;
+      SD_CHIMBE;
+      setHours(hours + 1, false, language, matrix);
+      SD_hours(hours + 1, matrix);
+      break;
+    }
+    break;
   case FRONTCOVER_NL:
     NL_HETIS;
     switch (minutes / 5)
@@ -1603,6 +1693,60 @@ void Renderer::setHours(uint8_t hours, boolean glatt, uint8_t language, uint16_t
       break;
     }
     break;
+  case FRONTCOVER_SD:
+    switch (hours)
+    {
+    case 0:
+    case 12:
+    case 24:
+      SD_H_DOIGHI;
+      break;
+    case 1:
+    case 13:
+      SD_H_UNA;
+      break;
+    case 2:
+    case 14:
+      SD_H_DUAS;
+      break;
+    case 3:
+    case 15:
+      SD_H_TRES;
+      break;
+    case 4:
+    case 16:
+      SD_H_BATTORO;
+      break;
+    case 5:
+    case 17:
+      SD_H_CHIMBE;
+      break;
+    case 6:
+    case 18:
+      SD_H_SESE;
+      break;
+    case 7:
+    case 19:
+      SD_H_SETTE;
+      break;
+    case 8:
+    case 20:
+      SD_H_OTTO;
+      break;
+    case 9:
+    case 21:
+      SD_H_NOE;
+      break;
+    case 10:
+    case 22:
+      SD_H_DEGHE;
+      break;
+    case 11:
+    case 23:
+      SD_H_UNDIGHI;
+      break;
+    }
+    break;
   case FRONTCOVER_NL:
     if (glatt)
       NL_UUR;
@@ -1757,6 +1901,10 @@ void Renderer::clearEntryWords(uint8_t language, uint16_t matrix[])
     IT_SONOLE_R; // remove SONO LE
     IT_E_R; // remove E (L'UNA)
     break;
+  case FRONTCOVER_SD:
+    SD_SUNUSAS_R; // remove SUNU SAS
+    SD_ESA_R; // remove E SA (UNA)
+    break;
   case FRONTCOVER_NL:
     NL_HETIS_R; // remove HET IS
     break;
@@ -1816,6 +1964,10 @@ void Renderer::setAMPM(uint8_t hours, uint8_t language, uint16_t matrix[])
     if (hours < 12) IT_AM;
     else IT_PM;
     break;
+  case FRONTCOVER_SD:
+    if (hours < 12) SD_AM;
+    else SD_PM;
+    break;
   case FRONTCOVER_NL:
     if (hours < 12) NL_AM;
     else NL_PM;
@@ -1857,6 +2009,15 @@ void Renderer::IT_hours(uint8_t hours, uint16_t matrix[])
     IT_SONOLE;
   else
     IT_E;
+}
+
+// Special case SD.
+void Renderer::SD_hours(uint8_t hours, uint16_t matrix[])
+{
+  if ((hours != 1) && (hours != 13))
+    SD_SUNUSAS;
+  else
+    SD_ESA;
 }
 
 // Write minutes to screenbuffer.
