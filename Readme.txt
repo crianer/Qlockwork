@@ -530,6 +530,9 @@ mode=0                              Set clock to mode=0 (time), mode=1 (am/pm), 
 ******************************************************************************
 Changelog:
 ******************************************************************************
+20231124:
+Introduced dialect of Sardinia.
+
 20231026:
 Introduced BME280 sensor to measure and display temperature and humidity.
 
