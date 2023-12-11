@@ -121,7 +121,7 @@ Words.h
 #define CH_GR_H_SIEBNI     matrix[7] |= 0b0000011111000000
 #define CH_GR_H_ACHTI      matrix[7] |= 0b1111100000000000
 #define CH_GR_H_NUENI      matrix[9] |= 0b1111100000000000
-#define CH_GR_H_ZAENI      matrix[8] |= 0b0000001111000000
+#define CH_GR_H_ZAENI      matrix[8] |= 0b0000001111100000
 #define CH_GR_H_EUFI     matrix[4] |= 0b0011110000000000
 #define CH_GR_H_ZWOEUFI    matrix[8] |= 0b1111110000000000
 
