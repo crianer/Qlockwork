@@ -146,9 +146,8 @@ DHT sensor library by Adafruit (1.4.3)
 DS3232RTC by Jack Christensen (2.0.0)
 IRremoteESP8266 by Sebastien Warin (2.8.4)
 Time by Paul Stoffregen (1.6.1)
-
-Included in source is the Timezone library from Jack Christensen
-and WiFiManager by AlexT.
+WiFiManager by tablatronix/tzapu (0.16.0)
+Timezone by Jack Christensen (1.2.4)
 
 ******************************************************************************
 Compiler-Options: (recommended/tested)
