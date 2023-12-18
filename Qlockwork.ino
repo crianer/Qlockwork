@@ -2733,11 +2733,11 @@ void handleRoot()
         message += F("<br><br>");
         message += F("<button title=\"Switch modes\" onclick=\"window.location.href='/handleButtonMode'\"><i class=\"fa fa-bars\"></i></button>");
         message += F("<button title=\"Return to time\" onclick=\"window.location.href='/handleButtonTime'\"><i class=\"fa fa-clock-o\"></i></button>");
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808) || defined(SENSOR_BME280)
     message += F("<br><br><i class = \"fa fa-home\" style=\"font-size:20px;\"></i>");
     message += F("<br><i class=\"fa fa-thermometer\" style=\"font-size:20px;\"></i> ") + String(roomTemperature) + F("&deg;C / ") + String(roomTemperature * 1.8 + 32.0) + F("&deg;F");
 #endif
-#ifdef SENSOR_DHT22
+#if defined(SENSOR_DHT22) || defined(SENSOR_BME280)
     message += F("<br><i class=\"fa fa-tint\" style=\"font-size:20px;\"></i> ") + String(roomHumidity) + F("% RH");
         message += F("<br><span style=\"font-size:20px;\">");
     if (roomHumidity < 30)
@@ -2811,6 +2811,9 @@ void handleRoot()
 #ifdef SENSOR_DHT22
     message += F("<br>Error (DHT): ") + String(errorCounterDHT);
 #endif
+#ifdef SENSOR_BME280
+    message += F("<br>Error (BME): ") + String(errorCounterBME);
+#endif
 #ifdef SENSOR_MCP9808
     message += F("<br>Error (MCP): ") + String(errorCounterMCP);
 #endif
@@ -2843,6 +2846,11 @@ void handleRoot()
     message += F("DHT22 ");
 #else
     message += F("<s>DHT22</s> ");
+#endif
+#ifdef SENSOR_BME280
+    message += F("BME280 ");
+#else
+    message += F("<s>BME280</s> ");
 #endif
 #ifdef LDR
     message += F("LDR ");
@@ -3045,7 +3053,7 @@ void handleButtonSettings()
         message += F(" </td></tr>");
 #endif
     // ------------------------------------------------------------------------
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808) || defined(SENSOR_BME280)
         message += F("<tr><td>");
         message += F(TXT_SHOW_TEMP);
         message += F("</td><td>");
@@ -3499,7 +3507,7 @@ void handleCommitSettings()
     }
 #endif
     // ------------------------------------------------------------------------
-#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808)
+#if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808) || defined(SENSOR_BME280)
     webServer.arg("mc") == "0" ? settings.mySettings.modeChange = false : settings.mySettings.modeChange = true;
 #endif
     // ------------------------------------------------------------------------
