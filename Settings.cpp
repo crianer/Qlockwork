@@ -48,6 +48,8 @@ void Settings::resetToDefault() {
     String(DEFAULT_LOCATION).toCharArray(mySettings.owLocation, sizeof(mySettings.owLocation), 0);
     mySettings.frontCover = FRONTCOVER_CH_BE;
     mySettings.chGsi = true;
+    mySettings.ldrPosX = LDR_X_DEFAULT;
+    mySettings.ldrPosY = LDR_Y_DEFAULT;
     
     saveToEEPROM();
 }

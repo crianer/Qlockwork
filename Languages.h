@@ -120,6 +120,8 @@ const char sColorStr[][15] PROGMEM =
 #define TXT_OW_API_KEY "OpenWeather API Key"
 #define TXT_OW_LOCATION "OpenWeather Location"
 #define TXT_COVER_LANGUAGE "Language/Dialect"
+#define TXT_LDR_COLUMN "Light Sensor Column No."
+#define TXT_LDR_ROW "Light Sensor Row No."
 #endif
 
 #ifdef LANGUAGE_DE
@@ -192,6 +194,8 @@ const char sColorStr[][15] PROGMEM =
 #define TXT_OW_API_KEY "OpenWeather API Key"
 #define TXT_OW_LOCATION "OpenWeather Standort"
 #define TXT_COVER_LANGUAGE "Sprache/Dialekt"
+#define TXT_LDR_COLUMN "Lichtsensor Spalte Nr."
+#define TXT_LDR_ROW "Lichtsensor Zeile Nr."
 #endif
 
 #ifdef LANGUAGE_FR
@@ -264,6 +268,8 @@ const char sColorStr[][15] PROGMEM =
 #define TXT_OW_API_KEY "OpenWeather API Key"
 #define TXT_OW_LOCATION "OpenWeather Location"
 #define TXT_COVER_LANGUAGE "Language/Dialect"
+#define TXT_LDR_COLUMN "Light Sensor Column No."
+#define TXT_LDR_ROW "Light Sensor Row No."
 #endif
 
 #ifdef LANGUAGE_IT
@@ -336,6 +342,8 @@ const char sColorStr[][15] PROGMEM =
 #define TXT_OW_API_KEY "OpenWeather API Key"
 #define TXT_OW_LOCATION "OpenWeather Location"
 #define TXT_COVER_LANGUAGE "Language/Dialect"
+#define TXT_LDR_COLUMN "Light Sensor Column No."
+#define TXT_LDR_ROW "Light Sensor Row No."
 #endif
 
 #ifdef LANGUAGE_ES
@@ -408,6 +416,8 @@ const char sColorStr[][15] PROGMEM =
 #define TXT_OW_API_KEY "OpenWeather API Key"
 #define TXT_OW_LOCATION "OpenWeather Location"
 #define TXT_COVER_LANGUAGE "Language/Dialect"
+#define TXT_LDR_COLUMN "Light Sensor Column No."
+#define TXT_LDR_ROW "Light Sensor Row No."
 #endif
 
 #ifdef LANGUAGE_NL
@@ -480,6 +490,8 @@ const char sColorStr[][15] PROGMEM =
 #define TXT_OW_API_KEY "OpenWeather API Key"
 #define TXT_OW_LOCATION "OpenWeather Location"
 #define TXT_COVER_LANGUAGE "Language/Dialect"
+#define TXT_LDR_COLUMN "Light Sensor Column No."
+#define TXT_LDR_ROW "Light Sensor Row No."
 #endif
 
 #endif

@@ -2379,7 +2379,7 @@ void updateBrightness(bool forcedUpdate) {
 #ifdef LDR
 uint8_t getBrightnessFromLDR(bool forcedUpdate)
 {
-    uint32_t ldrLetterColor = ledDriver.getPixelColor(LDR_LETTER_X, LDR_LETTER_Y);
+    uint32_t ldrLetterColor = ledDriver.getPixelColor(settings.mySettings.ldrPosX, settings.mySettings.ldrPosY);
     if (ldrLetterColor != 0){
       return brightness;
     }
@@ -3431,6 +3431,28 @@ void handleAdmin()
         }
         message += F("</select>");
         message += F("</td></tr>");
+        message += F("<tr><td>");
+        message += F(TXT_LDR_ROW);
+        message += F("</td><td>");
+        message += F("<select name=\"aday\">");
+        for(uint8_t i = 0; i < NUMPIXELS_Y; i++){
+        message += F("<option value=\"") + String(i) + F("\"");
+          if (settings.mySettings.ldrPosY == i) message += F(" selected");
+          message += F(">") + String(i+1) + F("</option>");
+        }
+        message += F("</select>");
+        message += F("</td></tr>");
+        message += F("<tr><td>");
+        message += F(TXT_LDR_COLUMN);
+        message += F("</td><td>");
+        message += F("<select name=\"adax\">");
+        for(uint8_t i = 0; i < NUMPIXELS_X; i++){
+        message += F("<option value=\"") + String(i) + F("\"");
+          if (settings.mySettings.ldrPosX == i) message += F(" selected");
+          message += F(">") + String(i+1) + F("</option>");
+        }
+        message += F("</select>");
+        message += F("</td></tr>");
     // ------------------------------------------------------------------------
         message += F("</table>");
         message += F("<br><button title=\"Save Settings.\"><i class=\"fa fa-floppy-o\"></i></button>");
@@ -3634,6 +3656,8 @@ void handleCommitAdminSettings()
   webServer.arg("adwk").toCharArray(settings.mySettings.owApiKey, sizeof(settings.mySettings.owApiKey), 0);
   webServer.arg("adwl").toCharArray(settings.mySettings.owLocation, sizeof(settings.mySettings.owLocation), 0);
   settings.mySettings.frontCover = (eFrontCover)webServer.arg("adfc").toInt();
+  settings.mySettings.ldrPosX = webServer.arg("adax").toInt();
+  settings.mySettings.ldrPosY = webServer.arg("aday").toInt();
   settings.saveToEEPROM();
   screenBufferNeedsUpdate = true;
 }

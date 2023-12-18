@@ -56,6 +56,8 @@ public:
         char owLocation[LEN_OW_LOCATION];
         eFrontCover frontCover;
         bool chGsi;
+        uint8_t ldrPosX;
+        uint8_t ldrPosY;
     } mySettings;
 
     void saveToEEPROM();
