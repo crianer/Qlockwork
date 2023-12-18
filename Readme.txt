@@ -529,6 +529,11 @@ mode=0                              Set clock to mode=0 (time), mode=1 (am/pm), 
 ******************************************************************************
 Changelog:
 ******************************************************************************
+20231218:
+Introduced settings for LDR position.
+Fixed bug in dialect "Swiss German GR".
+Added missing conditions and added web debug content for BME280.
+
 20231124:
 Introduced dialect of Sardinia.
 
