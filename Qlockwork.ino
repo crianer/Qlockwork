@@ -2686,7 +2686,7 @@ void setupWebServer()
     webServer.on("/commitEvents", []() { handleCommitEvents(); handleButtonSettings(); });
     webServer.on("/admin", handleAdmin);
     webServer.on("/reset", []() { handleReset(); callRoot(); });
-    webServer.on("/wifireset", handleWiFiReset);
+    webServer.on("/wifiReset", handleWiFiReset);
     webServer.on("/factoryReset", handleFactoryReset);
     webServer.on("/settingsReset", handleSettingsReset);
     webServer.on("/showText", handleShowText);
