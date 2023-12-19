@@ -2687,6 +2687,8 @@ void setupWebServer()
     webServer.on("/admin", handleAdmin);
     webServer.on("/reset", []() { handleReset(); callRoot(); });
     webServer.on("/wifireset", handleWiFiReset);
+    webServer.on("/factoryReset", handleFactoryReset);
+    webServer.on("/settingsReset", handleSettingsReset);
     webServer.on("/showText", handleShowText);
     webServer.on("/control", handleControl);
     webServer.begin();
@@ -3667,6 +3669,21 @@ void handleReset()
 {
     webServer.send(200, "text/plain", "OK. I'll be back!");
     ESP.restart();
+}
+
+// Settings Reset
+void handleSettingsReset()
+{
+  settings.resetToDefault();
+  webServer.send(200, TEXT_PLAIN, F("OK. I'll be back!"));
+  ESP.restart();
+}
+
+// Factory Reset
+void handleFactoryReset()
+{
+  settings.resetToDefault();
+  handleWiFiReset();
 }
 
 // WiFi Reset

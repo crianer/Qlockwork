@@ -61,9 +61,9 @@ public:
     } mySettings;
 
     void saveToEEPROM();
-
-private:
     void resetToDefault();
+    
+private:
     void loadFromEEPROM();
 };
 
