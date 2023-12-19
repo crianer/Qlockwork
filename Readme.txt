@@ -174,7 +174,9 @@ Don't forget to install Python 2.7 and to select "Add python.exe to path" while 
 
 Call "http://your_clocks_ip/update" to upload a new firmware via webbrowser.
 Call "http://your_clocks_ip/reset" to restart the ESP.
-Call "http://your_clocks_ip/wifireset" to forget all WiFi networks and credentials.
+Call "http://your_clocks_ip/wifiReset" to forget all WiFi networks and credentials.
+Call "http://your_clocks_ip/settingsReset" to forget all settings.
+Call "http://your_clocks_ip/factoryReset" to forget all settings, WiFi networks and credentials.
 Call "http://your_clocks_ip/admin" to open the admin settings page.
 Call "http://your_clocks_ip/fs" to open the file system on the ESP and upload animation files, e.g. stored in the repository in the folder "web".
 
@@ -260,6 +262,8 @@ OpenWeather API key:				API key provided by Openweather allowing to get weather 
 OpenWeather location				Location which the weather information should refer to. Needs to follow the location format of 
 									OpenWeather, e.g. "Bern, CH". Check out on https://openweathermap.org/ and check for your city.
 Language/dialect:					Language or dialect of the used front cover.
+Light sensor column no.				Column number in which the light sensor is installed.			
+Light sensor row no.				Row number in which the light sensor is installed.
 
 ******************************************************************************
 Configuration.h - Software settings:
@@ -529,6 +533,9 @@ mode=0                              Set clock to mode=0 (time), mode=1 (am/pm), 
 ******************************************************************************
 Changelog:
 ******************************************************************************
+20231219:
+Introduced settingsReset and factoryReset. 
+
 20231218:
 Introduced settings for LDR position.
 Fixed bug in dialect "Swiss German GR".

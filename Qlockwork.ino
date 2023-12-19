@@ -20,7 +20,7 @@
 //
 //*****************************************************************************
 
-#define FIRMWARE_VERSION 20231218
+#define FIRMWARE_VERSION 20231219
 
 #include <Arduino.h>
 #include <Arduino_JSON.h>
