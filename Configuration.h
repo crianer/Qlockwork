@@ -10,15 +10,15 @@
 // Software settings
 //*****************************************************************************
 
-#define PRODUCT_NAME "zytQuadrat"
-#define WEBSITE_TITLE "zytQuadrat"
+#define PRODUCT_NAME "QLOCKWIFIVE"
+#define WEBSITE_TITLE "HUP Wortuhr"
 //#define DEDICATION "The only reason for time is so that everything doesn't happen at once.<br>(Albert Einstein)"
-#define WIFI_SETUP_TIMEOUT 30
+#define WIFI_SETUP_TIMEOUT 120
 #define WIFI_CONNECT_TIMEOUT 15000
 #define BRIGHTNESS_TIMEOUT 1000
-#define WIFI_AP_PASS "12345678"
+#define WIFI_AP_PASS "123456789"
 #define OTA_PASS "1234"
-#define NTP_DEFAULT_SERVER "pool.ntp.org"
+#define NTP_DEFAULT_SERVER "ch.pool.ntp.org"
 #define SHOW_IP
 //#define WIFI_BEEPS
 
@@ -98,8 +98,8 @@
 //*****************************************************************************
 
 //#define BOARD_DEFAULT
-//#define BOARD_QWF_V1_2
-#define BOARD_QWF_V2_0
+#define BOARD_QWF_V1_2
+//#define BOARD_QWF_V2_0
 
 #ifdef BOARD_DEFAULT
 #define ESP_LED
@@ -152,25 +152,22 @@
 #define ESP_LED
 #define RTC_BACKUP
 #define LDR
+#define BUZZER
 #define IR_RECEIVER
 
-//#define ONOFF_BUTTON
-//#define MODE_BUTTON
-//#define TIME_BUTTON
-//#define PLUS_BUTTON
-//#define MINUS_BUTTON
+#define MODE_BUTTON
+#define PLUS_BUTTON
+#define MINUS_BUTTON
 
 // Pin Definition ESP8266 (Wemos D1 mini)
-#define PIN_IR_RECEIVER  12 // D6 (no interrupt)
-//#define PIN_MODE_BUTTON  00 // D3 LOW_Flash
-#define PIN_LED          02 // D4 ESP8266_LED
-#define PIN_LEDS_CLOCK   14 // D5
-#define PIN_LEDS_DATA    13 // D7
-#define PIN_LDR          A0 // ADC
-//#define PIN_TIME_BUTTON  01 // TXD0
-//#define PIN_ONOFF_BUTTON 03 // RXD0
-// GPIO 06 to GPIO 11 are
-// used for flash memory databus
+#define PIN_IR_RECEIVER  D6
+#define PIN_MODE_BUTTON  D0
+#define PIN_LED          D4
+#define PIN_BUZZER       D8
+#define PIN_LEDS_DATA    D7
+#define PIN_LDR          A0
+#define PIN_PLUS_BUTTON  RX
+#define PIN_MINUS_BUTTON TX
 
 //#define LED_LAYOUT_HORIZONTAL_1
 #define LED_LAYOUT_VERTICAL_1
@@ -179,8 +176,8 @@
 //#define LED_LAYOUT_VERTICAL_4
 //#define LED_LAYOUT_VERTICAL_4_XXL
 
-#define NEOPIXEL_RGB
-//#define NEOPIXEL_RGBW
+//#define NEOPIXEL_RGB
+#define NEOPIXEL_RGBW
 
 //#define NEOPIXEL_TYPE NEO_GRB + NEO_KHZ800     // see Adafruit_NeoPixel.h for help
 //#define NEOPIXEL_TYPE NEO_WRGB + NEO_KHZ800
