@@ -314,7 +314,7 @@
 //*****************************************************************************
 
 //#define DEBUG
-//#define DEBUG_WEB
+#define DEBUG_WEB
 //#define DEBUG_IR
 //#define DEBUG_MATRIX
 //#define DEBUG_FPS
