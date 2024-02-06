@@ -533,6 +533,10 @@ mode=0                              Set clock to mode=0 (time), mode=1 (am/pm), 
 ******************************************************************************
 Changelog:
 ******************************************************************************
+20240206:
+Introduced layout and board for QlockWiFive Mini v1.1.
+Fixed bug in SWISS GERMAN ZH dialect.
+
 20231219:
 Introduced settingsReset and factoryReset. 
 
