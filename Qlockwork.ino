@@ -2935,7 +2935,7 @@ void handleButtonSettings()
         message += String(hour(settings.mySettings.alarm1Time)) + F(":");
     if (minute(settings.mySettings.alarm1Time) < 10)
         message += F("0");
-        message += String(minute(settings.mySettings.alarm1Time)) + F("\">")
+        message += String(minute(settings.mySettings.alarm1Time)) + F("\">");
         message += F(" h<br><br>");
         message += F("<input type=\"checkbox\" name=\"a1w2\" value=\"4\"");
     if (bitRead(settings.mySettings.alarm1Weekdays, 2))
@@ -2967,7 +2967,7 @@ void handleButtonSettings()
         message += F("> Su. ");
         message += F("</td></tr>");
     // ------------------------------------------------------------------------
-        message += F("<tr><td>")
+        message += F("<tr><td>");
         message += F(TXT_ALARM);
         message += F(" 2</td><td>");
         message += F("<input type=\"radio\" name=\"a2\" value=\"1\"");
