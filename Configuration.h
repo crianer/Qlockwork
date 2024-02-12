@@ -99,6 +99,7 @@
 
 //#define BOARD_DEFAULT
 #define BOARD_QWF_V1_2
+//#define BOARD_QWF_MINI_V1_1
 //#define BOARD_QWF_V2_0
 
 #ifdef BOARD_DEFAULT
@@ -179,10 +180,55 @@
 //#define NEOPIXEL_RGB
 #define NEOPIXEL_RGBW
 
+#define NEOPIXEL_TYPE NEO_GRB + NEO_KHZ800     // see Adafruit_NeoPixel.h for help
+//#define NEOPIXEL_TYPE NEO_WRGB + NEO_KHZ800
+//#define NEOPIXEL_TYPE NEO_GRBW + NEO_KHZ800
+#endif // BOARD_QWF_V1_2
+
+
+// QlockWiFive Board Mini v1.1
+#ifdef BOARD_QWF_MINI_V1_1
+#define ESP_LED
+#define RTC_BACKUP
+#define LDR
+#define IR_RECEIVER
+//#define BUZZER
+
+//#define ONOFF_BUTTON
+//#define MODE_BUTTON
+//#define TIME_BUTTON
+//#define PLUS_BUTTON
+//#define MINUS_BUTTON
+
+// Pin Definition ESP8266 (Wemos D1 mini)
+#define PIN_IR_RECEIVER  12 // D6 (no interrupt)
+//#define PIN_MODE_BUTTON  02 // D4 LOW_Flash
+#define PIN_LED          02 // D4 ESP8266_LED
+#define PIN_LEDS_DATA    13 // D7
+#define PIN_LDR          A0 // ADC
+#define PIN_BUZZER       15 // D8
+//#define PIN_TIME_BUTTON  01 // TXD0
+//#define PIN_ONOFF_BUTTON 03 // RXD0
+//#define PIN_MINUS_BUTTON  16 // D0
+//#define PIN_PLUS_BUTTON 14 // D5
+// GPIO 06 to GPIO 11 are
+// used for flash memory databus
+
+//#define LED_LAYOUT_HORIZONTAL_1
+//#define LED_LAYOUT_VERTICAL_1
+//#define LED_LAYOUT_VERTICAL_2
+//#define LED_LAYOUT_VERTICAL_3
+//#define LED_LAYOUT_VERTICAL_4
+//#define LED_LAYOUT_VERTICAL_4_XXL
+#define LED_LAYOUT_VERTICAL_5
+
+#define NEOPIXEL_RGB
+//#define NEOPIXEL_RGBW
+
 //#define NEOPIXEL_TYPE NEO_GRB + NEO_KHZ800     // see Adafruit_NeoPixel.h for help
 //#define NEOPIXEL_TYPE NEO_WRGB + NEO_KHZ800
 #define NEOPIXEL_TYPE NEO_GRBW + NEO_KHZ800
-#endif // BOARD_QWF_V1_2
+#endif // BOARD_QWF_MINI_V1_1
 
 // QlockWiFive Board v2.0
 #ifdef BOARD_QWF_V2_0
