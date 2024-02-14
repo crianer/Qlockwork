@@ -548,6 +548,9 @@ mode=0                              Set clock to mode=0 (time), mode=1 (am/pm), 
 ******************************************************************************
 Changelog:
 ******************************************************************************
+20240214:
+Added pin definitions for button and buzzer on HW v1.2.
+
 20240206:
 Introduced layout and board for QlockWiFive Mini v1.1.
 Fixed bug in SWISS GERMAN ZH dialect.
