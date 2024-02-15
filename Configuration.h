@@ -98,9 +98,9 @@
 //*****************************************************************************
 
 //#define BOARD_DEFAULT
-//#define BOARD_QWF_V1_2
+#define BOARD_QWF_V1_2
 //#define BOARD_QWF_MINI_V1_1
-#define BOARD_QWF_V2_0
+//#define BOARD_QWF_V2_0
 
 #ifdef BOARD_DEFAULT
 #define ESP_LED
@@ -183,12 +183,12 @@
 //#define LED_LAYOUT_VERTICAL_4
 //#define LED_LAYOUT_VERTICAL_4_XXL
 
-#define NEOPIXEL_RGB
-//#define NEOPIXEL_RGBW
+//#define NEOPIXEL_RGB
+#define NEOPIXEL_RGBW
 
-#define NEOPIXEL_TYPE NEO_GRB + NEO_KHZ800     // see Adafruit_NeoPixel.h for help
+//#define NEOPIXEL_TYPE NEO_GRB + NEO_KHZ800     // see Adafruit_NeoPixel.h for help
 //#define NEOPIXEL_TYPE NEO_WRGB + NEO_KHZ800
-//#define NEOPIXEL_TYPE NEO_GRBW + NEO_KHZ800
+#define NEOPIXEL_TYPE NEO_GRBW + NEO_KHZ800
 #endif // BOARD_QWF_V1_2
 
 
