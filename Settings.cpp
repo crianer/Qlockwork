@@ -47,7 +47,7 @@ void Settings::resetToDefault() {
     memset(mySettings.owApiKey, 0, sizeof(mySettings.owApiKey));
     String(DEFAULT_LOCATION).toCharArray(mySettings.owLocation, sizeof(mySettings.owLocation), 0);
     mySettings.frontCover = FRONTCOVER_CH_BE;
-    mySettings.chGsi = true;
+    mySettings.chGsi = false;
     mySettings.ldrPosX = LDR_X_DEFAULT;
     mySettings.ldrPosY = LDR_Y_DEFAULT;
     
