@@ -15,7 +15,7 @@ Settings::~Settings() {
 void Settings::resetToDefault() {
     mySettings.magicNumber = SETTINGS_MAGIC_NUMBER;
     mySettings.version = SETTINGS_VERSION;
-    mySettings.useAbc = false;
+    mySettings.useAbc = true;
     mySettings.brightness = 50;
     mySettings.color = WHITE;
     mySettings.colorChange = COLORCHANGE_NO;
