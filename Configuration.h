@@ -10,15 +10,15 @@
 // Software settings
 //*****************************************************************************
 
-#define PRODUCT_NAME "zytQuadrat"
-#define WEBSITE_TITLE "zytQuadrat"
+#define PRODUCT_NAME "QLOCKWIFIVE"
+#define WEBSITE_TITLE "HUP Wortuhr"
 //#define DEDICATION "The only reason for time is so that everything doesn't happen at once.<br>(Albert Einstein)"
-#define WIFI_SETUP_TIMEOUT 30
+#define WIFI_SETUP_TIMEOUT 120
 #define WIFI_CONNECT_TIMEOUT 15000
 #define BRIGHTNESS_TIMEOUT 1000
-#define WIFI_AP_PASS "12345678"
+#define WIFI_AP_PASS "123456789"
 #define OTA_PASS "1234"
-#define NTP_DEFAULT_SERVER "pool.ntp.org"
+#define NTP_DEFAULT_SERVER "ch.pool.ntp.org"
 #define SHOW_IP
 //#define WIFI_BEEPS
 
@@ -366,7 +366,7 @@
 //*****************************************************************************
 
 //#define DEBUG
-//#define DEBUG_WEB
+#define DEBUG_WEB
 //#define DEBUG_IR
 //#define DEBUG_MATRIX
 //#define DEBUG_FPS
