@@ -207,7 +207,7 @@
 //#define MINUS_BUTTON
 
 // Pin Definition ESP8266 (Wemos D1 mini)
-#define PIN_IR_RECEIVER  12 // D6 (no interrupt)
+#define PIN_IR_RECEIVER  12 // D6 
 //#define PIN_MODE_BUTTON  02 // D4 LOW_Flash
 #define PIN_LED          02 // D4 ESP8266_LED
 #define PIN_LEDS_DATA    13 // D7
@@ -215,7 +215,7 @@
 #define PIN_BUZZER       15 // D8
 //#define PIN_TIME_BUTTON  01 // TXD0
 //#define PIN_ONOFF_BUTTON 03 // RXD0
-//#define PIN_MINUS_BUTTON  16 // D0
+//#define PIN_MINUS_BUTTON  16 // D0 (no interrupt)
 //#define PIN_PLUS_BUTTON 14 // D5
 // GPIO 06 to GPIO 11 are
 // used for flash memory databus
