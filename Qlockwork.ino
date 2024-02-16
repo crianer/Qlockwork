@@ -298,13 +298,8 @@ void setup()
 
 #ifdef MODE_BUTTON
     Serial.println("Setting up Mode-Button.");
-    if(PIN_MODE_BUTTON == 16){
-      pinMode(PIN_MODE_BUTTON, INPUT_PULLDOWN_16);
-      attachInterrupt(digitalPinToInterrupt(PIN_MODE_BUTTON), buttonModeInterrupt, RISING);
-    } else {
-      pinMode(PIN_MODE_BUTTON, INPUT_PULLUP);
-      attachInterrupt(digitalPinToInterrupt(PIN_MODE_BUTTON), buttonModeInterrupt, FALLING);
-    }
+    pinMode(PIN_MODE_BUTTON, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(PIN_MODE_BUTTON), buttonModeInterrupt, FALLING);
 #endif
 
 #ifdef ONOFF_BUTTON

@@ -153,13 +153,14 @@
 #define ESP_LED
 #define RTC_BACKUP
 #define LDR
+//#define BUZZER
 #define IR_RECEIVER
 
 //#define ONOFF_BUTTON
-#define MODE_BUTTON
+//#define MODE_BUTTON
 //#define TIME_BUTTON
-#define PLUS_BUTTON
-#define MINUS_BUTTON
+//#define PLUS_BUTTON
+//#define MINUS_BUTTON
 
 // Pin Definition ESP8266 (Wemos D1 mini)
 #define PIN_IR_RECEIVER  12 // D6 (no interrupt)
