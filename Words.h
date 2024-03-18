@@ -54,7 +54,7 @@ Words.h
 
 #define CH_ZH_H_EIS      matrix[4] |= 0b1110000000000000
 #define CH_ZH_H_ZWOEI      matrix[4] |= 0b0001111000000000
-#define CH_ZH_H_DRUE     matrix[4] |= 0b0000000011110000
+#define CH_ZH_H_DRUE     matrix[4] |= 0b0000000111100000
 #define CH_ZH_H_VIER     matrix[5] |= 0b1111100000000000
 #define CH_ZH_H_FUEFI      matrix[5] |= 0b0000001111100000
 #define CH_ZH_H_SAECHSI    matrix[6] |= 0b1111110000000000
