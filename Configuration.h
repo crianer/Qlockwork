@@ -315,8 +315,8 @@
 #define LDR_MIN_DEFAULT 99 // The ESP will crash if LDR_MIN_DEFAULT and LDR_MAX_DEFAULT are equal due to an error in map()
 #define LDR_MAX_DEFAULT 100
 #define LDR_HYSTERESIS 10
-#define LDR_X_DEFAULT 7
-#define LDR_Y_DEFAULT 9
+#define LDR_X_DEFAULT 5
+#define LDR_Y_DEFAULT 8
 #endif
 
 #ifdef BUZZER
