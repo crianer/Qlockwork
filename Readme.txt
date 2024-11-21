@@ -548,6 +548,9 @@ mode=0                              Set clock to mode=0 (time), mode=1 (am/pm), 
 ******************************************************************************
 Changelog:
 ******************************************************************************
+20240227:
+Reverted special cases for HW v1.2. Made a separate branch (V1_2wButtons) for HW v1.2 which uses buttons.
+
 20240214:
 Added pin definitions for button and buzzer on HW v1.2.
 

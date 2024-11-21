@@ -20,7 +20,7 @@
 //
 //*****************************************************************************
 
-#define FIRMWARE_VERSION 20240214
+#define FIRMWARE_VERSION 20241114
 
 #include <Arduino.h>
 #include <Arduino_JSON.h>
@@ -298,13 +298,8 @@ void setup()
 
 #ifdef MODE_BUTTON
     Serial.println("Setting up Mode-Button.");
-    if(PIN_MODE_BUTTON == 16){
-      pinMode(PIN_MODE_BUTTON, INPUT_PULLDOWN_16);
-      attachInterrupt(digitalPinToInterrupt(PIN_MODE_BUTTON), buttonModeInterrupt, RISING);
-    } else {
-      pinMode(PIN_MODE_BUTTON, INPUT_PULLUP);
-      attachInterrupt(digitalPinToInterrupt(PIN_MODE_BUTTON), buttonModeInterrupt, FALLING);
-    }
+    pinMode(PIN_MODE_BUTTON, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(PIN_MODE_BUTTON), buttonModeInterrupt, FALLING);
 #endif
 
 #ifdef ONOFF_BUTTON
@@ -2532,7 +2527,7 @@ ICACHE_RAM_ATTR void buttonModeInterrupt()
     {
         lastButtonPress = millis();
         lastModePress = lastButtonPress;
-    modeButtonStage = 0;
+        modeButtonStage = 0;
         buttonModePressed();
     }
 }

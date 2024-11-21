@@ -153,13 +153,14 @@
 #define ESP_LED
 #define RTC_BACKUP
 #define LDR
+//#define BUZZER
 #define IR_RECEIVER
 
 //#define ONOFF_BUTTON
-#define MODE_BUTTON
+//#define MODE_BUTTON
 //#define TIME_BUTTON
-#define PLUS_BUTTON
-#define MINUS_BUTTON
+//#define PLUS_BUTTON
+//#define MINUS_BUTTON
 
 // Pin Definition ESP8266 (Wemos D1 mini)
 #define PIN_IR_RECEIVER  12 // D6 (no interrupt)
@@ -207,7 +208,7 @@
 //#define MINUS_BUTTON
 
 // Pin Definition ESP8266 (Wemos D1 mini)
-#define PIN_IR_RECEIVER  12 // D6 (no interrupt)
+#define PIN_IR_RECEIVER  12 // D6 
 //#define PIN_MODE_BUTTON  02 // D4 LOW_Flash
 #define PIN_LED          02 // D4 ESP8266_LED
 #define PIN_LEDS_DATA    13 // D7
@@ -215,7 +216,7 @@
 #define PIN_BUZZER       15 // D8
 //#define PIN_TIME_BUTTON  01 // TXD0
 //#define PIN_ONOFF_BUTTON 03 // RXD0
-//#define PIN_MINUS_BUTTON  16 // D0
+//#define PIN_MINUS_BUTTON  16 // D0 (no interrupt)
 //#define PIN_PLUS_BUTTON 14 // D5
 // GPIO 06 to GPIO 11 are
 // used for flash memory databus
@@ -314,8 +315,8 @@
 #define LDR_MIN_DEFAULT 99 // The ESP will crash if LDR_MIN_DEFAULT and LDR_MAX_DEFAULT are equal due to an error in map()
 #define LDR_MAX_DEFAULT 100
 #define LDR_HYSTERESIS 10
-#define LDR_X_DEFAULT 7
-#define LDR_Y_DEFAULT 9
+#define LDR_X_DEFAULT 5
+#define LDR_Y_DEFAULT 8
 #endif
 
 #ifdef BUZZER
