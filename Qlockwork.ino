@@ -2792,7 +2792,7 @@ void handleRoot()
 #ifdef APIKEY
     if (String(settings.mySettings.owApiKey) != "") {
     message += F("<br><br><i class = \"fa fa-tree\" style=\"font-size:20px;\"></i>");
-        message += F("<br><i class = \"fa fa-thermometer\" style=\"font-size:20px;\"></i> ") + String(outdoorWeather.temperature) + F("&deg;C / ") + String(outdoorWeather.temperature * 1.8 + 32.0) + F("&deg;F");
+        message += F("<br><i class = \"fa fa-thermometer\" style=\"font-size:20px;\"></i> ") + String(outdoorWeather.temperature) + F("&deg;C");
         message += F("<br><i class = \"fa fa-tint\" style=\"font-size:20px;\"></i> ") + String(outdoorWeather.humidity) + F("% RH");
         message += F("<br>") + String(outdoorWeather.pressure) + F(" hPa / ") + String(outdoorWeather.pressure / 33.865) + F(" inHg");
         message += F("<br><i class = \"fa fa-sun-o\" style=\"font-size:20px;\"></i> ") + String(hour(timeZone.toLocal(outdoorWeather.sunrise))) + F(":");
@@ -2805,7 +2805,7 @@ void handleRoot()
     }
 #endif
     message += F("<span style=\"font-size:12px;\">");
-        message += F("<br><br><a href=\"http://shop.bracci.ch/\">zytQuadrat</a> was <i class=\"fa fa-code\"></i> with <i class=\"fa fa-heart\"></i> by <a href=\"https://github.com/ch570512/Qlockwork/\">ch570512</a> and <a href=\"https://github.com/bracci/Qlockwork/\">bracci</a>");
+        message += F("<br><br><a href=\"http://shop.bracci.ch/\">zytQuadrat</a> was <i class=\"fa fa-code\"></i> with <i class=\"fa fa-heart\"></i> by <a href=\"https://github.com/ch570512/Qlockwork/\">ch570512</a> and <a href=\"https://github.com/bracci/Qlockwork/\">bracci</a>"), improved by crianer.;
         message += F("<br>Firmware: ") + String(FIRMWARE_VERSION);
 #ifdef UPDATE_INFOSERVER
     if (updateInfo > int(FIRMWARE_VERSION))
