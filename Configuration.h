@@ -10,15 +10,15 @@
 // Software settings
 //*****************************************************************************
 
-#define PRODUCT_NAME "zytQuadrat"
-#define WEBSITE_TITLE "zytQuadrat"
+#define PRODUCT_NAME "QLOCKWIFIVE"
+#define WEBSITE_TITLE "HUP Wortuhr"
 //#define DEDICATION "The only reason for time is so that everything doesn't happen at once.<br>(Albert Einstein)"
-#define WIFI_SETUP_TIMEOUT 30
+#define WIFI_SETUP_TIMEOUT 120
 #define WIFI_CONNECT_TIMEOUT 15000
 #define BRIGHTNESS_TIMEOUT 1000
-#define WIFI_AP_PASS "12345678"
+#define WIFI_AP_PASS "123456789"
 #define OTA_PASS "1234"
-#define NTP_DEFAULT_SERVER "pool.ntp.org"
+#define NTP_DEFAULT_SERVER "ch.pool.ntp.org"
 #define SHOW_IP
 //#define WIFI_BEEPS
 
@@ -99,7 +99,6 @@
 
 //#define BOARD_DEFAULT
 #define BOARD_QWF_V1_2
-//#define BOARD_QWF_MINI_V1_1
 //#define BOARD_QWF_V2_0
 
 #ifdef BOARD_DEFAULT
@@ -153,29 +152,22 @@
 #define ESP_LED
 #define RTC_BACKUP
 #define LDR
-//#define BUZZER
+#define BUZZER
 #define IR_RECEIVER
 
-//#define ONOFF_BUTTON
-//#define MODE_BUTTON
-//#define TIME_BUTTON
-//#define PLUS_BUTTON
-//#define MINUS_BUTTON
+#define MODE_BUTTON
+#define PLUS_BUTTON
+#define MINUS_BUTTON
 
 // Pin Definition ESP8266 (Wemos D1 mini)
-#define PIN_IR_RECEIVER  12 // D6 (no interrupt)
-#define PIN_MODE_BUTTON  16 // D0 
-#define PIN_LED          02 // D4 ESP8266_LED
-#define PIN_BUZZER       15 // D8
-#define PIN_LEDS_CLOCK   14 // D5
-#define PIN_LEDS_DATA    13 // D7
-#define PIN_LDR          A0 // ADC
-//#define PIN_TIME_BUTTON  01 // TXD0
-//#define PIN_ONOFF_BUTTON 03 // RXD0
-#define PIN_MINUS_BUTTON 01 // TXD0
-#define PIN_PLUS_BUTTON 03 // RXD0
-// GPIO 06 to GPIO 11 are
-// used for flash memory databus
+#define PIN_IR_RECEIVER  D6
+#define PIN_MODE_BUTTON  D0
+#define PIN_LED          D4
+#define PIN_BUZZER       D8
+#define PIN_LEDS_DATA    D7
+#define PIN_LDR          A0
+#define PIN_PLUS_BUTTON  TX
+#define PIN_MINUS_BUTTON RX
 
 //#define LED_LAYOUT_HORIZONTAL_1
 #define LED_LAYOUT_VERTICAL_1
@@ -191,51 +183,6 @@
 //#define NEOPIXEL_TYPE NEO_WRGB + NEO_KHZ800
 #define NEOPIXEL_TYPE NEO_GRBW + NEO_KHZ800
 #endif // BOARD_QWF_V1_2
-
-
-// QlockWiFive Board Mini v1.1
-#ifdef BOARD_QWF_MINI_V1_1
-#define ESP_LED
-#define RTC_BACKUP
-#define LDR
-#define IR_RECEIVER
-//#define BUZZER
-
-//#define ONOFF_BUTTON
-//#define MODE_BUTTON
-//#define TIME_BUTTON
-//#define PLUS_BUTTON
-//#define MINUS_BUTTON
-
-// Pin Definition ESP8266 (Wemos D1 mini)
-#define PIN_IR_RECEIVER  12 // D6 
-//#define PIN_MODE_BUTTON  02 // D4 LOW_Flash
-#define PIN_LED          02 // D4 ESP8266_LED
-#define PIN_LEDS_DATA    13 // D7
-#define PIN_LDR          A0 // ADC
-#define PIN_BUZZER       15 // D8
-//#define PIN_TIME_BUTTON  01 // TXD0
-//#define PIN_ONOFF_BUTTON 03 // RXD0
-//#define PIN_MINUS_BUTTON  16 // D0 (no interrupt)
-//#define PIN_PLUS_BUTTON 14 // D5
-// GPIO 06 to GPIO 11 are
-// used for flash memory databus
-
-//#define LED_LAYOUT_HORIZONTAL_1
-//#define LED_LAYOUT_VERTICAL_1
-//#define LED_LAYOUT_VERTICAL_2
-//#define LED_LAYOUT_VERTICAL_3
-//#define LED_LAYOUT_VERTICAL_4
-//#define LED_LAYOUT_VERTICAL_4_XXL
-#define LED_LAYOUT_VERTICAL_5
-
-#define NEOPIXEL_RGB
-//#define NEOPIXEL_RGBW
-
-//#define NEOPIXEL_TYPE NEO_GRB + NEO_KHZ800     // see Adafruit_NeoPixel.h for help
-//#define NEOPIXEL_TYPE NEO_WRGB + NEO_KHZ800
-#define NEOPIXEL_TYPE NEO_GRBW + NEO_KHZ800
-#endif // BOARD_QWF_MINI_V1_1
 
 // QlockWiFive Board v2.0
 #ifdef BOARD_QWF_V2_0
@@ -315,8 +262,8 @@
 #define LDR_MIN_DEFAULT 99 // The ESP will crash if LDR_MIN_DEFAULT and LDR_MAX_DEFAULT are equal due to an error in map()
 #define LDR_MAX_DEFAULT 100
 #define LDR_HYSTERESIS 10
-#define LDR_X_DEFAULT 5
-#define LDR_Y_DEFAULT 8
+#define LDR_X_DEFAULT 7
+#define LDR_Y_DEFAULT 9
 #endif
 
 #ifdef BUZZER

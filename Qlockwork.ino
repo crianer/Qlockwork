@@ -20,7 +20,7 @@
 //
 //*****************************************************************************
 
-#define FIRMWARE_VERSION 20241114
+#define FIRMWARE_VERSION 20241124
 
 #include <Arduino.h>
 #include <Arduino_JSON.h>
@@ -145,6 +145,7 @@ uint32_t modeTimeout = 0;
 uint32_t autoModeChangeTimer = AUTO_MODECHANGE_TIME;
 bool runTransitionOnce = false;
 bool runTransitionDemo = false;
+bool nightModeActive = false;
 uint8_t autoMode = 0;
 
 // Time
@@ -626,6 +627,7 @@ void loop()
 #ifdef DEBUG
             Serial.println("Night off.");
 #endif
+            nightModeActive = true;
             setMode(MODE_BLANK);
         }
 
@@ -634,6 +636,7 @@ void loop()
 #ifdef DEBUG
             Serial.println("Day on.");
 #endif
+            nightModeActive = false;
             setMode(lastMode);
 
         }
@@ -1744,16 +1747,18 @@ void loop()
                 writeScreenBufferFade(matrixOld, matrix, settings.mySettings.color, brightness);
             else if (settings.mySettings.transition == TRANSITION_MOVEUP)
             {
-                if (((minute() % 5 == 0) && (second() == 0)) || runTransitionOnce)
+                if ((((minute() % 5 == 0) && (second() == 0)) && (!nightModeActive)) || (runTransitionOnce))
                     moveScreenBufferUp(matrixOld, matrix, settings.mySettings.color, brightness);
                 else
                     writeScreenBuffer(matrix, settings.mySettings.color, brightness);
             }
             else if (settings.mySettings.transition == TRANSITION_MATRIX)
-                if (((minute() % 5 == 0) && (second() == 0)) || runTransitionOnce)
+            {
+                if ((((minute() % 5 == 0) && (second() == 0)) && (!nightModeActive)) || (runTransitionOnce))
                     writeScreenBufferMatrix(matrixOld, matrix, settings.mySettings.color, brightness);
                 else
                     writeScreenBuffer(matrix, settings.mySettings.color, brightness);
+            }
             break;
 #ifdef SHOW_MODE_TEST
         case MODE_RED:
@@ -2527,7 +2532,7 @@ ICACHE_RAM_ATTR void buttonModeInterrupt()
     {
         lastButtonPress = millis();
         lastModePress = lastButtonPress;
-        modeButtonStage = 0;
+    modeButtonStage = 0;
         buttonModePressed();
     }
 }
@@ -2737,7 +2742,7 @@ void handleRoot()
         message += F("<button title=\"Return to time\" onclick=\"window.location.href='/handleButtonTime'\"><i class=\"fa fa-clock-o\"></i></button>");
 #if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808) || defined(SENSOR_BME280)
     message += F("<br><br><i class = \"fa fa-home\" style=\"font-size:20px;\"></i>");
-    message += F("<br><i class=\"fa fa-thermometer\" style=\"font-size:20px;\"></i> ") + String(roomTemperature) + F("&deg;C / ") + String(roomTemperature * 1.8 + 32.0) + F("&deg;F");
+    message += F("<br><i class=\"fa fa-thermometer\" style=\"font-size:20px;\"></i> ") + String(roomTemperature) + F("&deg;C");
 #endif
 #if defined(SENSOR_DHT22) || defined(SENSOR_BME280)
     message += F("<br><i class=\"fa fa-tint\" style=\"font-size:20px;\"></i> ") + String(roomHumidity) + F("% RH");
@@ -2780,7 +2785,7 @@ void handleRoot()
     }
 #endif
     message += F("<span style=\"font-size:12px;\">");
-        message += F("<br><br><a href=\"http://shop.bracci.ch/\">zytQuadrat</a> was <i class=\"fa fa-code\"></i> with <i class=\"fa fa-heart\"></i> by <a href=\"https://github.com/ch570512/Qlockwork/\">ch570512</a> and <a href=\"https://github.com/bracci/Qlockwork/\">bracci</a>");
+        message += F("<br><br><i class=\"fa fa-code\"></i> with <i class=\"fa fa-heart\"></i> by <a href=\"https://github.com/ch570512/Qlockwork/\">ch570512</a> and <a href=\"https://github.com/bracci/Qlockwork/\">bracci</a>, improved by crianer.");
         message += F("<br>Firmware: ") + String(FIRMWARE_VERSION);
 #ifdef UPDATE_INFOSERVER
     if (updateInfo > int(FIRMWARE_VERSION))
