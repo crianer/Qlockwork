@@ -58,6 +58,7 @@ public:
         bool chGsi;
         uint8_t ldrPosX;
         uint8_t ldrPosY;
+        bool nightModeActive;
     } mySettings;
 
     void saveToEEPROM();

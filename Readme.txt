@@ -134,20 +134,20 @@ Needed libraries: (recommended/tested versions in brackets)
 ******************************************************************************
 
 Arduino IDE for Windows (1.8.57)
-esp8266 by ESP8266 Community (3.1.2)
-Arduino_JSON by Arduino (0.1.0)
-Adafruit NeoPixel by Adafruit (1.11.0)
-Adafruit Unified Sensor by Adafruit (1.1.9)
-Adafruit MCP9808 by Adafruit (2.0.0)
-Adafruit BME280 by Adafruit (2.4.1)
-ArduinoHttpClient by Arduino (0.4.0)
-ArduinoOTA by Juraj Andressy (1.0.7)
-DHT sensor library by Adafruit (1.4.3)
-DS3232RTC by Jack Christensen (2.0.0)
-IRremoteESP8266 by Sebastien Warin (2.8.4)
-Time by Paul Stoffregen (1.6.1)
-WiFiManager by tablatronix/tzapu (0.16.0)
-Timezone by Jack Christensen (1.2.4)
+esp8266 by ESP8266 Community (3.1.2) 3.1.2
+Arduino_JSON by Arduino (0.1.0) 0.2.0
+Adafruit NeoPixel by Adafruit (1.11.0) 1.12.0
+Adafruit Unified Sensor by Adafruit (1.1.9) 1.1.14
+Adafruit MCP9808 by Adafruit (2.0.0) 2.0.2
+Adafruit BME280 by Adafruit (2.4.1) 2.2.4
+ArduinoHttpClient by Arduino (0.4.0) 0.5.0
+ArduinoOTA by Juraj Andressy (1.0.7) 1.1.0
+DHT sensor library by Adafruit (1.4.3) 1.4.6
+DS3232RTC by Jack Christensen (2.0.0) 2.0.1
+IRremoteESP8266 by Sebastien Warin (2.8.4) 2.8.6
+Time by Paul Stoffregen (1.6.1) 1.6.1
+WiFiManager by tablatronix/tzapu (0.16.0) 2.0.16.rc.2
+Timezone by Jack Christensen (1.2.4) 1.2.4
 
 ******************************************************************************
 Compiler-Options: (recommended/tested)

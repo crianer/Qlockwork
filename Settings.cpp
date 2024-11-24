@@ -33,6 +33,7 @@ void Settings::resetToDefault() {
     mySettings.dayOnTime = 18000;
     mySettings.hourBeep = false;
     mySettings.moodRate = 0;
+    mySettings.nightModeActive = false;
 
     for (uint8_t i = 0; i < NUM_EVTS ; i++) {
       mySettings.events[i].enabled = false;

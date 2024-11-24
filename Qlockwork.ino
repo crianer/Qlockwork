@@ -20,7 +20,7 @@
 //
 //*****************************************************************************
 
-#define FIRMWARE_VERSION 20240214
+#define FIRMWARE_VERSION 20240215
 
 #include <Arduino.h>
 #include <Arduino_JSON.h>
@@ -145,7 +145,7 @@ uint32_t modeTimeout = 0;
 uint32_t autoModeChangeTimer = AUTO_MODECHANGE_TIME;
 bool runTransitionOnce = false;
 bool runTransitionDemo = false;
-bool nightModeActive = false;
+bool screenOnAtNight = false;
 uint8_t autoMode = 0;
 
 // Time
@@ -632,7 +632,11 @@ void loop()
 #ifdef DEBUG
             Serial.println("Night off.");
 #endif
-            nightModeActive = true;
+            if (!settings.mySettings.nightModeActive)
+            {
+                settings.mySettings.nightModeActive = true;
+                settings.saveToEEPROM();
+            }
             setMode(MODE_BLANK);
         }
 
@@ -641,7 +645,11 @@ void loop()
 #ifdef DEBUG
             Serial.println("Day on.");
 #endif
-            nightModeActive = false;
+            if (settings.mySettings.nightModeActive)
+            {
+                settings.mySettings.nightModeActive = false;
+                settings.saveToEEPROM();
+            }
             setMode(lastMode);
 
         }
@@ -1752,14 +1760,14 @@ void loop()
                 writeScreenBufferFade(matrixOld, matrix, settings.mySettings.color, brightness);
             else if (settings.mySettings.transition == TRANSITION_MOVEUP)
             {
-                if ((((minute() % 5 == 0) && (second() == 0)) && (!nightModeActive)) || (runTransitionOnce))
+                if ((((minute() % 5 == 0) && (second() == 0)) && ((!settings.mySettings.nightModeActive) || (screenOnAtNight))) || (runTransitionOnce))
                     moveScreenBufferUp(matrixOld, matrix, settings.mySettings.color, brightness);
                 else
                     writeScreenBuffer(matrix, settings.mySettings.color, brightness);
             }
             else if (settings.mySettings.transition == TRANSITION_MATRIX)
             {
-                if ((((minute() % 5 == 0) && (second() == 0)) && (!nightModeActive)) || (runTransitionOnce))
+                if ((((minute() % 5 == 0) && (second() == 0)) && ((!settings.mySettings.nightModeActive) || (screenOnAtNight))) || (runTransitionOnce))
                     writeScreenBufferMatrix(matrixOld, matrix, settings.mySettings.color, brightness);
                 else
                     writeScreenBuffer(matrix, settings.mySettings.color, brightness);
@@ -2077,7 +2085,14 @@ void buttonOnOffPressed()
 #ifdef DEBUG
     Serial.println("On/off pressed.");
 #endif
-    mode == MODE_BLANK ? setLedsOn() : setLedsOff();
+    if (mode == MODE_BLANK)
+    {
+        screenOnAtNight = true;
+        setLedsOn();
+    } else {
+        screenOnAtNight = false;
+        setLedsOff();
+    }
 }
 
 //*****************************************************************************
@@ -2747,7 +2762,7 @@ void handleRoot()
         message += F("<button title=\"Return to time\" onclick=\"window.location.href='/handleButtonTime'\"><i class=\"fa fa-clock-o\"></i></button>");
 #if defined(RTC_BACKUP) || defined(SENSOR_DHT22) || defined(SENSOR_MCP9808) || defined(SENSOR_BME280)
     message += F("<br><br><i class = \"fa fa-home\" style=\"font-size:20px;\"></i>");
-    message += F("<br><i class=\"fa fa-thermometer\" style=\"font-size:20px;\"></i> ") + String(roomTemperature) + F("&deg;C / ") + String(roomTemperature * 1.8 + 32.0) + F("&deg;F");
+    message += F("<br><i class=\"fa fa-thermometer\" style=\"font-size:20px;\"></i> ") + String(roomTemperature) + F("&deg;C");
 #endif
 #if defined(SENSOR_DHT22) || defined(SENSOR_BME280)
     message += F("<br><i class=\"fa fa-tint\" style=\"font-size:20px;\"></i> ") + String(roomHumidity) + F("% RH");
@@ -2777,7 +2792,7 @@ void handleRoot()
 #ifdef APIKEY
     if (String(settings.mySettings.owApiKey) != "") {
     message += F("<br><br><i class = \"fa fa-tree\" style=\"font-size:20px;\"></i>");
-        message += F("<br><i class = \"fa fa-thermometer\" style=\"font-size:20px;\"></i> ") + String(outdoorWeather.temperature) + F("&deg;C");
+        message += F("<br><i class = \"fa fa-thermometer\" style=\"font-size:20px;\"></i> ") + String(outdoorWeather.temperature) + F("&deg;C / ") + String(outdoorWeather.temperature * 1.8 + 32.0) + F("&deg;F");
         message += F("<br><i class = \"fa fa-tint\" style=\"font-size:20px;\"></i> ") + String(outdoorWeather.humidity) + F("% RH");
         message += F("<br>") + String(outdoorWeather.pressure) + F(" hPa / ") + String(outdoorWeather.pressure / 33.865) + F(" inHg");
         message += F("<br><i class = \"fa fa-sun-o\" style=\"font-size:20px;\"></i> ") + String(hour(timeZone.toLocal(outdoorWeather.sunrise))) + F(":");
