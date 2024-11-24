@@ -2532,7 +2532,7 @@ ICACHE_RAM_ATTR void buttonModeInterrupt()
     {
         lastButtonPress = millis();
         lastModePress = lastButtonPress;
-    modeButtonStage = 0;
+        modeButtonStage = 0;
         buttonModePressed();
     }
 }
